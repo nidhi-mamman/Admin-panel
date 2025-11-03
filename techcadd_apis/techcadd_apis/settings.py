@@ -52,7 +52,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+CORS_ALLOW_ALL_ORIGINS = True  
+
+CORS_ALLOW_HEADERS = [
+    'authorization',
+    'content-type',
+]
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'techcadd_apis.urls'
 
@@ -88,9 +96,9 @@ WSGI_APPLICATION = 'techcadd_apis.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'techcadd_api3',
+        'NAME': 'admin_panel',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'Nidhi@100703',
         'HOST':'localhost',
         'PORT':'3306',
         
@@ -109,6 +117,7 @@ REST_FRAMEWORK = {
 }
 from datetime import timedelta
 SIMPLE_JWT = {
+
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
