@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { context } from "../context/Authprovider";
-import Logo from '../assets/tce_logo.png'
+import Logo from '../assets/tce_white.png'
 
 export default function Navbar() {
   const { isLoggedin, logout } = useContext(context);
@@ -28,7 +28,7 @@ export default function Navbar() {
             <Link
               to="/"
             >
-              <img style={{width:"100px",height:"50px"}} src={Logo} alt="tce_logo" />
+              <img style={{width:"180px",height:"50px"}} src={Logo} alt="tce_logo" />
             </Link>
           </li>
         </ul>

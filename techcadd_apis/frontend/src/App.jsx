@@ -5,7 +5,7 @@ import EnquiryCreation from './pages/Staff/EnquiryCreation';
 import StaffRoles from './pages/Staff/StaffRoles';
 import StudentRegistration from './pages/Staff/StudentRegistration';
 import Navbar from './components/Navbar';
-import StaffList from './pages/Staff/StaffList';
+import StaffList from './pages/Admin/StaffList';
 import AdminRoles from './pages/Admin/AdminRoles';
 import EnquiryList from './pages/Staff/EnquiryList';
 import EnquiryUpdate from './pages/Staff/EnquiryUpdate';

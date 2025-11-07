@@ -147,13 +147,8 @@ export default function Home() {
 
   return (
     <>
-      {/* <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:"20px"}}>
-        <Link to='/admin'>Admin</Link>
-        <Link to='/staff'>Staff</Link>
-        <Link to='/student'>Students</Link>
-      </div> */}
-      <div className="d-flex flex-column align-items-center justify-content-center">
-        <h2 className="login-form-heading">Login Here</h2>
+      <div className="d-flex flex-column align-items-center justify-content-center login-area">
+        <h2 className="login-form-heading">Login</h2>
         <div className="login-form-area">
           <div>
             <nav>
@@ -170,13 +165,13 @@ export default function Home() {
                     <div style={{
                       display: "flex",
                       alignItems: "center",
-                      border: "1px solid #555",
+                      border: "1px solid #fff",
                       borderRadius: "5px",
                       padding: "6px 10px",
                       width: "fit-content",
                       marginBottom: "20px"
                     }}>
-                      <i className='bx bxs-user' style={{ marginRight: "8px" }}></i>
+                      <i className='bx bxs-user' style={{ marginRight: "8px" ,color:"white"}}></i>
                       <input
                         type="text"
                         name="username"
@@ -188,6 +183,7 @@ export default function Home() {
                           outline: "none",
                           fontSize: "14px",
                           width: "320px",
+                          color:"white"
                         }}
                       />
                     </div>
@@ -195,13 +191,13 @@ export default function Home() {
                     <div style={{
                       display: "flex",
                       alignItems: "center",
-                      border: "1px solid #555",
+                      border: "1px solid #fff",
                       borderRadius: "5px",
                       padding: "6px 10px",
                       width: "fit-content",
                       marginBottom: "20px"
                     }}>
-                      <i className='bxr bxs-lock-keyhole' style={{ marginRight: "8px" }}></i>
+                      <i className='bxr bxs-lock-keyhole' style={{ marginRight: "8px",color:"white" }}></i>
                       <input
                         type="password"
                         name="password"
@@ -213,6 +209,7 @@ export default function Home() {
                           outline: "none",
                           fontSize: "14px",
                           width: "320px",
+                          color:"white"
                         }}
                       />
                     </div>
@@ -230,13 +227,13 @@ export default function Home() {
                     <div style={{
                       display: "flex",
                       alignItems: "center",
-                      border: "1px solid #555",
+                      border: "1px solid #fff",
                       borderRadius: "5px",
                       padding: "6px 10px",
                       width: "fit-content",
                       marginBottom: "20px"
                     }}>
-                      <i className='bx bxs-user' style={{ marginRight: "8px" }}></i>
+                      <i className='bx bxs-user' style={{ marginRight: "8px" ,color:"white"}}></i>
                       <input
                         type="text"
                         name="username"
@@ -248,6 +245,7 @@ export default function Home() {
                           outline: "none",
                           fontSize: "14px",
                           width: "320px",
+                          color:"white"
                         }}
                       />
                     </div>
@@ -255,13 +253,13 @@ export default function Home() {
                     <div style={{
                       display: "flex",
                       alignItems: "center",
-                      border: "1px solid #555",
+                      border: "1px solid #fff",
                       borderRadius: "5px",
                       padding: "6px 10px",
                       width: "fit-content",
                       marginBottom: "20px"
                     }}>
-                      <i className='bxr bxs-lock-keyhole' style={{ marginRight: "8px" }}></i>
+                      <i className='bxr bxs-lock-keyhole' style={{ marginRight: "8px",color:"white" }}></i>
                       <input
                         type="password"
                         name="password"
@@ -273,6 +271,7 @@ export default function Home() {
                           outline: "none",
                           fontSize: "14px",
                           width: "320px",
+                          color:"white"
                         }}
                       />
                     </div>
@@ -291,13 +290,13 @@ export default function Home() {
                     <div style={{
                       display: "flex",
                       alignItems: "center",
-                      border: "1px solid #555",
+                      border: "1px solid #fff",
                       borderRadius: "5px",
                       padding: "6px 10px",
                       width: "fit-content",
                       marginBottom: "20px"
                     }}>
-                      <i className='bx bxs-user' style={{ marginRight: "8px" }}></i>
+                      <i className='bx bxs-user' style={{ marginRight: "8px" ,color:"white"}}></i>
                       <input
                         type="text"
                         name="username"
@@ -309,6 +308,7 @@ export default function Home() {
                           outline: "none",
                           fontSize: "14px",
                           width: "320px",
+                          color:"white"
                         }}
                       />
                     </div>
@@ -316,13 +316,13 @@ export default function Home() {
                     <div style={{
                       display: "flex",
                       alignItems: "center",
-                      border: "1px solid #555",
+                      border: "1px solid #fff",
                       borderRadius: "5px",
                       padding: "6px 10px",
                       width: "fit-content",
                       marginBottom: "20px"
                     }}>
-                      <i className='bxr bxs-lock-keyhole' style={{ marginRight: "8px" }}></i>
+                      <i className='bxr bxs-lock-keyhole' style={{ marginRight: "8px" ,color:"white"}}></i>
                       <input
                         type="password"
                         name="password"

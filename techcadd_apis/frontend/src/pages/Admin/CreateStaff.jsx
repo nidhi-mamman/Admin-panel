@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import left_img from '../../assets/left-image.png'
 
 export default function CreateStaff() {
   const formRef = useRef(null);
@@ -40,32 +41,46 @@ export default function CreateStaff() {
   };
 
   return (
-    <div style={{ maxWidth: "320px", margin: "50px auto", textAlign: "center" }}>
-      <h2>Create Staff</h2>
-      <form ref={formRef} onSubmit={handleSubmit}>
-        <input type="text" name="username" placeholder="Username*" required />
-        <input type="password" name="password" placeholder="Password*" required />
-        <input type="email" name="email" placeholder="Email*" required />
-        <input type="text" name="first_name" placeholder="First Name*" required />
-        <input type="text" name="last_name" placeholder="Last Name*" required />
-        <select name="role" id="role">
-          <option value="manager">Manager</option>
-          <option value="trainer">Trainer</option>
-          <option value="counselor">Counselor</option>
-        </select>
-        <input type="text" name="department" placeholder="Department*"/>
-        <input
-          type="tel"
-          name="phone"
-          pattern="[0-9]{10}"
-          maxLength="10"
-          placeholder="Enter 10-digit mobile number"
-        />
-        <input type="text" name="address" placeholder="Address*"/>
-        <button type="submit" style={{ padding: "8px 16px" }}>Create Staff</button>
-      </form>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: "20px" }}>
+      <div className="right-container" style={{ height: "50%", width: "50%" }}>
+        <h2>Create Staff</h2>
+        <form ref={formRef} onSubmit={handleSubmit}>
+          <div className="form-group">
+            <input type="text" name="first_name" placeholder="First Name*" required />
+            <input type="text" name="last_name" placeholder="Last Name*" required />
+          </div>
+          <div className="form-group">
+            <input type="email" name="email" placeholder="Email*" required />
+            <input
+              type="tel"
+              name="phone"
+              pattern="[0-9]{10}"
+              maxLength="10"
+              placeholder="Phone number*"
+            />
+          </div>
+          <div className="form-group">
+            <input type="text" name="username" placeholder="Username*" required />
+            <input type="password" name="password" placeholder="Password*" required />
+          </div>
 
-      {message && <p style={{ marginTop: "10px" }}>{message}</p>}
+          <select name="role" id="role">
+            <option value="">Select Role</option>
+            <option value="manager">Manager</option>
+            <option value="trainer">Trainer</option>
+            <option value="counselor">Counselor</option>
+          </select>
+          <div className="form-group">
+            <input type="text" name="department" placeholder="Department*" />
+            <input type="text" name="address" placeholder="Address*" />
+          </div>
+          <div className="d-flex align-items-center justify-content-center">
+            <button type="submit" className="submit-btn" style={{ padding: "8px 16px" }}>Add Staff</button>
+          </div>
+        </form>
+
+        {message && <p style={{ marginTop: "10px" }}>{message}</p>}
+      </div>
     </div>
   );
 }

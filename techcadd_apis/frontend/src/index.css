@@ -1,3 +1,18 @@
+body {
+    margin: 0; 
+    min-height: 100vh; 
+    background: #2f248c;
+    background: linear-gradient(
+        90deg,
+        rgba(47, 36, 140, 1) 0%,
+        rgba(106, 106, 196, 1) 35%,
+        rgba(67, 205, 232, 1) 100%
+    );
+    background-attachment: fixed; 
+    background-size: cover; 
+    font-family: 'Poppins', sans-serif;
+}
+
 .myform {
     padding-top: 40px;
     padding-left: 8px;
@@ -5,10 +20,11 @@
 
 .login-form-area {
     width: 400px;
-    height: 300px;
+    height: 350px;
     padding: 10px;
     border: 1px solid rgb(190, 186, 186);
-    box-shadow: 2px 2px 4px rgb(154, 152, 152);
+    border-radius: 20px;
+    box-shadow: 2px 2px 4px rgb(239, 237, 237),-2px -2px 4px rgb(239, 237, 237);
 }
 
 .nav-tabs button {
@@ -17,14 +33,10 @@
 
 .nav-tabs .nav-link {
     position: relative;
-    color: #333;
+    color: #fff;
     text-decoration: none;
     padding: 10px 15px;
     transition: color 0.3s ease;
-}
-
-body {
-    font-family: 'Poppins', sans-serif;
 }
 
 .submit-btn {
@@ -45,10 +57,10 @@ body {
     content: "";
     position: absolute;
     top: 0;
-    right: 0;               
+    right: 0;
     width: 0;
     height: 100%;
-    background: #221e5c;
+    background: #221e5c!important;
     z-index: -1;
     transition: width 0.4s ease;
     border-radius: 40px;
@@ -60,12 +72,83 @@ body {
 
 .submit-btn:hover::before {
     width: 100%;
-    left: 0;               
-    right: auto;           
+    left: 0;
+    right: auto;
 }
 
 .login-form-heading {
     text-align: center;
     margin-bottom: 20px;
-    font-weight: 600;
+    font-weight: 800;
+    color: #221e5c;
+}
+
+.myform input::placeholder {
+    color: white !important;
+    opacity: 1 !important;
+}   
+
+.right-container {
+  width: 50%;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.1);
+}
+
+.right-container h2 {
+  text-align: center;
+  color: #221e5c;
+  margin-bottom: 25px;
+  font-size: 28px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  gap: 20px;
+}
+
+input,
+select {
+  flex: 1;
+  padding: 12px 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+input::placeholder {
+  color: #999;
+}
+
+input:focus,
+select:focus {
+  border-color: #221e5c;
+  box-shadow: 0 0 8px rgba(34, 30, 92, 0.2);
+}
+
+p {
+  text-align: center;
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+
+  .right-container {
+    width: 100%;
+    box-shadow: none;
+    padding: 20px;
+  }
+
+  .form-group {
+    flex-direction: column;
+  }
 }
