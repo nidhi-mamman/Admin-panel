@@ -1,10 +1,71 @@
-a,button{
+.myform {
+    padding-top: 40px;
+    padding-left: 8px;
+}
+
+.login-form-area {
+    width: 400px;
+    height: 300px;
+    padding: 10px;
+    border: 1px solid rgb(190, 186, 186);
+    box-shadow: 2px 2px 4px rgb(154, 152, 152);
+}
+
+.nav-tabs button {
+    width: 7.8rem !important;
+}
+
+.nav-tabs .nav-link {
+    position: relative;
+    color: #333;
+    text-decoration: none;
+    padding: 10px 15px;
+    transition: color 0.3s ease;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.submit-btn {
+    position: relative;
     width: 10rem;
-    padding:20px;
     text-align: center;
     text-decoration: none;
     color: black;
     font-weight: 600;
-    background-color: rgb(226, 226, 214);
-    box-shadow: 2px 2px 4px rgb(154, 152, 152);
+    background: none;
+    border: 2px solid #221e5c;
+    border-radius: 40px;
+    overflow: hidden;
+    transition: color 0.3s ease;
+}
+
+.submit-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;               
+    width: 0;
+    height: 100%;
+    background: #221e5c;
+    z-index: -1;
+    transition: width 0.4s ease;
+    border-radius: 40px;
+}
+
+.submit-btn:hover {
+    color: white;
+}
+
+.submit-btn:hover::before {
+    width: 100%;
+    left: 0;               
+    right: auto;           
+}
+
+.login-form-heading {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 600;
 }

@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { context } from "../context/Authprovider";
+import Logo from '../assets/tce_logo.png'
 
 export default function Navbar() {
   const { isLoggedin, logout } = useContext(context);
@@ -12,34 +13,37 @@ export default function Navbar() {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",  // places Home on left, Logout on right
-        alignItems: "center",              // vertically centers both
-        padding: "12px 20px",
-      }}
-    >
-      {/* Left side */}
-      <ul style={{ margin: 0, padding: 0 }}>
-        <li style={{ listStyle: "none", fontWeight: "600" }}>
-          <Link
-            to="/"
-          >
-            Home
-          </Link>
-        </li>
-      </ul>
+    <>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "12px 20px",
+        }}
+      >
+        {/* Left side */}
+        <ul style={{ margin: 0, padding: 0 }}>
+          <li style={{ listStyle: "none", fontWeight: "600" }}>
+            <Link
+              to="/"
+            >
+              <img style={{width:"100px",height:"50px"}} src={Logo} alt="tce_logo" />
+            </Link>
+          </li>
+        </ul>
 
-      {/* Right side */}
-      {isLoggedin && (
-        <button
-          onClick={handleLogout}
-          style={{border:"none"}}
-        >
-          Logout
-        </button>
-      )}
-    </div>
+        {/* Right side */}
+        {isLoggedin && (
+          <button
+            onClick={handleLogout}
+            className="submit-btn"
+            style={{padding:"10px"}}
+          >
+            Logout
+          </button>
+        )}
+      </div>
+    </>
   );
 }

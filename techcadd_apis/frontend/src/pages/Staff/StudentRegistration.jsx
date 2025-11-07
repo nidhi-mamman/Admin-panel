@@ -85,54 +85,60 @@ const StudentRegistration = () => {
   };
 
   // Handle form submit
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!token) {
-      alert("You are not authorized. Please log in again.");
-      return;
+  if (!token) {
+    alert("You are not authorized. Please log in again.");
+    return;
+  }
+
+  try {
+    const res = await axios.post(
+      "http://localhost:8000/api/staff/registrations/create/",
+      formData,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    const { username, password } = res.data?.login_credentials || {};
+
+    alert(
+      `✅ Student registered successfully!\n\n🆔 Username: ${username}\n🔑 Password: ${password}`
+    );
+
+    // Reset form fields
+    setFormData({
+      student_name: "",
+      phone_no: "",
+      branch: "",
+      course_type: "",
+      course: "",
+      duration_months: "",
+      joining_date: "",
+      father_name: "",
+      date_of_birth: "",
+      email: "",
+      qualification: "",
+      work_college: "",
+      contact_address: "",
+      whatsapp_no: "",
+      parents_no: "",
+      software_covered: "",
+      duration_hours: "",
+      total_course_fee: "",
+      paid_fee: "",
+    });
+    setCourses([]);
+  } catch (err) {
+    console.error("Error submitting form:", err);
+    if (err.response?.status === 401) {
+      alert("Unauthorized. Please login again.");
+      localStorage.removeItem("accessToken");
+    } else {
+      alert("Failed to register student.");
     }
-
-    try {
-      await axios.post(
-        "http://localhost:8000/api/staff/registrations/create/",
-        formData,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      alert("✅ Student registered successfully!");
-      setFormData({
-        student_name: "",
-        phone_no: "",
-        branch: "",
-        course_type: "",
-        course: "",
-        duration_months: "",
-        joining_date: "",
-        father_name: "",
-        date_of_birth: "",
-        email: "",
-        qualification: "",
-        work_college: "",
-        contact_address: "",
-        whatsapp_no: "",
-        parents_no: "",
-        software_covered: "",
-        duration_hours: "",
-        total_course_fee: "",
-        paid_fee: ""
-      });
-      setCourses([]);
-    } catch (err) {
-      console.error("Error submitting form:", err);
-      if (err.response?.status === 401) {
-        alert("Unauthorized. Please login again.");
-        localStorage.removeItem("accessToken");
-      } else {
-        alert("Failed to register student.");
-      }
-    }
-  };
+  }
+};
 
   if (loading) return <p>Loading options...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;

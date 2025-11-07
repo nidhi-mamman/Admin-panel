@@ -113,13 +113,6 @@ export default function EnquiryCreation() {
                     ))}
                 </select>
 
-                <select name="enquiry_taken_by_name" required>
-                    <option value="">-- Select Staff --</option>
-                    {options.staff_options.map((staff) => (
-                        <option key={staff.id} value={staff.id}>{staff.name}</option>
-                    ))}
-                </select>
-
                 <input type="text" name="remark" placeholder="Remark*" />
                 <input type="date" name="next_follow_up_date" placeholder="Follow up date(YYYY-MM-DD)*" />
 

@@ -90,7 +90,6 @@ export default function RegistrationList() {
                         <th style={thStyle}>Email</th>
                         <th style={thStyle}>Details</th>
                         <th style={thStyle}>Fee History</th>
-                        <th style={thStyle}>Update</th>
                     </tr>
                 </thead>
 
@@ -120,26 +119,6 @@ export default function RegistrationList() {
                                        <i class='bx bx-sm  bx-history' ></i> 
                                     </Link>
                                 </td>
-                                <td style={tdStyle}>
-                                    {Number(registration.total_course_fee) !== Number(registration.paid_fee) ? (
-                                        <Link
-                                            to="/staff/update-fee"
-                                            state={{ registrationNumber: registration.registration_number }}
-                                            style={{
-                                                background: "none",
-                                                border: "none",
-                                                boxShadow: "none",
-                                                color: "green",
-                                                textDecoration: "underline",
-                                            }}
-                                        >
-                                            <i className="bx bx-sm bx-pencil"></i>
-                                        </Link>
-                                    ) : (
-                                        <span style={{ color: "gray" }}>Paid</span>
-                                    )}
-                                </td>
-
                             </tr>
                         ))
                     ) : (

@@ -15,16 +15,22 @@ export default function CertificateStatus() {
 
     useEffect(() => {
         const fetchCertificateStatus = async () => {
+            console.log("🔹 Function started: fetchCertificateStatus()");
+            console.log("🔹 Token:", token);
+            console.log("🔹 Registration number:", registrationNumber);
+
             try {
                 if (!token) {
+                    console.log("⛔ No token found. Unauthorized request.");
                     setError("Unauthorized. Please log in again.");
                     setLoading(false);
                     return;
                 }
 
+                console.log("📡 Sending POST request to backend...");
                 const response = await axios.post(
                     `http://127.0.0.1:8000/api/staff/registrations/generate-certificate/?registration_number=${registrationNumber}`,
-                    { },
+                    {},
                     {
                         headers: {
                             "Content-Type": "application/json",
@@ -33,10 +39,21 @@ export default function CertificateStatus() {
                     }
                 );
 
+                console.log("✅ Response received successfully!");
+                console.log("Response Data:", response.data);
+
                 setStatus(response.data);
                 setError(null);
             } catch (err) {
-                console.error("Error fetching certificate status:", err);
+                console.error("❌ Error fetching certificate status:", err);
+
+                if (err.response) {
+                    console.log("Error Response Data:", err.response.data);
+                    console.log("Error Status Code:", err.response.status);
+                } else {
+                    console.log("Error Message:", err.message);
+                }
+
                 if (err.response?.status === 401) {
                     setError("Session expired or unauthorized. Please log in again.");
                     setTimeout(() => navigate("/staff/login"), 2000);
@@ -44,13 +61,16 @@ export default function CertificateStatus() {
                     setError(err.response?.data?.error || "Something went wrong!");
                 }
             } finally {
+                console.log("🟡 Finished fetchCertificateStatus()");
                 setLoading(false);
             }
         };
 
         if (state?.registrationNumber) {
+            console.log("✅ Registration number found, fetching status...");
             fetchCertificateStatus();
         } else {
+            console.log("⛔ No registration number found in state.");
             setError("Registration number not provided.");
             setLoading(false);
         }
