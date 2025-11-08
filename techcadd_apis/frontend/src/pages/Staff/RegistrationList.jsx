@@ -9,7 +9,6 @@ export default function RegistrationList() {
     const [error, setError] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
 
-    // ✅ Reusable fetch function
     const fetchRegistrations = async (query = "") => {
         setLoading(true);
         try {
@@ -29,9 +28,6 @@ export default function RegistrationList() {
             if (!response.ok) throw new Error("Failed to fetch registration list");
 
             const data = await response.json();
-            console.log("Search Response:", data); // 🔍 debug line
-
-            // supports both APIs (list and search)
             setRegistrationList(data.registrations || data.results || []);
         } catch (err) {
             setError(err.message);
@@ -49,23 +45,39 @@ export default function RegistrationList() {
         fetchRegistrations(searchQuery);
     };
 
+    const handleInputChange = (e) => {
+        const value = e.target.value;
+        setSearchQuery(value);
+
+        // 👇 When input becomes empty, show all registrations again
+        if (value.trim() === "") {
+            fetchRegistrations();
+        }
+    };
     if (loading) return <p style={{ textAlign: "center" }}>Loading Registration list...</p>;
     if (error) return <p style={{ color: "red", textAlign: "center" }}>{error}</p>;
 
     return (
         <div style={{ padding: "30px" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Registration List</h2>
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: "20px",
+                }}
+            >
+                <h2 style={{ textAlign: "center" }} className="login-form-heading">Registration List</h2>
 
                 {/* ✅ Search Form */}
-                <form className="d-flex" role="search" onSubmit={handleSearch}>
+                <form style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "row" }} role="search" onSubmit={handleSearch}>
                     <input
                         className="form-control me-2"
                         type="search"
                         placeholder="Search by name, email, phone, reg no, father name"
                         aria-label="Search"
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={handleInputChange}
                     />
                     <button className="btn btn-outline-success" type="submit">
                         Search
@@ -73,73 +85,94 @@ export default function RegistrationList() {
                 </form>
             </div>
 
-            <table
+            {/* ✅ Scrollable Table Container */}
+            <div
                 style={{
-                    width: "100%",
-                    borderCollapse: "collapse",
+                    maxHeight: "400px", // 👈 limit table height
+                    overflowY: "auto",   // 👈 only table scrolls
+                    border: "1px solid #ddd",
+                    borderRadius: "8px",
                     boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-                    marginTop: "20px",
                 }}
             >
-                <thead style={{ backgroundColor: "#f8f9fa" }}>
-                    <tr>
-                        <th style={thStyle}>Id</th>
-                        <th style={thStyle}>Registration No.</th>
-                        <th style={thStyle}>Student Name</th>
-                        <th style={thStyle}>Mobile Number</th>
-                        <th style={thStyle}>Email</th>
-                        <th style={thStyle}>Details</th>
-                        <th style={thStyle}>Fee History</th>
-                    </tr>
-                </thead>
+                <table
+                    style={{
+                        width: "100%",
+                        borderCollapse: "collapse",
+                        backgroundColor: "transparent",
+                        color: "white",
+                    }}
+                >
+                    <thead style={{ backgroundColor: "#f8f9fa", position: "sticky", top: 0, zIndex: 2 }}>
+                        <tr>
+                            <th style={thStyle}>Id</th>
+                            <th style={thStyle}>Registration No.</th>
+                            <th style={thStyle}>Student Name</th>
+                            <th style={thStyle}>Mobile Number</th>
+                            <th style={thStyle}>Email</th>
+                            <th style={thStyle}>Details</th>
+                            <th style={thStyle}>Fee History</th>
+                        </tr>
+                    </thead>
 
-                <tbody>
-                    {registrationList.length > 0 ? (
-                        registrationList.map((registration, index) => (
-                            <tr key={registration.id || index}>
-                                <td style={tdStyle}>{index + 1}</td>
-                                <td style={tdStyle}>{registration.registration_number}</td>
-                                <td style={tdStyle}>{registration.student_name}</td>
-                                <td style={tdStyle}>{registration.phone_no}</td>
-                                <td style={tdStyle}>{registration.email}</td>
-                                <td style={tdStyle}>
-                                    <Link
-                                        to={`/staff/student/registration/details/${registration.id}`}
-                                        style={{ color: "blue", textDecoration: "underline", background: "none", boxShadow: "none" }}
-                                    >
-                                        Click Here
-                                    </Link>
-                                </td>
-                                <td style={tdStyle}>
-                                    <Link
-                                        to='/staff/fee-history'
-                                        state={{registrationNumber:registration.registration_number}}
-                                        style={{ color: "blue", background: "none", boxShadow: "none" }}
-                                    >
-                                       <i class='bx bx-sm  bx-history' ></i> 
-                                    </Link>
+                    <tbody>
+                        {registrationList.length > 0 ? (
+                            registrationList.map((registration, index) => (
+                                <tr key={registration.id || index}>
+                                    <td style={tdStyle}>{index + 1}</td>
+                                    <td style={tdStyle}>{registration.registration_number}</td>
+                                    <td style={tdStyle}>{registration.student_name}</td>
+                                    <td style={tdStyle}>{registration.phone_no}</td>
+                                    <td style={tdStyle}>{registration.email}</td>
+                                    <td style={tdStyle}>
+                                        <Link
+                                            to={`/staff/student/registration/details/${registration.id}`}
+                                            style={{
+                                                color: "#1337acff",
+                                                textDecoration: "underline",
+                                                background: "none",
+                                                boxShadow: "none",
+                                            }}
+                                        >
+                                            Click Here
+                                        </Link>
+                                    </td>
+                                    <td style={tdStyle}>
+                                        <Link
+                                            to="/staff/fee-history"
+                                            state={{ registrationNumber: registration.registration_number }}
+                                            style={{
+                                                color: "green",
+                                                background: "none",
+                                                boxShadow: "none",
+                                            }}
+                                        >
+                                            <i className="bx bx-sm bx-history"></i>
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="7" style={{ textAlign: "center", padding: "10px" }}>
+                                    No Registration found
                                 </td>
                             </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan="6" style={{ textAlign: "center", padding: "10px" }}>
-                                No Registration found
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }
 
-// table cell styles
+// ✅ Table cell styles
 const thStyle = {
     border: "1px solid #ddd",
     padding: "10px",
     textAlign: "center",
     fontWeight: "600",
+    color: "#092847ff",
     backgroundColor: "#f8f9fa",
 };
 
@@ -147,4 +180,5 @@ const tdStyle = {
     border: "1px solid #ddd",
     padding: "10px",
     textAlign: "center",
+    color: "#ffffff",
 };

@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { context } from "../../context/Authprovider";
 
-export default function EnquiryDetails() {
+export default function RegistrationDetails() {
   const { id } = useParams();
   const { token } = useContext(context);
   const [registration, setRegistration] = useState(null);
@@ -34,9 +34,10 @@ export default function EnquiryDetails() {
   if (!registration) return <p style={{ textAlign: "center" }}>Loading Registration details...</p>;
 
   return (
-    <div style={{ padding: "30px", maxWidth: "800px", margin: "auto" }}>
-      <h2>Registration Details</h2>
-      <div style={{ border: "1px solid #ddd", padding: "20px", borderRadius: "8px" }}>
+    <div className="reg-container">
+      <h2 className="reg-title">Registration Details</h2>
+
+      <div className="reg-card">
         <p><strong>Branch:</strong> {registration.branch}</p>
         <p><strong>Joining Date:</strong> {registration.joining_date}</p>
         <p><strong>Student Name:</strong> {registration.student_name}</p>
@@ -56,27 +57,30 @@ export default function EnquiryDetails() {
         <p><strong>Duration Hours:</strong> {registration.duration_hours}</p>
         <p><strong>Total Course Fee:</strong> ₹{registration.total_course_fee}</p>
         <p><strong>Paid Fee:</strong> ₹{registration.paid_fee}</p>
+      </div>
 
+      <div className="reg-actions">
         {Number(registration.total_course_fee) !== Number(registration.paid_fee) && (
-          <p><Link
+          <Link
             to="/staff/add-payment"
             state={{
               registrationNumber: registration.registration_number,
               totalCourseFee: registration.total_course_fee,
               paidFee: registration.paid_fee,
             }}
+            className="reg-btn add-btn"
           >
-            Add Payment
-          </Link></p>
+            💰 Add Payment
+          </Link>
         )}
+
         <Link
           to="/staff/certificate-status"
           state={{ registrationNumber: registration.registration_number }}
-          style={{ color: "blue", background: "none", boxShadow: "none" }}
+          className="reg-btn cert-btn"
         >
-          <i className="bx bx-sm bx-certification"></i> Generate Certificate
+          🎓 Generate Certificate
         </Link>
-
       </div>
     </div>
   );

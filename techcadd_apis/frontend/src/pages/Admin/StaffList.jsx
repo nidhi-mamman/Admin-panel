@@ -31,65 +31,76 @@ export default function StaffList() {
     fetchStaff();
   }, [token]);
 
-
   if (loading) return <p style={{ textAlign: "center" }}>Loading staff list...</p>;
   if (error) return <p style={{ color: "red", textAlign: "center" }}>{error}</p>;
 
   return (
     <div style={{ padding: "30px" }}>
-      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Staff List</h2>
+      <h2 style={{ textAlign: "center", marginBottom: "20px" }} className="login-form-heading">Staff List</h2>
 
-      <table
+      {/* Scrollable container */}
+      <div
         style={{
-          width: "100%",
-          borderCollapse: "collapse",
+          maxHeight: "400px",   // adjust height as needed
+          overflowY: "auto",    // enables vertical scroll
+          overflowX: "auto",    // enables horizontal scroll if needed
+          border: "1px solid #ddd",
+          borderRadius: "8px",
           boxShadow: "0 0 10px rgba(0,0,0,0.1)",
         }}
       >
-        <thead style={{ backgroundColor: "#f8f9fa" }}>
-          <tr>
-            <th style={thStyle}>Id</th>
-            <th style={thStyle}>Username</th>
-            <th style={thStyle}>First Name</th>
-            <th style={thStyle}>Last Name</th>
-            <th style={thStyle}>Email</th>
-            <th style={thStyle}>Role</th>
-            <th style={thStyle}>Department</th>
-            <th style={thStyle}>Phone</th>
-            <th style={thStyle}>Address</th>
-            <th style={thStyle}>Active</th>
-            <th style={thStyle}>Created At</th>
-          </tr>
-        </thead>
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            minWidth: "800px", // ensures proper scroll on small screens
+          }}
+        >
+          <thead style={{ backgroundColor: "#f8f9fa", position: "sticky", top: 0, zIndex: 1 }}>
+            <tr>
+              <th style={thStyle}>Id</th>
+              <th style={thStyle}>Username</th>
+              <th style={thStyle}>First Name</th>
+              <th style={thStyle}>Last Name</th>
+              <th style={thStyle}>Email</th>
+              <th style={thStyle}>Role</th>
+              <th style={thStyle}>Department</th>
+              <th style={thStyle}>Phone</th>
+              <th style={thStyle}>Address</th>
+              <th style={thStyle}>Active</th>
+              <th style={thStyle}>Created At</th>
+            </tr>
+          </thead>
 
-        <tbody>
-          {staffList.length > 0 ? (
-            staffList.map((staff, index) => (
-              <tr key={staff.id || index}>
-                <td style={tdStyle}>{index + 1}</td>
-                <td style={tdStyle}>{staff.username}</td>
-                <td style={tdStyle}>{staff.first_name}</td>
-                <td style={tdStyle}>{staff.last_name}</td>
-                <td style={tdStyle}>{staff.email}</td>
-                <td style={tdStyle}>{staff.role}</td>
-                <td style={tdStyle}>{staff.department}</td>
-                <td style={tdStyle}>{staff.phone}</td>
-                <td style={tdStyle}>{staff.address}</td>
-                <td style={tdStyle}>{staff.is_active ? "Yes" : "No"}</td>
-                <td style={tdStyle}>
-                  {new Date(staff.created_at).toLocaleString()}
+          <tbody>
+            {staffList.length > 0 ? (
+              staffList.map((staff, index) => (
+                <tr key={staff.id || index}>
+                  <td style={tdStyle}>{index + 1}</td>
+                  <td style={tdStyle}>{staff.username}</td>
+                  <td style={tdStyle}>{staff.first_name}</td>
+                  <td style={tdStyle}>{staff.last_name}</td>
+                  <td style={tdStyle}>{staff.email}</td>
+                  <td style={tdStyle}>{staff.role}</td>
+                  <td style={tdStyle}>{staff.department}</td>
+                  <td style={tdStyle}>{staff.phone}</td>
+                  <td style={tdStyle}>{staff.address}</td>
+                  <td style={tdStyle}>{staff.is_active ? "Yes" : "No"}</td>
+                  <td style={tdStyle}>
+                    {new Date(staff.created_at).toLocaleString()}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="11" style={{ textAlign: "center", padding: "10px" }}>
+                  No staff found
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="11" style={{ textAlign: "center", padding: "10px" }}>
-                No staff found
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -100,6 +111,7 @@ const thStyle = {
   padding: "10px",
   textAlign: "center",
   fontWeight: "600",
+  color:"#092847ff",
   backgroundColor: "#f8f9fa",
 };
 
@@ -107,4 +119,5 @@ const tdStyle = {
   border: "1px solid #ddd",
   padding: "10px",
   textAlign: "center",
+  color:"#ffffff",
 };

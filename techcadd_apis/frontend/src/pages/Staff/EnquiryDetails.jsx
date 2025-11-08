@@ -34,11 +34,10 @@ export default function EnquiryDetails() {
   if (!enquiry) return <p style={{ textAlign: "center" }}>Loading enquiry details...</p>;
 
   return (
-    <div style={{ padding: "30px", maxWidth: "800px", margin: "auto" }}>
-   
-        <h2>Enquiry Details</h2>
-      
-      <div style={{ border: "1px solid #ddd", padding: "20px", borderRadius: "8px" }}>
+    <div className="enquiry-container">
+      <h2 className="enquiry-title">Enquiry Details</h2>
+
+      <div className="enquiry-card">
         <p><strong>Student Name:</strong> {enquiry.student_name}</p>
         <p><strong>Date of Birth:</strong> {enquiry.date_of_birth}</p>
         <p><strong>Qualification:</strong> {enquiry.qualification}</p>
@@ -51,7 +50,7 @@ export default function EnquiryDetails() {
         <p><strong>Course Fee offered:</strong> {enquiry.course_fee_offer}</p>
         <p><strong>Interested Course:</strong> {enquiry.course_interested}</p>
         <p><strong>Trade:</strong> {enquiry.trade_display}</p>
-        <p><strong>Enquiry Source:</strong> {enquiry.source}</p>
+        <p><strong>Enquiry Source:</strong> {enquiry.enquiry_source}</p>
         <p><strong>Enquiry Date:</strong> {enquiry.enquiry_date}</p>
         <p><strong>Status:</strong> {enquiry.enquiry_status_display}</p>
         <p><strong>Follow-up Date:</strong> {enquiry.next_follow_up_date}</p>

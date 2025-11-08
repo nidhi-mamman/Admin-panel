@@ -43,7 +43,7 @@ export default function CreateStaff() {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: "20px" }}>
       <div className="right-container" style={{ height: "50%", width: "50%" }}>
-        <h2>Create Staff</h2>
+        <h2 className="login-form-heading">Create Staff</h2>
         <form ref={formRef} onSubmit={handleSubmit}>
           <div className="form-group">
             <input type="text" name="first_name" placeholder="First Name*" required />
@@ -75,7 +75,7 @@ export default function CreateStaff() {
             <input type="text" name="address" placeholder="Address*" />
           </div>
           <div className="d-flex align-items-center justify-content-center">
-            <button type="submit" className="submit-btn" style={{ padding: "8px 16px" }}>Add Staff</button>
+            <button type="submit" className="custom-btn" style={{ padding: "8px 16px" }}>Add Staff</button>
           </div>
         </form>
 
