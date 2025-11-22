@@ -34,28 +34,49 @@ export default function EnquiryDetails() {
   if (!enquiry) return <p style={{ textAlign: "center" }}>Loading enquiry details...</p>;
 
   return (
-    <div className="enquiry-container">
-      <h2 className="enquiry-title">Enquiry Details</h2>
-
-      <div className="enquiry-card">
-        <p><strong>Student Name:</strong> {enquiry.student_name}</p>
-        <p><strong>Date of Birth:</strong> {enquiry.date_of_birth}</p>
-        <p><strong>Qualification:</strong> {enquiry.qualification}</p>
-        <p><strong>Work or College:</strong> {enquiry.work_college}</p>
-        <p><strong>Mobile:</strong> {enquiry.mobile}</p>
-        <p><strong>Email:</strong> {enquiry.email}</p>
-        <p><strong>Address:</strong> {enquiry.address}</p>
-        <p><strong>Centre:</strong> {enquiry.centre_display}</p>
-        <p><strong>Batch Timing:</strong> {enquiry.batch_time}</p>
-        <p><strong>Course Fee offered:</strong> {enquiry.course_fee_offer}</p>
-        <p><strong>Interested Course:</strong> {enquiry.course_interested}</p>
-        <p><strong>Trade:</strong> {enquiry.trade_display}</p>
-        <p><strong>Enquiry Source:</strong> {enquiry.enquiry_source}</p>
-        <p><strong>Enquiry Date:</strong> {enquiry.enquiry_date}</p>
-        <p><strong>Status:</strong> {enquiry.enquiry_status_display}</p>
-        <p><strong>Follow-up Date:</strong> {enquiry.next_follow_up_date}</p>
-        <p><strong>Remarks:</strong> {enquiry.remark}</p>
-        <p><strong>Enquiry Taken By:</strong> {enquiry.enquiry_taken_by_name}</p>
+    <div className="details-container">
+      <div className="enquiry-details-form">
+        <div>
+          <h5>Personal/Educational Details</h5>
+          <div className="form-row">
+            <p><strong>Student Name:</strong> {enquiry.student_name}</p>
+            <p><strong>Date of Birth:</strong> {enquiry.date_of_birth}</p>
+            <p><strong>Qualification:</strong> {enquiry.qualification}</p>
+            <p><strong>Work or College:</strong> {enquiry.work_college}</p>
+          </div>
+        </div>
+        <div>
+          <h5>Contact Details</h5>
+          <div className="form-row">
+            <p><strong>Mobile:</strong> {enquiry.mobile}</p>
+            <p><strong>Email:</strong> {enquiry.email}</p>
+            <p><strong>Address:</strong> {enquiry.address}</p>
+          </div>
+        </div>
+        <div>
+          <h5>Course Details</h5>
+          <div className="form-row">
+            <p><strong>Centre:</strong> {enquiry.centre_display}</p>
+            <p><strong>Batch Timing:</strong> {enquiry.batch_time}</p>
+          </div>
+          <div className="form-row">
+            <p><strong>Course Fee offered:</strong>&#8377;{enquiry.course_fee_offer}</p>
+            <p><strong>Interested Course:</strong> {enquiry.course_interested}</p>
+          </div>
+          <div className="form-row">
+            <p><strong>Trade:</strong> {enquiry.trade_display}</p>
+            <p><strong>Enquiry Source:</strong> {enquiry.enquiry_source}</p>
+          </div>
+          <div className="form-row">
+            <p><strong>Enquiry Date:</strong> {enquiry.enquiry_date}</p>
+            <p><strong>Status:</strong> {enquiry.enquiry_status_display}</p>
+            <p><strong>Follow-up Date:</strong> {enquiry.next_follow_up_date}</p>
+          </div>
+          <div className="form-row">
+            <p><strong>Remarks:</strong> {enquiry.remark}</p>
+            <p><strong>Enquiry Taken By:</strong> {enquiry.enquiry_taken_by_name}</p>
+          </div>
+        </div>
       </div>
     </div>
   );

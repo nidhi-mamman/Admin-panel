@@ -46,7 +46,7 @@ export default function EnquiryCreation() {
             const data = await response.json();
             if (response.ok) {
                 setMessage(data.message || "Enquiry created successfully ✅");
-                navigate("/");
+                navigate("/staff/show/enquiry-list");
             } else {
                 console.error("Error:", data);
                 setMessage(data.message || "Error creating enquiry❌");
@@ -62,33 +62,41 @@ export default function EnquiryCreation() {
     return (
         <div className="d-flex align-items-center justify-content-center">
             <div className="enquiry-container">
-                <h2>Create Enquiry</h2>
 
                 <form ref={formRef} onSubmit={handleSubmit} className="enquiry-form">
-                    <div className="form-row">
-                        <input type="text" name="student_name" placeholder="Student name*" required />
-                        <input type="date" name="date_of_birth" required />
+                    <div>
+                        <h3>Personal/Educational Details</h3>
+                        <div className="form-row">
+                            <input type="text" name="student_name" placeholder="Student name*" required />
+                            <div className="input-wrapper">
+                                <input type="date" name="date_of_birth" required placeholder=" " />
+                                <span>Date of Birth*</span>
+                            </div>
+                        </div>
                     </div>
-
                     <div className="form-row">
                         <input type="text" name="qualification" placeholder="Qualification*" required />
                         <input type="text" name="work_college" placeholder="Work or College*" required />
                     </div>
-
-                    <div className="form-row">
-                        <input
-                            type="tel"
-                            name="mobile"
-                            pattern="[0-9]{10}"
-                            maxLength="10"
-                            placeholder="Mobile number*"
-                            required
-                        />
-                        <input type="email" name="email" placeholder="Email*" required />
+                    <div>
+                        <h3>Contact Details</h3>
+                        <div className="form-row">
+                            <input
+                                type="tel"
+                                name="mobile"
+                                pattern="[0-9]{10}"
+                                maxLength="10"
+                                placeholder="Mobile number*"
+                                required
+                            />
+                            <input type="email" name="email" placeholder="Email*" required />
+                        </div>
                     </div>
 
                     <input type="text" name="address" placeholder="Address*" required />
-
+                    <div>
+                    </div>
+                    <h3>Enquiry Details</h3>
                     <select name="centre" required>
                         <option value="">-- Select Centre --</option>
                         {options.centre_choices.map(([value, label]) => (
@@ -126,7 +134,10 @@ export default function EnquiryCreation() {
 
                     <div className="form-row">
                         <input type="text" name="remark" placeholder="Remark*" />
-                        <input type="date" name="next_follow_up_date" placeholder="Follow up date*" />
+                        <div className="input-wrapper">
+                            <input type="date" name="next_follow_up_date" required placeholder=" " />
+                            <span>Follow up Date*</span>
+                        </div>
                     </div>
                     <div className="d-flex align-items-center justify-content-center">
                         <button type="submit" className="custom-btn" style={{ padding: "10px" }}>Create Enquiry</button>

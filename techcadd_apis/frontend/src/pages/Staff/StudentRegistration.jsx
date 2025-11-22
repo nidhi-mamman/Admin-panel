@@ -75,13 +75,12 @@ export default function StudentRegistration() {
             const data = await response.json();
             if (response.ok) {
                 const { username, password } = data?.login_credentials || {};
-                setMessage(
-                    `✅ Student registered successfully!\n\n🆔 Username: ${username}\n🔑 Password: ${password}`
-                );
+                alert(`✅ Student registered successfully!\n\n🆔 Username: ${username}\n🔑 Password: ${password}`);
                 formRef.current.reset();
                 setCourses([]);
-                navigate("/");
-            } else {
+                navigate("/staff/show/registration-list");
+            }
+            else {
                 console.error("Error:", data);
                 setMessage(data.message || "Failed to register student ❌");
             }
@@ -107,8 +106,10 @@ export default function StudentRegistration() {
                                 <option key={value} value={value}>{label}</option>
                             ))}
                         </select>
-
-                        <input type="date" name="joining_date" required />
+                        <div className="input-wrapper">
+                            <input type="date" name="joining_date" required placeholder=" " />
+                            <span>Joining Date*</span>
+                        </div>
                     </div>
 
                     <div className="form-row">
@@ -117,7 +118,10 @@ export default function StudentRegistration() {
                     </div>
 
                     <div className="form-row">
-                        <input type="date" name="date_of_birth" placeholder="Date of Birth*" required />
+                        <div className="input-wrapper">
+                            <input type="date" name="date_of_birth" required placeholder=" " />
+                            <span>Date of Birth*</span>
+                        </div>
                         <input type="email" name="email" placeholder="Email*" required />
                     </div>
 

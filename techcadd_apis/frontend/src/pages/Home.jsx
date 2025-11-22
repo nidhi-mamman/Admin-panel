@@ -1,10 +1,12 @@
 import { useContext, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import { context } from "../context/Authprovider";
+import login_illustration from '../assets/login_illustration.png'
 export default function Home() {
   const adminRef = useRef(null);
   const staffRef = useRef(null);
   const studentRef = useRef(null);
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [message, setMessage] = useState("");
   const navigate = useNavigate()
   const { setToken } = useContext(context)
@@ -31,7 +33,7 @@ export default function Home() {
 
       if (response.ok) {
         setMessage(data.message || "Login successful ✅");
-        navigate('/admin/roles')
+        navigate('/admin/show/staff-list')
         // Store tokens in localStorage
         if (data.tokens) {
           const accessToken = data.tokens.access;
@@ -76,7 +78,7 @@ export default function Home() {
 
       if (response.ok) {
         setMessage(data.message || "Login successful ✅");
-        navigate('/staff/roles')
+        navigate('/staff/dashboard')
         // Store tokens in localStorage
         if (data.tokens) {
           const accessToken = data.tokens.access;
@@ -148,9 +150,13 @@ export default function Home() {
   return (
     <>
       <div className="d-flex flex-column align-items-center justify-content-center login-area">
-        <h2 className="login-form-heading">Login</h2>
+        {/* <h2 className="login-form-heading">Login</h2> */}
         <div className="login-form-area">
-          <div>
+          <div className="left-container">
+            <img src={login_illustration} alt="login illustration" />
+          </div>
+          <div className="right-container">
+            <p className="login-badge">Welcome Back</p>
             <nav>
               <div className="nav nav-tabs" id="nav-tab" role="tablist">
                 <button className="nav-link  active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Admin</button>
@@ -165,13 +171,12 @@ export default function Home() {
                     <div style={{
                       display: "flex",
                       alignItems: "center",
-                      border: "1px solid #fff",
                       borderRadius: "5px",
                       padding: "6px 10px",
                       width: "fit-content",
-                      marginBottom: "20px"
+                      border: "1px solid #c5bfbfff"
                     }}>
-                      <i className='bx bxs-user' style={{ marginRight: "8px" ,color:"white"}}></i>
+                      <i className='bx bxs-user' style={{ marginRight: "8px" }}></i>
                       <input
                         type="text"
                         name="username"
@@ -182,8 +187,7 @@ export default function Home() {
                           border: "none",
                           outline: "none",
                           fontSize: "14px",
-                          width: "320px",
-                          color:"white"
+                          width: "320px"
                         }}
                       />
                     </div>
@@ -191,15 +195,20 @@ export default function Home() {
                     <div style={{
                       display: "flex",
                       alignItems: "center",
-                      border: "1px solid #fff",
                       borderRadius: "5px",
                       padding: "6px 10px",
                       width: "fit-content",
-                      marginBottom: "20px"
+                      marginBottom: "20px",
+                      border: "1px solid #c5bfbfff"
                     }}>
-                      <i className='bxr bxs-lock-keyhole' style={{ marginRight: "8px",color:"white" }}></i>
+                      {
+                        passwordVisible ?
+                        <i className='bx  bxs-lock-keyhole-open-alt' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i>:
+                          <i className='bxr bxs-lock-keyhole' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i> 
+                          
+                      }
                       <input
-                        type="password"
+                        type={`${passwordVisible ? "text" : "password"}`}
                         name="password"
                         placeholder="Password"
                         required
@@ -209,12 +218,11 @@ export default function Home() {
                           outline: "none",
                           fontSize: "14px",
                           width: "320px",
-                          color:"white"
                         }}
                       />
                     </div>
                     <div className="d-flex align-items-center justify-content-center">
-                      <button type="submit" className="submit-btn" style={{ padding: "8px 16px" }}>Login</button>
+                      <button type="submit" className="custom-btn" style={{ padding: "8px 16px" }}>Login</button>
                     </div>
                   </form>
 
@@ -227,13 +235,12 @@ export default function Home() {
                     <div style={{
                       display: "flex",
                       alignItems: "center",
-                      border: "1px solid #fff",
                       borderRadius: "5px",
                       padding: "6px 10px",
                       width: "fit-content",
-                      marginBottom: "20px"
+                      border: "1px solid #c5bfbfff"
                     }}>
-                      <i className='bx bxs-user' style={{ marginRight: "8px" ,color:"white"}}></i>
+                      <i className='bx bxs-user' style={{ marginRight: "8px" }}></i>
                       <input
                         type="text"
                         name="username"
@@ -242,10 +249,9 @@ export default function Home() {
                         style={{
                           backgroundColor: "transparent",
                           border: "none",
-                          outline: "none",
+                          outline: "none!important",
                           fontSize: "14px",
                           width: "320px",
-                          color:"white"
                         }}
                       />
                     </div>
@@ -253,15 +259,19 @@ export default function Home() {
                     <div style={{
                       display: "flex",
                       alignItems: "center",
-                      border: "1px solid #fff",
                       borderRadius: "5px",
                       padding: "6px 10px",
                       width: "fit-content",
-                      marginBottom: "20px"
+                      marginBottom: "20px",
+                      border: "1px solid #c5bfbfff"
                     }}>
-                      <i className='bxr bxs-lock-keyhole' style={{ marginRight: "8px",color:"white" }}></i>
+                      {
+                        passwordVisible ?
+                        <i className='bxs  bx-lock-keyhole-open-alt' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i>:
+                          <i className='bxr bxs-lock-keyhole' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i>
+                      }
                       <input
-                        type="password"
+                        type={`${passwordVisible ? "text" : "password"}`}
                         name="password"
                         placeholder="Password"
                         required
@@ -270,14 +280,13 @@ export default function Home() {
                           border: "none",
                           outline: "none",
                           fontSize: "14px",
-                          width: "320px",
-                          color:"white"
+                          width: "320px"
                         }}
                       />
                     </div>
 
                     <div className="d-flex align-items-center justify-content-center">
-                      <button type="submit" className="submit-btn" style={{ padding: "8px 16px" }}>Login</button>
+                      <button type="submit" className="custom-btn" style={{ padding: "8px 16px" }}>Login</button>
                     </div>
                   </form>
 
@@ -290,13 +299,12 @@ export default function Home() {
                     <div style={{
                       display: "flex",
                       alignItems: "center",
-                      border: "1px solid #fff",
                       borderRadius: "5px",
                       padding: "6px 10px",
                       width: "fit-content",
-                      marginBottom: "20px"
+                      border: "1px solid #c5bfbfff"
                     }}>
-                      <i className='bx bxs-user' style={{ marginRight: "8px" ,color:"white"}}></i>
+                      <i className='bx bxs-user' style={{ marginRight: "8px" }}></i>
                       <input
                         type="text"
                         name="username"
@@ -308,7 +316,6 @@ export default function Home() {
                           outline: "none",
                           fontSize: "14px",
                           width: "320px",
-                          color:"white"
                         }}
                       />
                     </div>
@@ -316,15 +323,19 @@ export default function Home() {
                     <div style={{
                       display: "flex",
                       alignItems: "center",
-                      border: "1px solid #fff",
                       borderRadius: "5px",
                       padding: "6px 10px",
                       width: "fit-content",
-                      marginBottom: "20px"
+                      marginBottom: "20px",
+                      border: "1px solid #c5bfbfff"
                     }}>
-                      <i className='bxr bxs-lock-keyhole' style={{ marginRight: "8px" ,color:"white"}}></i>
+                      {
+                        passwordVisible ?
+                        <i className='bxs  bx-lock-keyhole-open-alt' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i>:
+                          <i className='bxr bxs-lock-keyhole' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i>
+                      }
                       <input
-                        type="password"
+                        type={`${passwordVisible ? "text" : "password"}`}
                         name="password"
                         placeholder="Password"
                         required
@@ -339,7 +350,7 @@ export default function Home() {
                     </div>
 
                     <div className="d-flex align-items-center justify-content-center">
-                      <button type="submit" className="submit-btn" style={{ padding: "8px 16px" }}>Login</button>
+                      <button type="submit" className="custom-btn" style={{ padding: "8px 16px" }}>Login</button>
                     </div>
                   </form>
 

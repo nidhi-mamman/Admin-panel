@@ -1,47 +1,68 @@
-import Home from './pages/Home'
 import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+
+// Layouts
+import AdminLayout from "./Layouts/AdminLayout";
+import StaffLayout from "./Layouts/StaffLayout";
+import StudentLayout from "./Layouts/StudentLayout";
+
+// Admin pages
 import CreateStaff from './pages/Admin/CreateStaff';
-import EnquiryCreation from './pages/Staff/EnquiryCreation';
-import StaffRoles from './pages/Staff/StaffRoles';
-import StudentRegistration from './pages/Staff/StudentRegistration';
-import Navbar from './components/Navbar';
 import StaffList from './pages/Admin/StaffList';
-import AdminRoles from './pages/Admin/AdminRoles';
+
+// Staff pages
+import EnquiryCreation from './pages/Staff/EnquiryCreation';
 import EnquiryList from './pages/Staff/EnquiryList';
 import EnquiryUpdate from './pages/Staff/EnquiryUpdate';
 import EnquiryDetails from './pages/Staff/EnquiryDetails';
+import StudentRegistration from './pages/Staff/StudentRegistration';
 import RegistrationList from './pages/Staff/RegistrationList';
 import RegistrationDetails from './pages/Staff/RegistrationDetails';
 import AddPayment from './pages/Staff/AddPayment';
 import UpdateFee from './pages/Staff/UpdateFee';
 import FeeHistory from './pages/Staff/FeeHistory';
 import CertificateStatus from './pages/Staff/CertificateStatus';
+
+// Student pages
 import StudentDashboard from './pages/Student/StudentDashboard';
 import MyCourses from './pages/Student/MyCourses';
+import StaffDashboard from './pages/Staff/StaffDashboard';
+
 export default function App() {
   return (
-    <div>
-      <Navbar />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/admin/roles' element={<AdminRoles />} />
-        <Route path='/admin/create-staff' element={<CreateStaff />} />
-        <Route path='/admin/show/staff-list' element={<StaffList />} />
-        <Route path='/staff/roles' element={<StaffRoles />} />
-        <Route path='/staff/create-enquiry' element={<EnquiryCreation />} />
-        <Route path='/staff/show/enquiry-list' element={<EnquiryList />} />
-        <Route path='/staff/student/enquiry/details/:id' element={<EnquiryDetails />} />
-        <Route path="/staff/student/enquiry/update/:id" element={<EnquiryUpdate />} />
-        <Route path='/staff/show/registration-list' element={<RegistrationList />} />
-        <Route path='/staff/student/registration/details/:id' element={<RegistrationDetails />} />
-        <Route path="/staff/add-payment" element={<AddPayment />} />
-        <Route path="/staff/update-fee" element={<UpdateFee />} />
-        <Route path="/staff/fee-history" element={<FeeHistory />} />
-        <Route path="/staff/certificate-status" element={<CertificateStatus />} />
-        <Route path='/staff/student/create' element={<StudentRegistration />} />
-        <Route path='/student/dashboard' element={<StudentDashboard />} />
-        <Route path='/student/mycourse' element={<MyCourses/>}/>
-      </Routes>
-    </div>
+    <Routes>
+
+      {/* PUBLIC ROUTES */}
+      <Route path="/" element={<Home />} />
+
+      {/* ---------- ADMIN ROUTES ---------- */}
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route path="create-staff" element={<CreateStaff />} />
+        <Route path="show/staff-list" element={<StaffList />} />
+      </Route>
+
+      {/* ---------- STAFF ROUTES ---------- */}
+      <Route path="/staff" element={<StaffLayout />}>
+        <Route path="dashboard" element={<StaffDashboard />} />
+        <Route path="create-enquiry" element={<EnquiryCreation />} />
+        <Route path="show/enquiry-list" element={<EnquiryList />} />
+        <Route path="student/enquiry/details/:id" element={<EnquiryDetails />} />
+        <Route path="student/enquiry/update/:id" element={<EnquiryUpdate />} />
+        <Route path="show/registration-list" element={<RegistrationList />} />
+        <Route path="student/registration/details/:id" element={<RegistrationDetails />} />
+        <Route path="add-payment" element={<AddPayment />} />
+        <Route path="update-fee" element={<UpdateFee />} />
+        <Route path="fee-history" element={<FeeHistory />} />
+        <Route path="certificate-status" element={<CertificateStatus />} />
+        <Route path="student/create" element={<StudentRegistration />} />
+      </Route>
+
+      {/* ---------- STUDENT ROUTES ---------- */}
+      <Route path="/student" element={<StudentLayout />}>
+        <Route path="dashboard" element={<StudentDashboard />} />
+        <Route path="mycourse" element={<MyCourses />} />
+      </Route>
+
+    </Routes>
   );
 }

@@ -58,7 +58,7 @@ export default function RegistrationList() {
     if (error) return <p style={{ color: "red", textAlign: "center" }}>{error}</p>;
 
     return (
-        <div style={{ padding: "30px" }}>
+        <div style={{ padding: "30px", fontSize: "12px", marginLeft: "250px" }}>
             <div
                 style={{
                     display: "flex",
@@ -67,8 +67,9 @@ export default function RegistrationList() {
                     marginBottom: "20px",
                 }}
             >
-                <h2 style={{ textAlign: "center" }} className="login-form-heading">Registration List</h2>
-
+                <div className="d-flex align-items-center justify-content-start gap-2 mb-4">
+                    <Link to='/staff/student/create' className="add-badge" style={{ marginLeft: "0px", textDecoration: 'none' }}> <span>New Student</span> <i class='bx  bxs-plus' style={{ color: '#ffffff' }}  ></i> </Link>
+                </div>
                 {/* ✅ Search Form */}
                 <form style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "row" }} role="search" onSubmit={handleSearch}>
                     <input
@@ -180,5 +181,5 @@ const tdStyle = {
     border: "1px solid #ddd",
     padding: "10px",
     textAlign: "center",
-    color: "#ffffff",
+    color: "#092847ff",
 };

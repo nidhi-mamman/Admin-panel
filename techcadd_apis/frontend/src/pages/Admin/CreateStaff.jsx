@@ -29,7 +29,7 @@ export default function CreateStaff() {
 
       if (response.ok) {
         setMessage(data.message || "Staff created successfully ✅");
-        navigate("/");
+        navigate("/admin/show/staff-list");
       } else {
         console.error("Error:", data);
         setMessage(data.message || "Error creating staff ❌");

@@ -51,7 +51,7 @@ export default function FeeHistory() {
     return <p style={{ textAlign: "center" }}>No fee history found for this registration.</p>;
 
   return (
-    <div style={{ padding: "30px" }}>
+    <div style={{ padding: "30px",fontSize:"12px",marginLeft:"250px" }}>
       <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
         Fee History — {feeData.student_name} ({feeData.registration_number})
       </h2>
@@ -161,5 +161,5 @@ const tdStyle = {
   border: "1px solid #ddd",
   padding: "10px",
   textAlign: "center",
-  color:"#ffffff"
+  color:"#000000"
 };

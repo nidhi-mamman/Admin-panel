@@ -37,11 +37,10 @@ export default function EnquiryList() {
     if (error) return <p style={{ color: "red", textAlign: "center" }}>{error}</p>;
 
     return (
-        <div style={{ padding: "30px" }}>
-            <h2 style={{ textAlign: "center" }} className="login-form-heading">
-                Enquiry List
-            </h2>
-
+        <div style={{ padding: "30px", fontSize: "12px", marginLeft: "250px" }}>
+            <div className="d-flex align-items-center justify-content-start gap-2 mb-4">
+                <Link to='/staff/create-enquiry' className="add-badge" style={{ marginLeft: "0px", textDecoration: 'none' }}> <span>New Enquiry</span> <i class='bx  bxs-plus' style={{ color: '#ffffff' }}  ></i> </Link>
+            </div>
             {/* Scrollable Table Container */}
             <div
                 style={{
@@ -140,5 +139,5 @@ const tdStyle = {
     border: "1px solid #ddd",
     padding: "10px",
     textAlign: "center",
-    color: "#ffffff",
+    color: "#092847ff",
 };

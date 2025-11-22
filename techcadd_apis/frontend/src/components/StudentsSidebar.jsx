@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { context } from "../context/Authprovider";
 import Logo from '../assets/tce_white.png'
 
-export default function Navbar() {
+export default function StudentsSidebar() {
   const { isLoggedin, logout } = useContext(context);
   const navigate = useNavigate();
 
