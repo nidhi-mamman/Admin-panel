@@ -4,8 +4,12 @@ import { Outlet } from "react-router-dom";
 export default function StudentLayout() {
   return (
     <>
-      <StudentSidebar />
-      <Outlet />
+      <div className="student-layout">
+        <StudentSidebar />
+        <div className="student-content">
+          <Outlet />
+        </div>
+      </div>
     </>
   );
 }

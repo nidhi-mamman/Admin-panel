@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import left_img from '../../assets/left-image.png'
 
 export default function CreateStaff() {
   const formRef = useRef(null);
@@ -8,37 +7,43 @@ export default function CreateStaff() {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const form = new FormData(formRef.current);
-    const formData = {};
-    for (let [key, value] of form.entries()) {
-      formData[key] = value
-    }
-    console.log(localStorage.getItem("accessToken"))
-    try {
-      const response = await fetch("http://localhost:8000/api/admin/staff/create/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-        body: JSON.stringify(formData),
-      });
+  e.preventDefault();
+  const form = new FormData(formRef.current);
+  const formData = {};
+  for (let [key, value] of form.entries()) {
+    formData[key] = value
+  }
 
-      const data = await response.json();
+  try {
+    const response = await fetch("http://localhost:8000/api/admin/staff/create/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+      body: JSON.stringify(formData),
+    });
 
-      if (response.ok) {
-        setMessage(data.message || "Staff created successfully ✅");
-        navigate("/admin/show/staff-list");
-      } else {
-        console.error("Error:", data);
-        setMessage(data.message || "Error creating staff ❌");
-      }
-    } catch (error) {
-      console.error("Create Staff error:", error);
-      setMessage("Something went wrong. Please try again ❌");
+    const data = await response.json();
+
+    if (response.ok) {
+      // SHOW ALERT WITH USERNAME & PASSWORD
+      alert(
+        `Staff Created Successfully!\n\nUsername: ${formData.username}\nPassword: ${formData.password}`
+      );
+
+      setMessage(data.message || "Staff created successfully ✅");
+      navigate("/admin/show/staff-list");
+    } else {
+      console.error("Error:", data);
+      setMessage(data.message || "Error creating staff ❌");
     }
-  };
+  } catch (error) {
+    console.error("Create Staff error:", error);
+    setMessage("Something went wrong. Please try again ❌");
+  }
+};
+
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: "20px" }}>

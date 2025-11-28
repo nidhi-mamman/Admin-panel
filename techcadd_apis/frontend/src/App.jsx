@@ -24,7 +24,7 @@ import FeeHistory from './pages/Staff/FeeHistory';
 import CertificateStatus from './pages/Staff/CertificateStatus';
 
 // Student pages
-import StudentDashboard from './pages/Student/StudentDashboard';
+import StudentProfile from './pages/Student/StudentProfile';
 import MyCourses from './pages/Student/MyCourses';
 import StaffDashboard from './pages/Staff/StaffDashboard';
 
@@ -59,7 +59,7 @@ export default function App() {
 
       {/* ---------- STUDENT ROUTES ---------- */}
       <Route path="/student" element={<StudentLayout />}>
-        <Route path="dashboard" element={<StudentDashboard />} />
+        <Route path="dashboard" element={<StudentProfile />} />
         <Route path="mycourse" element={<MyCourses />} />
       </Route>
 

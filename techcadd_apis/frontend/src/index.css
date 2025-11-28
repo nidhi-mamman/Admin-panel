@@ -724,7 +724,7 @@ textarea {
   left: 0;
 }
 
-.staff-layout {
+.staff-layout,.student-layout {
   display: flex;
   min-height: 100vh !important;
   background-color: white;
@@ -817,4 +817,24 @@ h5{
   font-weight: 600;
   color:#221e5c;
   text-decoration: underline;
+}
+
+
+/* Student Dashboard */
+
+.student-content {
+  flex: 1;
+  overflow-y: auto;
+}
+.student-header{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 30px;
+  box-shadow: 2px 2px 4px inset rgba(0, 0, 0, 0.2);
+  background-color: #f7f7f7;
+}
+
+.student-header .student-profile{
+
 }
