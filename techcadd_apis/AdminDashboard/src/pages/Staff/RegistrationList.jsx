@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { context } from "../../context/Authprovider";
 import { Link } from "react-router-dom";
-
 export default function RegistrationList() {
     const { token } = useContext(context);
     const [registrationList, setRegistrationList] = useState([]);
@@ -25,9 +24,11 @@ export default function RegistrationList() {
                 },
             });
 
+            
             if (!response.ok) throw new Error("Failed to fetch registration list");
 
             const data = await response.json();
+            console.log(data)
             setRegistrationList(data.registrations || data.results || []);
         } catch (err) {
             setError(err.message);

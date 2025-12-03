@@ -30,10 +30,10 @@ export default function Home() {
       });
 
       const data = await response.json();
-
+    
       if (response.ok) {
         setMessage(data.message || "Login successful ✅");
-        navigate('/admin/show/staff-list')
+        navigate('/admin/admin-dashboard')
         // Store tokens in localStorage
         if (data.tokens) {
           const accessToken = data.tokens.access;
@@ -78,7 +78,7 @@ export default function Home() {
 
       if (response.ok) {
         setMessage(data.message || "Login successful ✅");
-        navigate('/staff/dashboard')
+        navigate('/staff/staff-dashboard')
         // Store tokens in localStorage
         if (data.tokens) {
           const accessToken = data.tokens.access;

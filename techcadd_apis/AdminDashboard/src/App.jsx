@@ -27,6 +27,7 @@ import CertificateStatus from './pages/Staff/CertificateStatus';
 import StudentProfile from './pages/Student/StudentProfile';
 import MyCourses from './pages/Student/MyCourses';
 import StaffDashboard from './pages/Staff/StaffDashboard';
+import AdminDashboard from './pages/Admin/AdminDashboard';
 
 export default function App() {
   return (
@@ -37,13 +38,14 @@ export default function App() {
 
       {/* ---------- ADMIN ROUTES ---------- */}
       <Route path="/admin" element={<AdminLayout />}>
+       <Route path="admin-dashboard" element={<AdminDashboard />} />
         <Route path="create-staff" element={<CreateStaff />} />
         <Route path="show/staff-list" element={<StaffList />} />
       </Route>
 
       {/* ---------- STAFF ROUTES ---------- */}
       <Route path="/staff" element={<StaffLayout />}>
-        <Route path="dashboard" element={<StaffDashboard />} />
+        <Route path="staff-dashboard" element={<StaffDashboard />} />
         <Route path="create-enquiry" element={<EnquiryCreation />} />
         <Route path="show/enquiry-list" element={<EnquiryList />} />
         <Route path="student/enquiry/details/:id" element={<EnquiryDetails />} />

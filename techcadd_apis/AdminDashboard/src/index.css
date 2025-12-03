@@ -8,7 +8,13 @@ body {
       rgba(67, 205, 232, 1) 100%);
   background-attachment: fixed;
   background-size: cover;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins';
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+html,body,#root{
+  height:100%;
 }
 
 .myform {
@@ -106,7 +112,6 @@ body {
 }
 
 .right-container {
-  width: 50%;
   height: 450px;
   background: #ffffff;
   padding: 40px;
@@ -163,23 +168,42 @@ p {
   }
 }
 
+
 .admin-profile {
   position: relative;
+}
+
+.admin-profile div .profile-img{
+  border-radius: 50%;
+  box-shadow: 2px 2px 4px black;
+}
+
+/* Parent wrapper */
+.admin-layout {
+  display: flex;
+  flex-direction: column; 
+}
+
+.admin-body {
+  display: flex;
+  margin-top: 74px;
+}
+
+.admin-content {
+  flex: 1;
+  padding: 20px;
+  min-height: 100vh;
+  background-color: rgb(239, 241, 243);
 }
 
 .sub-profile {
   top: 60px;
   right: 0px;
   background-color: white;
-  padding: 10px;
-  display: none;
+  padding: 8px;
+  font-size: 14px;
   position: absolute;
-}
-
-.admin-profile:hover .sub-profile {
-  display: block;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  box-shadow: 2px 2px 4px rgb(187, 187, 187),-2px -2px 4px rgb(187, 187, 187);
 }
 
 .nav-tabs {
@@ -225,7 +249,6 @@ p {
   color: #333;
   font-weight: 500;
   padding: 8px 15px;
-  border-radius: 8px;
   transition: background-color 0.3s ease;
 }
 
@@ -710,24 +733,58 @@ textarea {
 }
 
 
-/* Staff Dashboard css */
+/* Dashboard css */
 .sidebar {
   height: auto;
   width: 250px;
   padding: 10px;
-  background-color: #1e1e2f;
-  color: white;
   font-size: 18px;
   position: fixed;
-  top: 0;
+  top: 74px;
   bottom: 0;
   left: 0;
+  z-index: 9999;
+  overflow-y: auto;
+  background-color: white;
 }
 
-.staff-layout,.student-layout {
+/* Light-colored scrollbar for sidebar */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar:hover::-webkit-scrollbar-thumb {
+  background-color: #d0d0d0;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: #b0b0b0;
+}
+
+.staff-layout,.student-layout,.admin-layout{
   display: flex;
   min-height: 100vh !important;
   background-color: white;
+}
+
+.admin-navbar{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background-color: white;
+  box-shadow:2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -739,37 +796,94 @@ textarea {
 
 .sidebar .sidebar-items ul {
   padding-inline-start: 0px !important;
-  ;
 }
+
+.sidebar .sidebar-items ul .dashboard-item{
+  background-color: #221e5c;
+  color: white;
+}
+
 
 .sidebar .sidebar-items ul li {
   display: flex;
   align-items: center;
   gap: 15px;
   padding: 12px 15px;
-  color: white;
   width: 100%;
   text-decoration: none;
   border-radius: 8px;
-  transition: 0.25s ease;
+  border-bottom: 1px solid transparent;
+  transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease, border-bottom-color 0.25s ease;
   margin: 15px 0;
   cursor: pointer;
 }
 
 .sidebar .sidebar-items ul li:hover {
-  background-color: #2a2a40;
-  border-bottom: 1px solid #fff;
+  background-color: #1b1b67;
+  color: white;
+  border-bottom-color: #fff;
   box-shadow: 2px 2px 4px inset rgba(0, 0, 0, 0.2);
 }
 
+.auth-item {
+  transition: filter 0.25s ease;
+}
+
+.sidebar .sidebar-items ul li:hover .auth-item {
+  filter: brightness(0) invert(1);
+}
+
+/* Position chevron icon to the right with equal spacing */
+.sidebar .sidebar-items ul li .bx-chevron-down {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+/* Style all images in sidebar items with hover effect */
+.sidebar .sidebar-items ul li img {
+  width: 20px;
+  height: 20px;
+  transition: filter 0.25s ease;
+}
+
+.sidebar .sidebar-items ul li:hover img {
+  filter: brightness(0) invert(1);
+}
+
+.submenu-wrapper {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 400ms ease-out, opacity 400ms ease-out;
+  margin: 0 0 -15px 0;
+  padding: 0;
+  will-change: max-height, opacity;
+}
+
+.submenu-wrapper.open {
+  max-height: 300px;
+  opacity: 1;
+  transition-timing-function: ease-in-out;
+}
+
 .submenu-item {
-  padding-left: 40px;
-  font-size: 14px; 
+  padding-left: 50px!important;
+  font-size: 14px;
+  margin: 0px!important;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  list-style: none;
 }
 
 .submenu-item a {
-  color: #cfcfcf;
+  color: #5e5b5b;
   text-decoration: none;
+  display: block;
+  transition: color 0.25s ease;
+}
+
+.submenu-item:hover a {
+  color: #fff;
 }
 
 .cards-container {
@@ -835,6 +949,135 @@ h5{
   background-color: #f7f7f7;
 }
 
-.student-header .student-profile{
+/* Admin Dashboard Summary Cards */
+.summary-container {
+  padding: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
 
+.summary-area {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: white;
+  width: 500px;
+  box-sizing: border-box;
+  border-radius: 12px;
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.summary-title {
+  margin: 0 0 6px 0;
+  font-size: 20px;
+}
+
+.summary-cards {
+  display: flex;
+  gap: 16px;
+  flex-wrap: nowrap;
+  align-items:center;
+  justify-content:center;
+}
+
+.summary-card {
+  flex: 0 0 190px;
+  max-width: 150px;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.summary-card:nth-child(1) {
+  background: #ffe8f0;
+}
+
+.summary-card:nth-child(2) {
+  background: #ffe6c0;
+}
+
+.summary-card:nth-child(3) {
+  background: #e6f2ff;
+}
+
+.summary-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.summary-icon {
+  width: 44px;
+  height: 44px;
+  background: #ff4d80;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+}
+
+.summary-icon.icon-primary {
+  background: #ff4d80;
+}
+
+.summary-icon.icon-secondary {
+  background: #ffa500;
+}
+
+.summary-icon.icon-tertiary {
+  background: #4a9eff;
+}
+
+.summary-card h4 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2a1a4e;
+  margin: 0;
+  margin-top: 4px;
+}
+
+.summary-label {
+  font-size: 13px;
+  color: #8b7a9e;
+  font-weight: 500;
+  margin: 0;
+}
+
+.summary-change {
+  font-size: 12px;
+  color: #6b9cdb;
+  font-weight: 500;
+  margin: 0;
+}
+
+.summary-chart{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: white;
+  border-radius: 12px;
+}
+
+.summary-chart img{
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
 }

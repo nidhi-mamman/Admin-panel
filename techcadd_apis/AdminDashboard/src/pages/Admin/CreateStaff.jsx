@@ -46,8 +46,8 @@ export default function CreateStaff() {
 
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: "20px" }}>
-      <div className="right-container" style={{ height: "50%", width: "50%" }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: "20px",marginLeft:"250px" }} className="create-staff-container">
+      <div className="right-container">
         <h2 className="login-form-heading">Create Staff</h2>
         <form ref={formRef} onSubmit={handleSubmit}>
           <div className="form-group">

@@ -39,7 +39,7 @@ export default function StaffList() {
   if (error) return <p style={{ color: "red", textAlign: "center" }}>{error}</p>;
 
   return (
-    <div style={{ padding: "30px" }}>
+    <div style={{ padding: "30px",marginLeft:"250px" }}>
       <div className="d-flex align-items-center justify-content-start gap-2 mb-4">
         <Link to='/admin/create-staff' className="add-badge" style={{marginLeft:"0px",textDecoration:'none'}}> <span>Add Staff</span> <i class='bx  bxs-plus'  style={{color:'#ffffff'}}  ></i> </Link>
       </div>
@@ -116,7 +116,7 @@ const thStyle = {
   textAlign: "center",
   fontWeight: "600",
   color: "#092847ff",
-  fontSize: "14px",
+  fontSize: "12px",
   backgroundColor: "#f8f9fa",
 };
 
@@ -125,5 +125,5 @@ const tdStyle = {
   padding: "10px",
   textAlign: "center",
   color: "#092847ff",
-  fontSize: "12px",
+  fontSize: "9px",
 };
