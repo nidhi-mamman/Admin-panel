@@ -1,25 +1,38 @@
 import { useContext, useEffect, useState } from "react";
 import { context } from "../../context/Authprovider";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function StaffList() {
-  const { token } = useContext(context);
+  const { authFetch, isLoggedin } = useContext(context);
+  const navigate = useNavigate();
   const [staffList, setStaffList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
-  const location = useLocation();
-  const pathnames = location.pathname.split("/").filter((x) => x);
 
   useEffect(() => {
     const fetchStaff = async () => {
+      // Skip fetch if not logged in
+      if (!isLoggedin) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        const response = await fetch("http://localhost:8000/api/admin/staff/list/", {
+        const response = await authFetch("http://localhost:8000/api/admin/staff/list/", {
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
         });
+
+        if (response.status === 401) {
+          // Token invalid/expired and refresh failed — redirect to login
+          navigate("/");
+          return;
+        }
 
         if (!response.ok) throw new Error("Failed to fetch staff list");
 
@@ -33,15 +46,71 @@ export default function StaffList() {
     };
 
     fetchStaff();
-  }, [token]);
+  }, [authFetch, isLoggedin, navigate]);
 
   if (loading) return <p style={{ textAlign: "center" }}>Loading staff list...</p>;
   if (error) return <p style={{ color: "red", textAlign: "center" }}>{error}</p>;
 
+  // Pagination calculations
+  const totalPages = Math.ceil(staffList.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentStaff = staffList.slice(startIndex, endIndex);
+
+  // Generate page numbers to display
+  const getPageNumbers = () => {
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
+
+  // Badge style helper for roles - dark text color + light gradient background
+  const getRoleBadgeStyle = (role) => {
+    const baseStyle = {
+      display: "inline-block",
+      padding: "6px 12px",
+      borderRadius: "12px",
+      fontSize: "12px",
+      fontWeight: "700",
+    };
+
+    // normalize to lowercase for robust matching
+    const roleKey = (role || "").toString().toLowerCase();
+    const roleMap = {
+      // Manager: dark green text, light green gradient background
+      manager: { color: "#2b8a3e", background: "linear-gradient(135deg,#ecfff1,#d6ffd6)" },
+      // Trainer: dark orange text, light orange gradient background
+      trainer: { color: "#b35a00", background: "linear-gradient(135deg,#fff6ea,#ffe8cf)" },
+      // Counselor: dark blue text, light blue gradient background
+      counselor: { color: "#1f6fd6", background: "linear-gradient(135deg,#e6f4ff,#dbefff)" },
+    };
+
+    const chosen = roleMap[roleKey] || { color: "#444", background: "linear-gradient(135deg,#f3f4f6,#e6e7ea)" };
+    return { ...baseStyle, color: chosen.color, background: chosen.background };
+  };
+
+  // Badge style helper for active status - dark text + light gradient
+  const getActiveBadgeStyle = (isActive) => {
+    const baseStyle = {
+      display: "inline-block",
+      padding: "6px 12px",
+      borderRadius: "12px",
+      fontSize: "12px",
+      fontWeight: "700",
+    };
+
+    if (isActive) {
+      return { ...baseStyle, color: "#2b8a3e", background: "linear-gradient(135deg,#ecfff1,#d6ffd6)" };
+    }
+    return { ...baseStyle, color: "#a21919", background: "linear-gradient(135deg,#fff1f2,#ffd6d8)" };
+  };
+
   return (
-    <div style={{ padding: "30px",marginLeft:"250px" }}>
+    <div style={{ padding: "30px", marginLeft: "250px" }}>
       <div className="d-flex align-items-center justify-content-start gap-2 mb-4">
-        <Link to='/admin/create-staff' className="add-badge" style={{marginLeft:"0px",textDecoration:'none'}}> <span>Add Staff</span> <i class='bx  bxs-plus'  style={{color:'#ffffff'}}  ></i> </Link>
+        <Link to='/admin/create-staff' className="add-badge" style={{ marginLeft: "0px", textDecoration: 'none' }}> <span>Add Staff</span> <i class='bx  bxs-plus' style={{ color: '#ffffff' }}  ></i> </Link>
       </div>
 
       {/* Scrollable container */}
@@ -79,19 +148,27 @@ export default function StaffList() {
           </thead>
 
           <tbody style={{ backgroundColor: "#fff", color: "#000" }}>
-            {staffList.length > 0 ? (
-              staffList.map((staff, index) => (
+            {currentStaff.length > 0 ? (
+              currentStaff.map((staff, index) => (
                 <tr key={staff.id || index}>
-                  <td style={tdStyle}>{index + 1}</td>
+                  <td style={tdStyle}>{startIndex + index + 1}</td>
                   <td style={tdStyle}>{staff.username}</td>
                   <td style={tdStyle}>{staff.first_name}</td>
                   <td style={tdStyle}>{staff.last_name}</td>
                   <td style={tdStyle}>{staff.email}</td>
-                  <td style={tdStyle}>{staff.role}</td>
+                  <td style={tdStyle}>
+                    <span style={getRoleBadgeStyle(staff.role)}>
+                      {staff.role}
+                    </span>
+                  </td>
                   <td style={tdStyle}>{staff.department}</td>
                   <td style={tdStyle}>{staff.phone}</td>
                   <td style={tdStyle}>{staff.address}</td>
-                  <td style={tdStyle}>{staff.is_active ? "Yes" : "No"}</td>
+                  <td style={tdStyle}>
+                    <span style={getActiveBadgeStyle(staff.is_active)}>
+                      {staff.is_active ? "Yes" : "No"}
+                    </span>
+                  </td>
                   <td style={tdStyle}>{new Date(staff.created_at).toLocaleString()}</td>
                 </tr>
               ))
@@ -104,6 +181,38 @@ export default function StaffList() {
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Pagination Controls */}
+      <div className="pagination-container">
+        <span className="pagination-info">
+          Showing {staffList.length === 0 ? 0 : startIndex + 1}-{Math.min(endIndex, staffList.length)} of {staffList.length}
+        </span>
+        <div className="pagination-controls">
+          <button
+            className="pagination-btn pagination-arrow"
+            onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+            disabled={currentPage === 1}
+          >
+            ‹
+          </button>
+          {getPageNumbers().map((page) => (
+            <button
+              key={page}
+              className={`pagination-btn ${currentPage === page ? "active" : ""}`}
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+            </button>
+          ))}
+          <button
+            className="pagination-btn pagination-arrow"
+            onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+            disabled={currentPage === totalPages}
+          >
+            ›
+          </button>
+        </div>
       </div>
     </div>
   );

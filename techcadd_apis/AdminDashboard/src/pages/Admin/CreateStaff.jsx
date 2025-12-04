@@ -71,9 +71,9 @@ export default function CreateStaff() {
 
           <select name="role" id="role">
             <option value="">Select Role</option>
-            <option value="manager">Manager</option>
-            <option value="trainer">Trainer</option>
-            <option value="counselor">Counselor</option>
+            <option value="Manager">Manager</option>
+            <option value="Trainer">Trainer</option>
+            <option value="Counselor">Counselor</option>
           </select>
           <div className="form-group">
             <input type="text" name="department" placeholder="Department*" />

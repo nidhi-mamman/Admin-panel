@@ -186,7 +186,7 @@ p {
 
 .admin-body {
   display: flex;
-  margin-top: 74px;
+  margin-top: 55px;
 }
 
 .admin-content {
@@ -794,6 +794,25 @@ textarea {
   overflow-y: auto;
 }
 
+.staff-list-container{
+  margin-left: 20px;
+}
+.staff-list-header {
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+  color: #374151;
+  font-weight: 600;
+}
+
+.staff-list-header::before,
+.staff-list-header::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background-color: #374151;
+}
+
 .sidebar .sidebar-items ul {
   padding-inline-start: 0px !important;
 }
@@ -959,7 +978,6 @@ h5{
 }
 
 .summary-area {
-  margin-bottom: 30px;
   padding: 20px;
   background-color: white;
   width: 500px;
@@ -1080,4 +1098,56 @@ h5{
   max-width: 100%;
   height: auto;
   object-fit: contain;
+}
+
+/* Pagination Styles */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 0 10px;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #666;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.pagination-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #dfe7ef;
+  background-color: white;
+  color: #092847;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: #f0f4f8;
+}
+
+.pagination-btn.active {
+  background-color: #5856d6;
+  color: white;
+  border-color: #5856d6;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-arrow {
+  font-size: 16px;
+  font-weight: bold;
 }

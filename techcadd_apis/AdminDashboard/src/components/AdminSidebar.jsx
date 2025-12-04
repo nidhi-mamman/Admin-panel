@@ -7,7 +7,6 @@ import enquiry from '../assets/info.png'
 import registration from '../assets/registration.png'
 import signout from '../assets/signout.png'
 import staff from '../assets/team.png'
-
 export default function AdminSidebar() {
     const { logout } = useContext(context);
     const navigate = useNavigate();
@@ -23,13 +22,17 @@ export default function AdminSidebar() {
         setOpenMenu(openMenu === menuName ? null : menuName);
     };
 
+    const handleNavigate=()=>{
+        navigate("/admin/admin-dashboard");
+    }
+
     return (
         <div className="sidebar">
             <div className="sidebar-items">
                 <ul>
 
                     {/* HOME */}
-                    <li className="dashboard-item">
+                    <li className="dashboard-item" onClick={handleNavigate} style={{ cursor: "pointer" }}>
                         <img src={dashboard} alt="" />
                         Dashboard
                     </li>
