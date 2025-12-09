@@ -98,17 +98,17 @@ export default function StudentRegistration() {
             <div className="registration-container">
 
                 <form ref={formRef} onSubmit={handleSubmit} className="registration-form">
-                    <h3 style={{ marginBottom: "0px" }}>Personal/Educational Details</h3>
+                    <h3>Personal/Educational Details</h3>
                     <div className="form-row">
-                        <input type="text" name="student_name" placeholder="Student Name*" required />
-                        <input type="text" name="father_name" placeholder="Father's Name*" required />
-                    </div>
-                    <div className="form-row">
-                        <div className="input-wrapper">
-                            <input type="date" name="date_of_birth" required placeholder=" " />
-                            <span>Date of Birth*</span>
+                        <div className="form-registration-group">
+                            <input type="text" name="student_name" placeholder="Student Name*" required />
+                            <input type="text" name="father_name" placeholder="Father's Name*" required />
+                            <div className="input-wrapper">
+                                <input type="date" name="date_of_birth" required placeholder=" " />
+                                <span>Date of Birth*</span>
+                            </div>
                         </div>
-                        <input type="email" name="email" placeholder="Email*" required />
+                        <textarea name="contact_address" id="address" placeholder="Adress*" required></textarea>
                     </div>
                     <div className="form-row">
                         <input type="text" name="qualification" placeholder="Qualification*" required />
@@ -146,6 +146,18 @@ export default function StudentRegistration() {
                             <input type="text" name="company_name" placeholder="Company Name*" required />
                         </div>
                     )}
+
+                    <h3>Contact Details</h3>
+                    <div className="form-row">
+                        <input type="tel" name="phone_no" pattern="[0-9]{10}" placeholder="Phone No*" required />
+                        <input type="email" name="email" id="email" placeholder="Email*" required />
+
+                    </div>
+                    <div className="form-row">
+                        <input type="tel" name="whatsapp_no" pattern="[0-9]{10}" placeholder="WhatsApp No*" required />
+                        <input type="tel" name="parents_no" pattern="[0-9]{10}" placeholder="Parent's No*" required />
+                    </div>
+                    <h3>Registration Details</h3>
                     <div className="form-row">
                         <select name="branch" required>
                             <option value="">-- Select Branch --</option>
@@ -158,12 +170,6 @@ export default function StudentRegistration() {
                             <span>Joining Date*</span>
                         </div>
                     </div>
-                    <input type="text" name="contact_address" placeholder="Contact Address*" required />
-                    <div className="form-row">
-                        <input type="tel" name="phone_no" pattern="[0-9]{10}" placeholder="Phone No*" required />
-                        <input type="tel" name="whatsapp_no" pattern="[0-9]{10}" placeholder="WhatsApp No*" required />
-                    </div>
-                    <input type="tel" name="parents_no" pattern="[0-9]{10}" placeholder="Parent's No*" required />
                     <div className="form-row">
                         <select name="course_type" onChange={handleCourseTypeChange} required>
                             <option value="">-- Select Course Type --</option>
@@ -185,7 +191,7 @@ export default function StudentRegistration() {
                         )}
                     </div>
 
-                    <input type="text" name="software_covered" placeholder="Software Covered*" required />
+                    <textarea className="software-area" name="software_covered" placeholder="Software Covered*" required></textarea>
 
                     <div className="form-row">
                         <select name="duration_months" required>

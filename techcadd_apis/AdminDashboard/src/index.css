@@ -324,6 +324,13 @@ p {
   flex-direction: column;
 }
 
+.registration-form .form-registration-group {
+  width: 50%;
+  display: flex;
+  gap:15px;
+  flex-direction: column;
+}
+
 /* Two-column groups */
 .form-row {
   display: flex;
@@ -349,6 +356,9 @@ p {
   border: 1px solid #d0d0d0;
 }
 
+.registration-form h3{
+  margin-bottom: 0px!important;
+}
 .enquiry-form textarea,.registration-form textarea {
   resize: vertical;
   min-height: 80px;
@@ -359,6 +369,10 @@ p {
   border: 1px solid #d0d0d0;
   transition: all 0.3s ease;
   outline: none;
+}
+
+.registration-form .software-area {
+  width: 100%;
 }
 
 .enquiry-form input:focus,
@@ -715,6 +729,11 @@ textarea {
   padding: 10px;
   font-size: 1rem;
 }
+
+.form-registration-group .input-wrapper {
+  width: 100%;
+}
+
 
 .input-wrapper span {
   position: absolute;
