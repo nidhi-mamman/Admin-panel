@@ -1,12 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import { context } from "../../context/Authprovider";
 import { Link } from "react-router-dom";
+
 export default function RegistrationList() {
     const { token } = useContext(context);
     const [registrationList, setRegistrationList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
+
+    // Pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     const fetchRegistrations = async (query = "") => {
         setLoading(true);
@@ -24,12 +29,11 @@ export default function RegistrationList() {
                 },
             });
 
-            
             if (!response.ok) throw new Error("Failed to fetch registration list");
 
             const data = await response.json();
-            console.log(data)
             setRegistrationList(data.registrations || data.results || []);
+            setCurrentPage(1); // Reset pagination on search
         } catch (err) {
             setError(err.message);
         } finally {
@@ -50,13 +54,25 @@ export default function RegistrationList() {
         const value = e.target.value;
         setSearchQuery(value);
 
-        // 👇 When input becomes empty, show all registrations again
         if (value.trim() === "") {
             fetchRegistrations();
         }
     };
+
     if (loading) return <p style={{ textAlign: "center" }}>Loading Registration list...</p>;
     if (error) return <p style={{ color: "red", textAlign: "center" }}>{error}</p>;
+
+    // Pagination Logic
+    const totalPages = Math.ceil(registrationList.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentData = registrationList.slice(startIndex, endIndex);
+
+    const getPageNumbers = () => {
+        const pages = [];
+        for (let i = 1; i <= totalPages; i++) pages.push(i);
+        return pages;
+    };
 
     return (
         <div style={{ padding: "30px", fontSize: "12px", marginLeft: "250px" }}>
@@ -69,29 +85,29 @@ export default function RegistrationList() {
                 }}
             >
                 <div className="d-flex align-items-center justify-content-start gap-2 mb-4">
-                    <Link to='/staff/student/create' className="add-badge" style={{ marginLeft: "0px", textDecoration: 'none' }}> <span>New Student</span> <i class='bx  bxs-plus' style={{ color: '#ffffff' }}  ></i> </Link>
+                    <Link to='/staff/student/create' className="add-badge" style={{ marginLeft: "0px", textDecoration: 'none' }}>
+                        <span>New Student</span> <i className='bx bxs-plus' style={{ color: '#ffffff' }}></i>
+                    </Link>
                 </div>
-                {/* ✅ Search Form */}
-                <form style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "row" }} role="search" onSubmit={handleSearch}>
+
+                {/* Search Form */}
+                <form style={{ display: "flex", alignItems: "center",flexDirection:"row"}} onSubmit={handleSearch}>
                     <input
                         className="form-control me-2"
                         type="search"
                         placeholder="Search by name, email, phone, reg no, father name"
-                        aria-label="Search"
                         value={searchQuery}
                         onChange={handleInputChange}
                     />
-                    <button className="btn btn-outline-success" type="submit">
-                        Search
-                    </button>
+                    <button className="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>
 
-            {/* ✅ Scrollable Table Container */}
+            {/* Scrollable Table */}
             <div
                 style={{
-                    maxHeight: "400px", // 👈 limit table height
-                    overflowY: "auto",   // 👈 only table scrolls
+                    maxHeight: "400px",
+                    overflowY: "auto",
                     border: "1px solid #ddd",
                     borderRadius: "8px",
                     boxShadow: "0 0 10px rgba(0,0,0,0.1)",
@@ -118,10 +134,10 @@ export default function RegistrationList() {
                     </thead>
 
                     <tbody>
-                        {registrationList.length > 0 ? (
-                            registrationList.map((registration, index) => (
+                        {currentData.length > 0 ? (
+                            currentData.map((registration, index) => (
                                 <tr key={registration.id || index}>
-                                    <td style={tdStyle}>{index + 1}</td>
+                                    <td style={tdStyle}>{startIndex + index + 1}</td>
                                     <td style={tdStyle}>{registration.registration_number}</td>
                                     <td style={tdStyle}>{registration.student_name}</td>
                                     <td style={tdStyle}>{registration.phone_no}</td>
@@ -129,12 +145,7 @@ export default function RegistrationList() {
                                     <td style={tdStyle}>
                                         <Link
                                             to={`/staff/student/registration/details/${registration.id}`}
-                                            style={{
-                                                color: "#1337acff",
-                                                textDecoration: "underline",
-                                                background: "none",
-                                                boxShadow: "none",
-                                            }}
+                                            style={{ color: "#1337acff", textDecoration: "underline" }}
                                         >
                                             Click Here
                                         </Link>
@@ -143,11 +154,7 @@ export default function RegistrationList() {
                                         <Link
                                             to="/staff/fee-history"
                                             state={{ registrationNumber: registration.registration_number }}
-                                            style={{
-                                                color: "green",
-                                                background: "none",
-                                                boxShadow: "none",
-                                            }}
+                                            style={{ color: "green" }}
                                         >
                                             <i className="bx bx-sm bx-history"></i>
                                         </Link>
@@ -164,11 +171,45 @@ export default function RegistrationList() {
                     </tbody>
                 </table>
             </div>
+
+            {/* Pagination Controls */}
+            <div className="pagination-container">
+                <span className="pagination-info">
+                    Showing {registrationList.length === 0 ? 0 : startIndex + 1}-{Math.min(endIndex, registrationList.length)} of {registrationList.length}
+                </span>
+
+                <div className="pagination-controls">
+                    <button
+                        className="pagination-btn pagination-arrow"
+                        onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                        disabled={currentPage === 1}
+                    >
+                        ‹
+                    </button>
+
+                    {getPageNumbers().map((page) => (
+                        <button
+                            key={page}
+                            className={`pagination-btn ${currentPage === page ? "active" : ""}`}
+                            onClick={() => setCurrentPage(page)}
+                        >
+                            {page}
+                        </button>
+                    ))}
+
+                    <button
+                        className="pagination-btn pagination-arrow"
+                        onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                        disabled={currentPage === totalPages}
+                    >
+                        ›
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }
 
-// ✅ Table cell styles
 const thStyle = {
     border: "1px solid #ddd",
     padding: "10px",

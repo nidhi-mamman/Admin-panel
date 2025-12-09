@@ -10,7 +10,6 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate()
   const { setToken } = useContext(context)
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -23,36 +22,32 @@ export default function Home() {
     try {
       const response = await fetch("http://localhost:8000/api/admin/login/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       const data = await response.json();
-    
+
       if (response.ok) {
-        setMessage(data.message || "Login successful ✅");
-        navigate('/admin/admin-dashboard')
-        // Store tokens in localStorage
+        // show green message
+        setMessage({ text: "Login successful ✅", type: "success" });
+
+        // store access/refresh
         if (data.tokens) {
-          const accessToken = data.tokens.access;
-          const refreshToken = data.tokens.refresh;
-
-          localStorage.setItem("accessToken", accessToken);
-          localStorage.setItem("refreshToken", refreshToken);
-
-          // ✅ Update context immediately
-          setToken(accessToken);;
+          localStorage.setItem("accessToken", data.tokens.access);
+          localStorage.setItem("refreshToken", data.tokens.refresh);
+          setToken(data.tokens.access);
         }
 
-      } else {
-        setMessage(data.message || "Invalid username or password ❌");
+        // wait & redirect
+        setTimeout(() => navigate("/admin/admin-dashboard"), 2000);
+      }
+      else {
+        setMessage({ text: data.message || "Invalid username or password ❌", type: "error" });
       }
 
     } catch (error) {
-      console.error("Login error:", error);
-      setMessage("Something went wrong. Please try again ❌");
+      setMessage({ text: "Something went wrong ❌", type: "error" });
     }
   };
 
@@ -203,9 +198,9 @@ export default function Home() {
                     }}>
                       {
                         passwordVisible ?
-                        <i className='bx  bxs-lock-keyhole-open-alt' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i>:
-                          <i className='bxr bxs-lock-keyhole' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i> 
-                          
+                          <i className='bx  bxs-lock-keyhole-open-alt' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i> :
+                          <i className='bxr bxs-lock-keyhole' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i>
+
                       }
                       <input
                         type={`${passwordVisible ? "text" : "password"}`}
@@ -226,7 +221,21 @@ export default function Home() {
                     </div>
                   </form>
 
-                  {message && <p style={{ marginTop: "10px" }}>{message}</p>}
+                  {message && (
+                    <p
+                      style={{
+                        marginTop: "10px",
+                        padding: "8px 12px",
+                        borderRadius: "6px",
+                        fontWeight: "600",
+                        color: message.type === "success" ? "#155724" : "#721c24",
+                        textAlign: "center",
+                      }}
+                    >
+                      {message.text}
+                    </p>
+                  )}
+
                 </div>
               </div>
               <div className="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
@@ -267,7 +276,7 @@ export default function Home() {
                     }}>
                       {
                         passwordVisible ?
-                        <i className='bxs  bx-lock-keyhole-open-alt' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i>:
+                          <i className='bxs  bx-lock-keyhole-open-alt' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i> :
                           <i className='bxr bxs-lock-keyhole' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i>
                       }
                       <input
@@ -289,8 +298,21 @@ export default function Home() {
                       <button type="submit" className="custom-btn" style={{ padding: "8px 16px" }}>Login</button>
                     </div>
                   </form>
+                  {message && (
+                    <p
+                      style={{
+                        marginTop: "10px",
+                        padding: "8px 12px",
+                        borderRadius: "6px",
+                        fontWeight: "600",
+                        color: message.type === "success" ? "#155724" : "#721c24",
+                        textAlign: "center",
+                      }}
+                    >
+                      {message.text}
+                    </p>
+                  )}
 
-                  {message && <p style={{ marginTop: "10px" }}>{message}</p>}
                 </div>
               </div>
               <div className="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
@@ -331,7 +353,7 @@ export default function Home() {
                     }}>
                       {
                         passwordVisible ?
-                        <i className='bxs  bx-lock-keyhole-open-alt' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i>:
+                          <i className='bxs  bx-lock-keyhole-open-alt' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i> :
                           <i className='bxr bxs-lock-keyhole' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i>
                       }
                       <input
@@ -354,7 +376,21 @@ export default function Home() {
                     </div>
                   </form>
 
-                  {message && <p style={{ marginTop: "10px" }}>{message}</p>}
+                 {message && (
+                    <p
+                      style={{
+                        marginTop: "10px",
+                        padding: "8px 12px",
+                        borderRadius: "6px",
+                        fontWeight: "600",
+                        color: message.type === "success" ? "#155724" : "#721c24",
+                        textAlign: "center",
+                      }}
+                    >
+                      {message.text}
+                    </p>
+                  )}
+
                 </div>
               </div>
             </div>

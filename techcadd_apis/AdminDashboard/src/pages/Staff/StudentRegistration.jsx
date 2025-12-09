@@ -6,6 +6,7 @@ export default function StudentRegistration() {
     const [message, setMessage] = useState("");
     const [options, setOptions] = useState(null);
     const [courses, setCourses] = useState([]);
+    const [studentType, setStudentType] = useState("");
     const navigate = useNavigate();
 
     // 🟢 Fetch dropdown options on mount
@@ -95,10 +96,56 @@ export default function StudentRegistration() {
     return (
         <div className="d-flex align-items-center justify-content-center">
             <div className="registration-container">
-                <h2 className="login-form-heading">Student Registration</h2>
 
                 <form ref={formRef} onSubmit={handleSubmit} className="registration-form">
+                    <h3 style={{ marginBottom: "0px" }}>Personal/Educational Details</h3>
+                    <div className="form-row">
+                        <input type="text" name="student_name" placeholder="Student Name*" required />
+                        <input type="text" name="father_name" placeholder="Father's Name*" required />
+                    </div>
+                    <div className="form-row">
+                        <div className="input-wrapper">
+                            <input type="date" name="date_of_birth" required placeholder=" " />
+                            <span>Date of Birth*</span>
+                        </div>
+                        <input type="email" name="email" placeholder="Email*" required />
+                    </div>
+                    <div className="form-row">
+                        <input type="text" name="qualification" placeholder="Qualification*" required />
+                        <select name="student_type" value={studentType}
+                            onChange={(e) => setStudentType(e.target.value)} required>
+                            <option value="">--Select Type--</option>
+                            <option value="college">College</option>
+                            <option value="school">School</option>
+                            <option value="working">Working</option>
+                        </select>
 
+                    </div>
+                    {/* 🔥 CONDITIONAL FIELDS */}
+
+                    {/* College Fields */}
+                    {studentType === "college" && (
+                        <div className="form-row">
+                            <input type="text" name="semester" placeholder="Semester*" required />
+                            <input type="text" name="college_name" placeholder="College Name*" required />
+                        </div>
+                    )}
+
+                    {/* School Fields */}
+                    {studentType === "school" && (
+                        <div className="form-row">
+                            <input type="text" name="class_name" placeholder="Class*" required />
+                            <input type="text" name="school_name" placeholder="School Name*" required />
+                        </div>
+                    )}
+
+                    {/* Working Fields */}
+                    {studentType === "working" && (
+                        <div className="form-row">
+                            <input type="text" name="job_role" placeholder="Job Role*" required />
+                            <input type="text" name="company_name" placeholder="Company Name*" required />
+                        </div>
+                    )}
                     <div className="form-row">
                         <select name="branch" required>
                             <option value="">-- Select Branch --</option>
@@ -111,32 +158,11 @@ export default function StudentRegistration() {
                             <span>Joining Date*</span>
                         </div>
                     </div>
-
-                    <div className="form-row">
-                        <input type="text" name="student_name" placeholder="Student Name*" required />
-                        <input type="text" name="father_name" placeholder="Father's Name*" required />
-                    </div>
-
-                    <div className="form-row">
-                        <div className="input-wrapper">
-                            <input type="date" name="date_of_birth" required placeholder=" " />
-                            <span>Date of Birth*</span>
-                        </div>
-                        <input type="email" name="email" placeholder="Email*" required />
-                    </div>
-
-                    <div className="form-row">
-                        <input type="text" name="qualification" placeholder="Qualification*" required />
-                        <input type="text" name="work_college" placeholder="Work or College*" required />
-                    </div>
-
                     <input type="text" name="contact_address" placeholder="Contact Address*" required />
-
                     <div className="form-row">
                         <input type="tel" name="phone_no" pattern="[0-9]{10}" placeholder="Phone No*" required />
                         <input type="tel" name="whatsapp_no" pattern="[0-9]{10}" placeholder="WhatsApp No*" required />
                     </div>
-
                     <input type="tel" name="parents_no" pattern="[0-9]{10}" placeholder="Parent's No*" required />
                     <div className="form-row">
                         <select name="course_type" onChange={handleCourseTypeChange} required>
@@ -145,7 +171,6 @@ export default function StudentRegistration() {
                                 <option key={type.id} value={type.id}>{type.name}</option>
                             ))}
                         </select>
-
                         {courses.length > 0 ? (
                             <select name="course" required>
                                 <option value="">-- Select Course --</option>

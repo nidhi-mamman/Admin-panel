@@ -8,7 +8,7 @@ import registration from '../assets/registration.png'
 import signout from '../assets/signout.png'
 import staff from '../assets/team.png'
 export default function AdminSidebar() {
-    const { logout } = useContext(context);
+    const { logout,isLoggedin } = useContext(context);
     const navigate = useNavigate();
 
     const [openMenu, setOpenMenu] = useState(null);
@@ -22,7 +22,7 @@ export default function AdminSidebar() {
         setOpenMenu(openMenu === menuName ? null : menuName);
     };
 
-    const handleNavigate=()=>{
+    const handleNavigate = () => {
         navigate("/admin/admin-dashboard");
     }
 
@@ -45,9 +45,21 @@ export default function AdminSidebar() {
 
                     {/* Authentication SUBMENU - Persistent wrapper for smooth transitions */}
                     <div className={`submenu-wrapper ${openMenu === "authentication" ? "open" : ""}`}>
-                        <li className="submenu-item">
-                            <Link to="/">Sign in</Link>
+                        <li
+                            className="submenu-item"
+                            onClick={(e) => {
+                                if (isLoggedin) {
+                                    e.preventDefault();
+                                    alert("You are already logged in!");
+                                } else {
+                                    navigate("/");
+                                }
+                            }}
+                            style={{ cursor: "pointer" }}
+                        >
+                            Sign in
                         </li>
+
                     </div>
 
                     <li onClick={() => toggleMenu("staff")} style={{ cursor: "pointer" }}>

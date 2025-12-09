@@ -8,6 +8,10 @@ export default function EnquiryList() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
     useEffect(() => {
         const fetchEnquiry = async () => {
             try {
@@ -32,20 +36,38 @@ export default function EnquiryList() {
         fetchEnquiry();
     }, [token]);
 
-
     if (loading) return <p style={{ textAlign: "center" }}>Loading Enquiry list...</p>;
     if (error) return <p style={{ color: "red", textAlign: "center" }}>{error}</p>;
+
+    // Pagination logic
+    const totalPages = Math.ceil(enquiryList.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentItems = enquiryList.slice(startIndex, endIndex);
+
+    // Generate page numbers
+    const getPageNumbers = () => {
+        const pages = [];
+        for (let i = 1; i <= totalPages; i++) {
+            pages.push(i);
+        }
+        return pages;
+    };
 
     return (
         <div style={{ padding: "30px", fontSize: "12px", marginLeft: "250px" }}>
             <div className="d-flex align-items-center justify-content-start gap-2 mb-4">
-                <Link to='/staff/create-enquiry' className="add-badge" style={{ marginLeft: "0px", textDecoration: 'none' }}> <span>New Enquiry</span> <i class='bx  bxs-plus' style={{ color: '#ffffff' }}  ></i> </Link>
+                <Link to='/staff/create-enquiry' className="add-badge" style={{ textDecoration: 'none' }}>
+                    <span>New Enquiry</span>
+                    <i className='bx bxs-plus' style={{ color: '#ffffff' }}></i>
+                </Link>
             </div>
+
             {/* Scrollable Table Container */}
             <div
                 style={{
-                    maxHeight: "400px", // 👈 Set the height limit
-                    overflowY: "auto",   // 👈 Enables vertical scroll
+                    maxHeight: "400px",
+                    overflowY: "auto",
                     border: "1px solid #ddd",
                     borderRadius: "8px",
                     boxShadow: "0 0 10px rgba(0,0,0,0.1)",
@@ -56,7 +78,6 @@ export default function EnquiryList() {
                         width: "100%",
                         borderCollapse: "collapse",
                         backgroundColor: "transparent",
-                        color: "white",
                     }}
                 >
                     <thead style={{ backgroundColor: "#f8f9fa", position: "sticky", top: 0, zIndex: 2 }}>
@@ -73,10 +94,10 @@ export default function EnquiryList() {
                     </thead>
 
                     <tbody>
-                        {enquiryList.length > 0 ? (
-                            enquiryList.map((enquiry, index) => (
+                        {currentItems.length > 0 ? (
+                            currentItems.map((enquiry, index) => (
                                 <tr key={enquiry.id || index}>
-                                    <td style={tdStyle}>{index + 1}</td>
+                                    <td style={tdStyle}>{startIndex + index + 1}</td>
                                     <td style={tdStyle}>{enquiry.student_name}</td>
                                     <td style={tdStyle}>{enquiry.mobile}</td>
                                     <td style={tdStyle}>{enquiry.email}</td>
@@ -86,8 +107,6 @@ export default function EnquiryList() {
                                         <Link
                                             to={`/staff/student/enquiry/details/${enquiry.id}`}
                                             style={{
-                                                background: "none",
-                                                border: "none",
                                                 color: "#0d2d84ff",
                                                 textDecoration: "underline",
                                             }}
@@ -99,8 +118,6 @@ export default function EnquiryList() {
                                         <Link
                                             to={`/staff/student/enquiry/update/${enquiry.id}`}
                                             style={{
-                                                background: "none",
-                                                border: "none",
                                                 color: "green",
                                                 textDecoration: "underline",
                                             }}
@@ -112,7 +129,7 @@ export default function EnquiryList() {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="11" style={{ textAlign: "center", padding: "10px" }}>
+                                <td colSpan="8" style={{ textAlign: "center", padding: "10px" }}>
                                     No Enquiry found
                                 </td>
                             </tr>
@@ -120,12 +137,47 @@ export default function EnquiryList() {
                     </tbody>
                 </table>
             </div>
+
+            {/* Pagination Component (same as StaffList) */}
+            <div className="pagination-container">
+                <span className="pagination-info">
+                    Showing {enquiryList.length === 0 ? 0 : startIndex + 1}-
+                    {Math.min(endIndex, enquiryList.length)} of {enquiryList.length}
+                </span>
+
+                <div className="pagination-controls">
+                    <button
+                        className="pagination-btn pagination-arrow"
+                        onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                        disabled={currentPage === 1}
+                    >
+                        ‹
+                    </button>
+
+                    {getPageNumbers().map((page) => (
+                        <button
+                            key={page}
+                            className={`pagination-btn ${currentPage === page ? "active" : ""}`}
+                            onClick={() => setCurrentPage(page)}
+                        >
+                            {page}
+                        </button>
+                    ))}
+
+                    <button
+                        className="pagination-btn pagination-arrow"
+                        onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                        disabled={currentPage === totalPages}
+                    >
+                        ›
+                    </button>
+                </div>
+            </div>
         </div>
     );
-
 }
 
-// table cell styles
+// Styles
 const thStyle = {
     border: "1px solid #ddd",
     padding: "10px",

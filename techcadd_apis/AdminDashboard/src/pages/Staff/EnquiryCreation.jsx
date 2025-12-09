@@ -5,6 +5,7 @@ export default function EnquiryCreation() {
     const formRef = useRef(null);
     const [message, setMessage] = useState("");
     const [options, setOptions] = useState(null);
+    const [studentType, setStudentType] = useState("");
     const navigate = useNavigate();
 
     // 🟢 Fetch dropdown options on component mount
@@ -76,27 +77,60 @@ export default function EnquiryCreation() {
                     </div>
                     <div className="form-row">
                         <input type="text" name="qualification" placeholder="Qualification*" required />
-                        <input type="text" name="work_college" placeholder="Work or College*" required />
+                        <select name="student_type" value={studentType}
+                            onChange={(e) => setStudentType(e.target.value)} required>
+                            <option value="">--Select Type--</option>
+                            <option value="college">College</option>
+                            <option value="school">School</option>
+                            <option value="working">Working</option>
+                        </select>
+
                     </div>
+                    {/* 🔥 CONDITIONAL FIELDS */}
+
+                    {/* College Fields */}
+                    {studentType === "college" && (
+                        <div className="form-row">
+                            <input type="text" name="semester" placeholder="Semester*" required />
+                            <input type="text" name="college_name" placeholder="College Name*" required />
+                        </div>
+                    )}
+
+                    {/* School Fields */}
+                    {studentType === "school" && (
+                        <div className="form-row">
+                            <input type="text" name="class_name" placeholder="Class*" required />
+                            <input type="text" name="school_name" placeholder="School Name*" required />
+                        </div>
+                    )}
+
+                    {/* Working Fields */}
+                    {studentType === "working" && (
+                        <div className="form-row">
+                            <input type="text" name="job_role" placeholder="Job Role*" required />
+                            <input type="text" name="company_name" placeholder="Company Name*" required />
+                        </div>
+                    )}
                     <div>
                         <h3>Contact Details</h3>
                         <div className="form-row">
-                            <input
-                                type="tel"
-                                name="mobile"
-                                pattern="[0-9]{10}"
-                                maxLength="10"
-                                placeholder="Mobile number*"
-                                required
-                            />
-                            <input type="email" name="email" placeholder="Email*" required />
+                            <textarea name="address" id="address" placeholder="Adress*" required></textarea>
+                            <div className="form-enquiry-group">
+                                <input
+                                    type="tel"
+                                    name="mobile"
+                                    pattern="[0-9]{10}"
+                                    maxLength="10"
+                                    placeholder="Mobile number*"
+                                    required
+                                />
+                                <input type="email" name="email" placeholder="Email*" required />
+                            </div>
                         </div>
                     </div>
-
-                    <input type="text" name="address" placeholder="Address*" required />
                     <div>
                     </div>
-                    <h3>Enquiry Details</h3>
+                    <h3>ER Details</h3>
                     <select name="centre" required>
                         <option value="">-- Select Centre --</option>
                         {options.centre_choices.map(([value, label]) => (
@@ -106,6 +140,12 @@ export default function EnquiryCreation() {
 
                     <div className="form-row">
                         <input type="text" name="batch_time" placeholder="Batch timing*" />
+                        <select name="class_mode" required>
+                            <option value="">-- Select Mode--</option>
+                            <option value="online">Online</option>
+                            <option value="offline">Offline</option>
+                            <option value="both">Both</option>
+                        </select>
                         <input type="number" name="course_fee_offer" step="0.01" min="0" placeholder="Course fee offer*" />
                     </div>
 

@@ -13,8 +13,10 @@ body {
   font-weight: 500;
 }
 
-html,body,#root{
-  height:100%;
+html,
+body,
+#root {
+  height: 100%;
 }
 
 .myform {
@@ -23,7 +25,6 @@ html,body,#root{
 }
 
 .login-form-area {
-  width: 1000px;
   height: 400px;
   display: flex;
   align-items: center;
@@ -100,13 +101,6 @@ html,body,#root{
   right: auto;
 }
 
-.login-form-heading {
-  text-align: center;
-  margin-bottom: 20px;
-  font-weight: 800;
-  color: #221e5c;
-}
-
 .myform input::placeholder {
   opacity: 1 !important;
 }
@@ -173,7 +167,7 @@ p {
   position: relative;
 }
 
-.admin-profile div .profile-img{
+.admin-profile div .profile-img {
   border-radius: 50%;
   box-shadow: 2px 2px 4px black;
 }
@@ -181,7 +175,7 @@ p {
 /* Parent wrapper */
 .admin-layout {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
 }
 
 .admin-body {
@@ -203,7 +197,7 @@ p {
   padding: 8px;
   font-size: 14px;
   position: absolute;
-  box-shadow: 2px 2px 4px rgb(187, 187, 187),-2px -2px 4px rgb(187, 187, 187);
+  box-shadow: 2px 2px 4px rgb(187, 187, 187), -2px -2px 4px rgb(187, 187, 187);
 }
 
 .nav-tabs {
@@ -299,9 +293,11 @@ p {
 .enquiry-container {
   background: #fff;
   border-radius: 15px;
-  padding: 40px;
+  padding: 20px;
   width: 100%;
-  margin-left:250px;
+  margin-left: 250px;
+  max-width: 800px;
+  margin-top: 20px;
   box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.1);
 }
 
@@ -311,13 +307,20 @@ p {
   padding: 40px;
   width: 980px;
   height: 100%;
-  margin-left:250px;
+  margin-left: 250px;
   box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.1);
 }
 
 /* Form Layout */
 .enquiry-form {
   display: flex;
+  flex-direction: column;
+}
+
+.enquiry-form .form-enquiry-group {
+  width: 50%;
+  display: flex;
+  gap:15px;
   flex-direction: column;
 }
 
@@ -334,11 +337,26 @@ p {
 
 /* Input & Select Styles */
 .enquiry-form input,
-.enquiry-form select {
-  padding: 12px 15px;
-  border: 1.8px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
+.enquiry-form select,
+.registration-form input,
+.registration-form select {
+  transition: all 0.3s ease;
+  outline: none;
+  height: 38px;
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #d0d0d0;
+}
+
+.enquiry-form textarea,.registration-form textarea {
+  resize: vertical;
+  min-height: 80px;
+  width: 50%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #d0d0d0;
   transition: all 0.3s ease;
   outline: none;
 }
@@ -371,10 +389,12 @@ p {
 
 .registration-container {
   width: 100%;
+  max-width: 800px;
   background: #ffffff;
   border-radius: 16px;
-  padding: 30px 40px;
-  margin-left:250px;
+  padding: 20px;
+  margin-left: 250px;
+  margin-top: 20px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
 }
@@ -419,7 +439,7 @@ p {
 
 .update-container {
   max-width: 650px;
-  margin-left:450px;
+  margin-left: 450px;
   padding: 30px 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
@@ -771,20 +791,22 @@ textarea {
   background-color: #b0b0b0;
 }
 
-.staff-layout,.student-layout,.admin-layout{
+.staff-layout,
+.student-layout,
+.admin-layout {
   display: flex;
   min-height: 100vh !important;
   background-color: white;
 }
 
-.admin-navbar{
+.admin-navbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 9999;
   background-color: white;
-  box-shadow:2px 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -794,13 +816,14 @@ textarea {
   overflow-y: auto;
 }
 
-.staff-list-container{
+.staff-list-container {
   margin-left: 20px;
 }
+
 .staff-list-header {
   display: flex;
   align-items: center;
-  gap: 10px; 
+  gap: 10px;
   color: #374151;
   font-weight: 600;
 }
@@ -817,7 +840,7 @@ textarea {
   padding-inline-start: 0px !important;
 }
 
-.sidebar .sidebar-items ul .dashboard-item{
+.sidebar .sidebar-items ul .dashboard-item {
   background-color: #221e5c;
   color: white;
 }
@@ -886,9 +909,9 @@ textarea {
 }
 
 .submenu-item {
-  padding-left: 50px!important;
+  padding-left: 50px !important;
   font-size: 14px;
-  margin: 0px!important;
+  margin: 0px !important;
   padding-top: 10px;
   padding-bottom: 10px;
   list-style: none;
@@ -914,7 +937,7 @@ textarea {
 .enquiry-count-card {
   width: 200px;
   height: 120px;
-  color:white;
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -928,8 +951,8 @@ textarea {
 .registration-count-card {
   width: 200px;
   height: 120px;
-  color:white;
-   display: flex;
+  color: white;
+  display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
@@ -939,16 +962,16 @@ textarea {
   box-shadow: 2px 2px 4px inset rgba(0, 0, 0, 0.2);
 }
 
-h3{
-  font-weight:600;
+h3 {
+  font-weight: 600;
   color: #2a2a40;
-  margin-bottom: 20px!important;
+  margin-bottom: 20px !important;
 }
 
 
-h5{
+h5 {
   font-weight: 600;
-  color:#221e5c;
+  color: #221e5c;
   text-decoration: underline;
 }
 
@@ -959,7 +982,8 @@ h5{
   flex: 1;
   overflow-y: auto;
 }
-.student-header{
+
+.student-header {
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -1002,8 +1026,8 @@ h5{
   display: flex;
   gap: 16px;
   flex-wrap: nowrap;
-  align-items:center;
-  justify-content:center;
+  align-items: center;
+  justify-content: center;
 }
 
 .summary-card {
@@ -1082,7 +1106,7 @@ h5{
   margin: 0;
 }
 
-.summary-chart{
+.summary-chart {
   width: 100%;
   display: flex;
   align-items: center;
@@ -1093,7 +1117,7 @@ h5{
   border-radius: 12px;
 }
 
-.summary-chart img{
+.summary-chart img {
   width: 100%;
   max-width: 100%;
   height: auto;
