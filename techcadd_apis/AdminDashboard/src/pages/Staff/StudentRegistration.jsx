@@ -192,13 +192,19 @@ export default function StudentRegistration() {
                     </div>
 
                     <textarea className="software-area" name="software_covered" placeholder="Software Covered*" required></textarea>
-
+                    <input type="text" name="work_college" id="" />
                     <div className="form-row">
                         <select name="duration_months" required>
                             <option value="">-- Select Duration --</option>
                             {options.duration_choices?.map((d) => (
                                 <option key={d.value} value={d.value}>{d.label}</option>
                             ))}
+                        </select>
+                        <select name="class_mode" required>
+                            <option value="">-- Select Mode --</option>
+                            <option value="online">Online</option>
+                            <option value="offline">Offline</option>
+                            <option value="both">Both</option>
                         </select>
 
                         <input type="number" name="duration_hours" placeholder="Duration Hours*" required />

@@ -1021,7 +1021,7 @@ h5 {
 }
 
 .summary-area {
-  padding: 20px;
+  padding: 10px;
   background-color: white;
   width: 500px;
   box-sizing: border-box;
@@ -1112,10 +1112,11 @@ h5 {
 }
 
 .summary-label {
-  font-size: 13px;
+  font-size: 11px;
   color: #8b7a9e;
   font-weight: 500;
   margin: 0;
+  text-align: left;
 }
 
 .summary-change {

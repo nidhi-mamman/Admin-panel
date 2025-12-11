@@ -7,11 +7,33 @@ export default function EnquiryList() {
     const [enquiryList, setEnquiryList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [options, setOptions] = useState(null);
+    const [filters, setFilters] = useState({
+        centre: "",
+        trade: "",
+        enquiry_status: ""
+    });
+
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
-
+    useEffect(() => {
+        const fetchOptions = async () => {
+            try {
+                const res = await fetch("http://localhost:8000/api/staff/students/options/", {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                    },
+                });
+                const data = await res.json();
+                setOptions(data);
+            } catch (err) {
+                console.error("Error fetching options:", err);
+            }
+        };
+        fetchOptions();
+    }, []);
     useEffect(() => {
         const fetchEnquiry = async () => {
             try {
@@ -25,6 +47,7 @@ export default function EnquiryList() {
                 if (!response.ok) throw new Error("Failed to fetch enquiry list");
 
                 const data = await response.json();
+                console.log(data)
                 setEnquiryList(data.students || []);
             } catch (err) {
                 setError(err.message);
@@ -36,8 +59,6 @@ export default function EnquiryList() {
         fetchEnquiry();
     }, [token]);
 
-    if (loading) return <p style={{ textAlign: "center" }}>Loading Enquiry list...</p>;
-    if (error) return <p style={{ color: "red", textAlign: "center" }}>{error}</p>;
 
     // Pagination logic
     const totalPages = Math.ceil(enquiryList.length / itemsPerPage);
@@ -53,14 +74,76 @@ export default function EnquiryList() {
         }
         return pages;
     };
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        setFilters(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+    useEffect(() => {
+        const fetchFilteredEnquiries = async () => {
+            try {
+                let query = [];
+
+                if (filters.centre) query.push(`centre=${filters.centre}`);
+                if (filters.trade) query.push(`trade=${filters.trade}`);
+                if (filters.enquiry_status) query.push(`enquiry_status=${filters.enquiry_status}`);
+
+                const queryString = query.length > 0 ? `?${query.join("&")}` : "";
+
+                const response = await fetch(
+                    `http://localhost:8000/api/staff/students/list/${queryString}`,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                const data = await response.json();
+                console.log("Fetched Enquiries:", data);
+                setEnquiryList(data.students || []);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+
+        fetchFilteredEnquiries();
+    }, [filters, token]);
+
+    if (loading) return <p style={{ textAlign: "center" }}>Loading Enquiry list...</p>;
+    if (error) return <p style={{ color: "red", textAlign: "center" }}>{error}</p>;
+
+    if (!options) return <p>Loading form options...</p>;
+
 
     return (
         <div style={{ padding: "30px", fontSize: "12px", marginLeft: "250px" }}>
-            <div className="d-flex align-items-center justify-content-start gap-2 mb-4">
+            <div className="d-flex align-items-center justify-content-start gap-2 mb-5">
                 <Link to='/staff/create-enquiry' className="add-badge" style={{ textDecoration: 'none' }}>
                     <span>New Enquiry</span>
                     <i className='bx bxs-plus' style={{ color: '#ffffff' }}></i>
                 </Link>
+                <select name="centre" required onChange={handleFilterChange}>
+                    <option value="">-- Select Centre --</option>
+                    {options.centre_choices.map(([value, label]) => (
+                        <option key={value} value={value}>{label}</option>
+                    ))}
+                </select>
+                <select name="trade" required onChange={handleFilterChange}>
+                    <option value="">-- Select Trade --</option>
+                    {options.trade_choices.map(([value, label]) => (
+                        <option key={value} value={value}>{label}</option>
+                    ))}
+                </select>
+                <select name="enquiry_status" required onChange={handleFilterChange}>
+                    <option value="">-- Select Status --</option>
+                    {options.enquiry_status_choices.map(([value, label]) => (
+                        <option key={value} value={value}>{label}</option>
+                    ))}
+                </select>
             </div>
 
             {/* Scrollable Table Container */}
@@ -101,7 +184,7 @@ export default function EnquiryList() {
                                     <td style={tdStyle}>{enquiry.student_name}</td>
                                     <td style={tdStyle}>{enquiry.mobile}</td>
                                     <td style={tdStyle}>{enquiry.email}</td>
-                                    <td style={tdStyle}>{enquiry.enquiry_date}</td>
+                                    <td style={tdStyle}>{enquiry.created_at ? enquiry.created_at.split("T")[0] : ""}</td>
                                     <td style={tdStyle}>{enquiry.enquiry_status_display}</td>
                                     <td style={tdStyle}>
                                         <Link

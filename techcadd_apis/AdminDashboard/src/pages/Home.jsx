@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useRef, useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom'
 import { context } from "../context/Authprovider";
 import login_illustration from '../assets/login_illustration.png'
@@ -7,9 +7,21 @@ export default function Home() {
   const staffRef = useRef(null);
   const studentRef = useRef(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [message, setMessage] = useState("");
+  const [toast, setToast] = useState(null);
   const navigate = useNavigate()
   const { setToken } = useContext(context)
+  // 🔥 Auto-hide toast after 3 seconds
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
+
+  // 🔥 FUNCTION: show toast
+  const showToast = (message, type) => {
+    setToast({ message, type });
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -29,8 +41,7 @@ export default function Home() {
       const data = await response.json();
 
       if (response.ok) {
-        // show green message
-        setMessage({ text: "Login successful ✅", type: "success" });
+        showToast("Login successful ✅", "success");
 
         // store access/refresh
         if (data.tokens) {
@@ -43,11 +54,11 @@ export default function Home() {
         setTimeout(() => navigate("/admin/admin-dashboard"), 2000);
       }
       else {
-        setMessage({ text: data.message || "Invalid username or password ❌", type: "error" });
+        showToast(data.message || "Invalid username or password ❌", "error");
       }
 
     } catch (error) {
-      setMessage({ text: "Something went wrong ❌", type: "error" });
+      showToast("Something went wrong ❌", "error");
     }
   };
 
@@ -55,46 +66,39 @@ export default function Home() {
     e.preventDefault();
 
     const form = new FormData(staffRef.current);
-    const formData = {};
-    for (let [key, value] of form.entries()) {
-      formData[key] = value;
-    }
+    const formData = Object.fromEntries(form.entries());
 
     try {
       const response = await fetch("http://localhost:8000/api/staff/login/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       const data = await response.json();
 
-      if (response.ok) {
-        setMessage(data.message || "Login successful ✅");
-        navigate('/staff/staff-dashboard')
-        // Store tokens in localStorage
+      // 🔥 Backend may return success but not `response.ok`
+      if (response.ok || data.status === "success" || data.message === "Login successful") {
+        showToast("Login successful ✅", "success");
+
         if (data.tokens) {
-          const accessToken = data.tokens.access;
-          const refreshToken = data.tokens.refresh;
-
-          localStorage.setItem("accessToken", accessToken);
-          localStorage.setItem("refreshToken", refreshToken);
-
-          // ✅ Update context immediately
-          setToken(accessToken);
+          localStorage.setItem("accessToken", data.tokens.access);
+          localStorage.setItem("refreshToken", data.tokens.refresh);
+          setToken(data.tokens.access);
         }
 
-      } else {
-        setMessage(data.message || "Invalid username or password ❌");
+        setTimeout(() => navigate("/staff/staff-dashboard"), 1200);
+        return;
       }
 
+      // ❌ If not ok, show error
+      showToast(data.message || "Invalid username or password ❌", "error");
+
     } catch (error) {
-      console.error("Login error:", error);
-      setMessage("Something went wrong. Please try again ❌");
+      showToast("Something went wrong ❌", "error");
     }
   };
+
 
   const handleStudentSubmit = async (e) => {
     e.preventDefault();
@@ -117,9 +121,8 @@ export default function Home() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage(data.message || "Login successful ✅");
-        navigate('/student/dashboard')
-        // Store tokens in localStorage
+        showToast("Login successful ✅", "success");
+        navigate('/staff/staff-dashboard');
         if (data.tokens) {
           const accessToken = data.tokens.access;
           const refreshToken = data.tokens.refresh;
@@ -133,17 +136,23 @@ export default function Home() {
 
 
       } else {
-        setMessage(data.message || "Invalid username or password ❌");
+        showToast(data.message || "Invalid username or password ❌", "error");
       }
 
     } catch (error) {
-      console.error("Login error:", error);
-      setMessage("Something went wrong. Please try again ❌");
+      showToast("Something went wrong ❌", "error");
     }
   };
 
   return (
     <>
+      <div className="toast-container">
+        {toast && (
+          <div className={`custom-toast ${toast.type}`}>
+            {toast.message}
+          </div>
+        )}
+      </div>
       <div className="d-flex flex-column align-items-center justify-content-center login-area">
         {/* <h2 className="login-form-heading">Login</h2> */}
         <div className="login-form-area">
@@ -221,20 +230,6 @@ export default function Home() {
                     </div>
                   </form>
 
-                  {message && (
-                    <p
-                      style={{
-                        marginTop: "10px",
-                        padding: "8px 12px",
-                        borderRadius: "6px",
-                        fontWeight: "600",
-                        color: message.type === "success" ? "#155724" : "#721c24",
-                        textAlign: "center",
-                      }}
-                    >
-                      {message.text}
-                    </p>
-                  )}
 
                 </div>
               </div>
@@ -276,8 +271,8 @@ export default function Home() {
                     }}>
                       {
                         passwordVisible ?
-                          <i className='bxs  bx-lock-keyhole-open-alt' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i> :
-                          <i className='bxr bxs-lock-keyhole' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i>
+                          <i className='bxs bx-lock-keyhole-open-alt' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i> :
+                          <i className='bx bxs-lock-keyhole' style={{ marginRight: "8px" }} onClick={() => { setPasswordVisible(!passwordVisible) }}></i>
                       }
                       <input
                         type={`${passwordVisible ? "text" : "password"}`}
@@ -298,20 +293,7 @@ export default function Home() {
                       <button type="submit" className="custom-btn" style={{ padding: "8px 16px" }}>Login</button>
                     </div>
                   </form>
-                  {message && (
-                    <p
-                      style={{
-                        marginTop: "10px",
-                        padding: "8px 12px",
-                        borderRadius: "6px",
-                        fontWeight: "600",
-                        color: message.type === "success" ? "#155724" : "#721c24",
-                        textAlign: "center",
-                      }}
-                    >
-                      {message.text}
-                    </p>
-                  )}
+
 
                 </div>
               </div>
@@ -375,21 +357,6 @@ export default function Home() {
                       <button type="submit" className="custom-btn" style={{ padding: "8px 16px" }}>Login</button>
                     </div>
                   </form>
-
-                 {message && (
-                    <p
-                      style={{
-                        marginTop: "10px",
-                        padding: "8px 12px",
-                        borderRadius: "6px",
-                        fontWeight: "600",
-                        color: message.type === "success" ? "#155724" : "#721c24",
-                        textAlign: "center",
-                      }}
-                    >
-                      {message.text}
-                    </p>
-                  )}
 
                 </div>
               </div>
