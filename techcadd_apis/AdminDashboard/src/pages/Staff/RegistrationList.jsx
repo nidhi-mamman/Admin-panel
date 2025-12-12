@@ -109,15 +109,24 @@ export default function RegistrationList() {
             const queryString = buildQueryString(filters);
 
             const response = await fetch(
-                `http://127.0.0.1:8000/api/staff/registrations/list/?${queryString}`
+                `http://127.0.0.1:8000/api/staff/registrations/list/?${queryString}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    }
+                }
             );
 
+            if (!response.ok) throw new Error("Failed to fetch filtered data");
+
             const data = await response.json();
-            setRegistrationList(data?.registrations || []);
+            setRegistrationList(data?.registrations || data?.results || []);
         } catch (error) {
             console.error("Error fetching:", error);
         }
     };
+
     useEffect(() => {
         fetchFilteredRegistrations()
     }, [filters]);

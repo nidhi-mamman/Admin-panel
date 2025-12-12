@@ -190,7 +190,6 @@ export default function StudentRegistration() {
                             </select>
                         )}
                     </div>
-
                     <textarea className="software-area" name="software_covered" placeholder="Software Covered*" required></textarea>
                     <input type="text" name="work_college" id="" />
                     <div className="form-row">

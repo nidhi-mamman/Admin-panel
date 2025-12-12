@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { context } from "../../context/Authprovider";
 import Chart from '../../components/Charts/EnquiryRegistrationChart'
-// import SourceStatsCard from "../../components/Charts/SourceStatsCard";
+import SourceStatsCard from "../../components/Charts/SourceStatsCard";
 export default function AdminDashboard() {
   const { token } = useContext(context);
   const [totalEnquiries, setTotalEnquiries] = useState(0);
@@ -94,6 +94,9 @@ export default function AdminDashboard() {
             <Chart />
             {/* <SourceStatsCard /> */}
           </div>
+        </div>
+        <div className="source-stats">
+          <SourceStatsCard/>
         </div>
       </div>
     </>
