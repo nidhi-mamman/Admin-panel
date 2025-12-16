@@ -1,14 +1,7 @@
-import profile from '../../assets/profile.png'
-const StudentDashboard = () => {
+export default function StudentDashboard() {
   return (
-    <div>
-      <div className="student-header">
-        <div className="student-profile">
-          <img src={profile} alt="Student Profile" width={60} height={60} />
-        </div>
-      </div>
+    <div style={{ marginLeft: "250px" }}>
+      <h1>Student Dashboard</h1>
     </div>
-  )
+  );
 }
-
-export default StudentDashboard

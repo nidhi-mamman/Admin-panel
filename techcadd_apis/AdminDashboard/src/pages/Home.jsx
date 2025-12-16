@@ -122,7 +122,7 @@ export default function Home() {
 
       if (response.ok) {
         showToast("Login successful ✅", "success");
-        navigate('/staff/staff-dashboard');
+        navigate('/student/dashboard');
         if (data.tokens) {
           const accessToken = data.tokens.access;
           const refreshToken = data.tokens.refresh;

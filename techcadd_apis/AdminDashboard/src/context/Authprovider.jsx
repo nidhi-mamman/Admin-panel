@@ -4,124 +4,99 @@ import axios from "axios";
 
 export const context = createContext();
 
-export const AuthProvider = (props) => {
+export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem("accessToken"));
   const isLoggedin = !!token;
 
-  // helper: refresh access token using stored refresh token
+  /* ==============================
+     🔁 REFRESH ACCESS TOKEN
+  ============================== */
   const refreshAccessToken = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
-    if (!refreshToken) {
-      console.warn("No refresh token available");
-      return null;
-    }
+    if (!refreshToken) return null;
+
     try {
-      console.log("Attempting to refresh access token...");
       const resp = await axios.post(
         "http://localhost:8000/api/admin/token/refresh/",
         { refresh: refreshToken },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        { headers: { "Content-Type": "application/json" } }
       );
-      console.log("Refresh response:", resp.data);
-      const newAccess = resp.data?.access || resp.data?.accessToken || resp.data?.token;
+
+      const newAccess = resp.data?.access;
       if (newAccess) {
-        console.log("New access token received, storing...");
-        setToken(newAccess);
         localStorage.setItem("accessToken", newAccess);
+        setToken(newAccess);
         return newAccess;
       }
     } catch (err) {
-      console.warn("Refresh token failed:", err.response?.data || err.message);
-      // do not auto-clear tokens here; let caller decide what to do on failure
+      console.warn("Refresh failed:", err.response?.data || err.message);
     }
     return null;
   };
 
-  // helper: verify access token validity (returns true/false)
+  /* ==============================
+     ✅ VERIFY TOKEN (APP LOAD ONLY)
+  ============================== */
   const verifyAccessToken = async (accessToken) => {
-    const tokenToVerify = accessToken || localStorage.getItem("accessToken");
-    if (!tokenToVerify) {
-      console.warn("No token to verify");
-      return false;
-    }
     try {
-      // Send token in Authorization header (most common way to verify)
       await axios.post(
         "http://localhost:8000/api/admin/verify-token/",
-        {},
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${tokenToVerify}`,
-          },
-        }
+        { token: accessToken },
+        { headers: { "Content-Type": "application/json" } }
       );
-      console.log("Token verification passed");
       return true;
-    } catch (err) {
-      console.warn("Token verification failed:", err.response?.status, err.response?.data);
+    } catch {
       return false;
     }
   };
 
-  // convenience fetch wrapper that adds Authorization header and auto-refreshes once on 401
-  const authFetch = async (input, init = {}) => {
+  /* ==============================
+     🌐 AUTH FETCH (NO VERIFY HERE)
+  ============================== */
+  const authFetch = async (url, options = {}) => {
     let access = localStorage.getItem("accessToken");
 
-    // if we have an access token, verify it first; if invalid, try refresh
-    if (access) {
-      const valid = await verifyAccessToken(access);
-      if (!valid) {
-        access = await refreshAccessToken();
-      }
-    } else {
-      // no access token in storage, try refresh (in case page reload dropped in-memory state)
-      access = await refreshAccessToken();
-    }
-
-    const headers = new Headers(init.headers || {});
+    const headers = new Headers(options.headers || {});
     if (access) headers.set("Authorization", `Bearer ${access}`);
 
-    const response = await fetch(input, { ...init, headers });
-    if (response.status !== 401) return response;
+    let response = await fetch(url, { ...options, headers });
 
-    // try refresh once more on 401
-    const newAccess = await refreshAccessToken();
-    if (!newAccess) return response; // still 401
+    // 🔁 Access expired → refresh once
+    if (response.status === 401) {
+      const newAccess = await refreshAccessToken();
+      if (!newAccess) return response;
 
-    // retry original request with new token
-    const retryHeaders = new Headers(init.headers || {});
-    retryHeaders.set("Authorization", `Bearer ${newAccess}`);
-    return fetch(input, { ...init, headers: retryHeaders });
+      headers.set("Authorization", `Bearer ${newAccess}`);
+      response = await fetch(url, { ...options, headers });
+    }
+
+    return response;
   };
 
-  useEffect(() => {
-    if (token) {
-      localStorage.setItem("accessToken", token);
-    } else {
-      localStorage.removeItem("accessToken");
-    }
-  }, [token]);
-
-  // on app load: validate existing access token, or refresh if needed
+  /* ==============================
+     🚀 INIT AUTH (ON APP LOAD)
+  ============================== */
   useEffect(() => {
     const initAuth = async () => {
+      const access = localStorage.getItem("accessToken");
       const refresh = localStorage.getItem("refreshToken");
 
-      // If a refresh token exists, try refreshing to get a fresh access token on page load
-      if (refresh) {
-        await refreshAccessToken();
-        // don't clear tokens on failure - let API calls decide if unauthorized
+      if (!access || !refresh) return;
+
+      const valid = await verifyAccessToken(access);
+      if (!valid) {
+        const refreshed = await refreshAccessToken();
+        if (!refreshed) logoutLocal();
       }
     };
+
     initAuth();
   }, []);
-  
-  const logout = async () => {
+
+  /* ==============================
+     🔓 LOGOUTS
+  ============================== */
+  const logoutAdmin = async () => {
     try {
       await axios.post(
         "http://localhost:8000/api/admin/logout/",
@@ -132,18 +107,33 @@ export const AuthProvider = (props) => {
           },
         }
       );
-    } catch (error) {
-      console.error("Logout failed:", error.response?.data || error.message);
+    } catch (err) {
+      console.error("Admin logout failed:", err.response?.data || err.message);
     } finally {
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      setToken(null);
+      logoutLocal();
     }
   };
 
+  const logoutLocal = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    setToken(null);
+  };
+
   return (
-    <context.Provider value={{ isLoggedin, token, setToken, logout, refreshAccessToken, verifyAccessToken, authFetch }}>
-      {props.children}
+    <context.Provider
+      value={{
+        isLoggedin,
+        token,
+        setToken,
+        authFetch,
+        refreshAccessToken,
+        verifyAccessToken,
+        logoutAdmin,
+        logoutLocal,
+      }}
+    >
+      {children}
     </context.Provider>
   );
 };

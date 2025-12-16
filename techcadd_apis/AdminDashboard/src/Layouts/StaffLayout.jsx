@@ -1,11 +1,11 @@
-import AdminNavbar from "../components/AdminNavbar";
+import StaffNavbar from "../components/StaffNavbar";
 import StaffSidebar from "../components/StaffSidebar";
 import { Outlet } from "react-router-dom";
 
-export default function AdminLayout() {
+export default function StaffLayout() {
   return (
     <div className="admin-layout">
-      <AdminNavbar />
+      <StaffNavbar />
       <div className="admin-body">
         <StaffSidebar />
         <div className="admin-content">

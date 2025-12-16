@@ -8,13 +8,13 @@ import registration from '../assets/registration.png'
 import signout from '../assets/signout.png'
 import staff from '../assets/team.png'
 export default function AdminSidebar() {
-    const { logout,isLoggedin } = useContext(context);
+    const { logoutAdmin,isLoggedin } = useContext(context);
     const navigate = useNavigate();
 
     const [openMenu, setOpenMenu] = useState(null);
 
     const handleLogout = async () => {
-        await logout();
+        await logoutAdmin();
         navigate("/");
     };
 

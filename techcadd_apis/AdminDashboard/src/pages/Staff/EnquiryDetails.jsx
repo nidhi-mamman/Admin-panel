@@ -21,6 +21,7 @@ export default function EnquiryDetails() {
         if (!response.ok) throw new Error("Failed to fetch enquiry details");
 
         const data = await response.json();
+        console.log("data:", data);
         setEnquiry(data);
       } catch (err) {
         setError(err.message);
@@ -42,7 +43,7 @@ export default function EnquiryDetails() {
             <p><strong>Student Name:</strong> {enquiry.student_name}</p>
             <p><strong>Date of Birth:</strong> {enquiry.date_of_birth}</p>
             <p><strong>Qualification:</strong> {enquiry.qualification}</p>
-            <p><strong>Work or College:</strong> {enquiry.work_college}</p>
+            <p><strong>Work or College:</strong> {enquiry.student_type}</p>
           </div>
         </div>
         <div>
@@ -74,7 +75,7 @@ export default function EnquiryDetails() {
           </div>
           <div className="form-row">
             <p><strong>Remarks:</strong> {enquiry.remark}</p>
-            <p><strong>Enquiry Taken By:</strong> {enquiry.enquiry_taken_by_name}</p>
+            <p><strong>Enquiry Taken By:</strong> {enquiry.enquiry_taken_by["first_name"]}</p>
           </div>
         </div>
       </div>

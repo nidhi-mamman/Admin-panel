@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-export default function StudentDashboard() {
+export default function StudentProfile() {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -18,6 +17,7 @@ export default function StudentDashboard() {
         });
 
         const data = await response.json();
+        console.log(data);
 
         if (response.ok) {
           setDashboardData(data.dashboard);
@@ -41,14 +41,16 @@ export default function StudentDashboard() {
 
   return (
     <div style={{
-      maxWidth: "600px",
+      maxWidth: "900px",
       margin: "40px auto",
       padding: "20px",
+      marginLeft:"280px",
+      backgroundColor: "#fff",
       border: "1px solid #ddd",
       borderRadius: "12px",
+      marginTop:"30px",
       boxShadow: "0px 2px 8px rgba(0,0,0,0.1)"
     }}>
-      <h2 style={{ textAlign: "center" }}>🎓 Student Dashboard</h2>
 
       <div style={{ marginTop: "20px" }}>
         <p><strong>Registration No:</strong> {dashboardData.registration_number}</p>
@@ -65,17 +67,6 @@ export default function StudentDashboard() {
         <p><strong>Fee Balance:</strong> ₹{dashboardData.fee_balance}</p>
         <p><strong>Payment %:</strong> {dashboardData.payment_percentage}%</p>
       </div>
-
-      <hr />
-
-      <h3>📊 Quick Stats</h3>
-      <ul>
-        <li>Total Courses: {dashboardData.quick_stats.total_courses}</li>
-        <li>Completed Lessons: {dashboardData.quick_stats.completed_lessons}</li>
-        <li>Upcoming Classes: {dashboardData.quick_stats.upcoming_classes}</li>
-        <li>Pending Assignments: {dashboardData.quick_stats.pending_assignments}</li>
-      </ul>
-      <Link to='/student/mycourse'>My Course</Link>
     </div>
   );
 }

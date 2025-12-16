@@ -6,14 +6,14 @@ import shield from '../assets/shield.png'
 import enquiry from '../assets/info.png'
 import registration from '../assets/registration.png'
 import signout from '../assets/signout.png'
-export default function AdminSidebar() {
-    const { logout, isLoggedin } = useContext(context);
+export default function StaffSidebar() {
+    const { logoutLocal, isLoggedin } = useContext(context);
     const navigate = useNavigate();
 
     const [openMenu, setOpenMenu] = useState(null);
 
     const handleLogout = async () => {
-        await logout();
+        await logoutLocal();
         navigate("/");
     };
 
