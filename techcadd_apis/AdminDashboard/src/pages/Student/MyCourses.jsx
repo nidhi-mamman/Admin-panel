@@ -63,6 +63,7 @@ export default function MyCourses() {
       style={{
         maxWidth: "700px",
         margin: "40px auto",
+        marginLeft:"380px",
         padding: "24px",
         border: "1px solid #ddd",
         borderRadius: "12px",
@@ -132,22 +133,6 @@ export default function MyCourses() {
           <p>No modules available yet.</p>
         )}
       </div>
-
-      <hr style={{ margin: "24px 0" }} />
-
-      <Link
-        to="/student/dashboard"
-        style={{
-          textDecoration: "none",
-          color: "white",
-          background: "#007bff",
-          padding: "10px 16px",
-          borderRadius: "8px",
-          display: "inline-block",
-        }}
-      >
-        ← Back to Dashboard
-      </Link>
     </div>
   );
 }

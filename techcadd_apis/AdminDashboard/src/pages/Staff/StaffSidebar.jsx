@@ -1,20 +1,19 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { context } from "../context/Authprovider";
-import dashboard from '../assets/pie-chart.png'
-import shield from '../assets/shield.png'
-import enquiry from '../assets/info.png'
-import registration from '../assets/registration.png'
-import signout from '../assets/signout.png'
-import staff from '../assets/team.png'
-export default function AdminSidebar() {
-    const { logoutAdmin,isLoggedin } = useContext(context);
+import { context } from "../../context/Authprovider";
+import dashboard from '../../assets/pie-chart.png'
+import shield from '../../assets/shield.png'
+import enquiry from '../../assets/info.png'
+import registration from '../../assets/registration.png'
+import signout from '../../assets/signout.png'
+export default function StaffSidebar() {
+    const { logoutLocal, isLoggedin } = useContext(context);
     const navigate = useNavigate();
 
     const [openMenu, setOpenMenu] = useState(null);
 
     const handleLogout = async () => {
-        await logoutAdmin();
+        await logoutLocal();
         navigate("/");
     };
 
@@ -23,7 +22,7 @@ export default function AdminSidebar() {
     };
 
     const handleNavigate = () => {
-        navigate("/admin/admin-dashboard");
+        navigate("/staff/staff-dashboard");
     }
 
     return (
@@ -60,22 +59,6 @@ export default function AdminSidebar() {
                             Sign in
                         </li>
 
-                    </div>
-
-                    <li onClick={() => toggleMenu("staff")} style={{ cursor: "pointer" }}>
-                        <img src={staff} alt="" />
-                        Staff
-                        <i className='bx  bx-chevron-down auth-item' style={{ color: '#525562' }}></i>
-                    </li>
-
-                    {/* ENQUIRY SUBMENU - Persistent wrapper for smooth transitions */}
-                    <div className={`submenu-wrapper ${openMenu === "staff" ? "open" : ""}`}>
-                        <li className="submenu-item">
-                            <Link to="/admin/create-staff">New Staff</Link>
-                        </li>
-                        <li className="submenu-item">
-                            <Link to="/admin/show/staff-list">Staff List</Link>
-                        </li>
                     </div>
 
                     {/* ENQUIRY */}

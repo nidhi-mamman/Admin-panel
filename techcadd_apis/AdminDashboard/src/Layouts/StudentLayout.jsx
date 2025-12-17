@@ -1,6 +1,6 @@
-import StudentNavbar from "../components/StudentNavbar";
+import StudentNavbar from "../pages/Student/StudentNavbar";
 import { Outlet } from "react-router-dom";
-import StudentsSidebar from "../components/StudentsSidebar";
+import StudentsSidebar from "../pages/Student/StudentsSidebar";
 export default function StudentLayout() {
   return (
     <div className="admin-layout">

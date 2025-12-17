@@ -1,9 +1,10 @@
 import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { context } from "../context/Authprovider";
-import dashboard from '../assets/pie-chart.png'
-import shield from '../assets/shield.png'
-import signout from '../assets/signout.png'
+import { useNavigate } from "react-router-dom";
+import { context } from "../../context/Authprovider";
+import dashboard from '../../assets/pie-chart.png'
+import shield from '../../assets/shield.png'
+import signout from '../../assets/signout.png' //#6A6FFE
+import courses from '../../assets/education.png'
 export default function StudentsSidebar() {
     const { logoutLocal, isLoggedin } = useContext(context);
     const navigate = useNavigate();
@@ -21,6 +22,10 @@ export default function StudentsSidebar() {
 
     const handleNavigate = () => {
         navigate("/student/dashboard");
+    }
+
+    const handleCourses = () => {
+        navigate("/student/mycourses");
     }
 
     return (
@@ -58,7 +63,10 @@ export default function StudentsSidebar() {
                         </li>
 
                     </div>
-                  
+                   <li style={{ cursor: "pointer" }} onClick={handleCourses}>
+                        <img src={courses} alt="" />
+                        Courses
+                    </li>
 
                     {/* LOGOUT */}
                     <li onClick={handleLogout}>

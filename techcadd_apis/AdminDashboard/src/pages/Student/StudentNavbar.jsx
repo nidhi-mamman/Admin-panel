@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { context } from "../context/Authprovider";
-import Logo from "../assets/tce_logo.png";
-import profile from "../assets/profilepic.jpg";
-import user from "../assets/user.png";
-import exit from "../assets/exit.png";
+import { context } from "../../context/Authprovider";
+import Logo from "../../assets/tce_logo.png";
+import profile from "../../assets/profilepic.jpg";
+import user from "../../assets/user.png";
+import exit from "../../assets/exit.png";
 
 export default function StudentNavbar() {
   const { logoutLocal } = useContext(context);

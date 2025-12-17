@@ -1,18 +1,24 @@
 // context/AuthProvider.jsx
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import axios from "axios";
 
 export const context = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(() => localStorage.getItem("accessToken"));
+  const [token, setToken] = useState(() =>
+    localStorage.getItem("accessToken")
+  );
+
   const isLoggedin = !!token;
 
   /* ==============================
-     🔁 REFRESH ACCESS TOKEN
+     🔁 REFRESH ACCESS TOKEN (ADMIN ONLY)
+     → Runs ONLY if refreshToken exists
   ============================== */
   const refreshAccessToken = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
+
+    // 👉 Staff / Student will not have refreshToken
     if (!refreshToken) return null;
 
     try {
@@ -23,35 +29,25 @@ export const AuthProvider = ({ children }) => {
       );
 
       const newAccess = resp.data?.access;
+
       if (newAccess) {
         localStorage.setItem("accessToken", newAccess);
         setToken(newAccess);
         return newAccess;
       }
     } catch (err) {
-      console.warn("Refresh failed:", err.response?.data || err.message);
+      console.warn(
+        "Admin token refresh failed:",
+        err.response?.data || err.message
+      );
     }
+
     return null;
   };
 
   /* ==============================
-     ✅ VERIFY TOKEN (APP LOAD ONLY)
-  ============================== */
-  const verifyAccessToken = async (accessToken) => {
-    try {
-      await axios.post(
-        "http://localhost:8000/api/admin/verify-token/",
-        { token: accessToken },
-        { headers: { "Content-Type": "application/json" } }
-      );
-      return true;
-    } catch {
-      return false;
-    }
-  };
-
-  /* ==============================
-     🌐 AUTH FETCH (NO VERIFY HERE)
+     🌐 AUTH FETCH (SAFE FOR ALL)
+     → Refresh happens ONLY for admin
   ============================== */
   const authFetch = async (url, options = {}) => {
     let access = localStorage.getItem("accessToken");
@@ -61,8 +57,11 @@ export const AuthProvider = ({ children }) => {
 
     let response = await fetch(url, { ...options, headers });
 
-    // 🔁 Access expired → refresh once
-    if (response.status === 401) {
+    // 🔁 Retry only if refreshToken exists (ADMIN)
+    if (
+      response.status === 401 &&
+      localStorage.getItem("refreshToken")
+    ) {
       const newAccess = await refreshAccessToken();
       if (!newAccess) return response;
 
@@ -74,27 +73,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   /* ==============================
-     🚀 INIT AUTH (ON APP LOAD)
-  ============================== */
-  useEffect(() => {
-    const initAuth = async () => {
-      const access = localStorage.getItem("accessToken");
-      const refresh = localStorage.getItem("refreshToken");
-
-      if (!access || !refresh) return;
-
-      const valid = await verifyAccessToken(access);
-      if (!valid) {
-        const refreshed = await refreshAccessToken();
-        if (!refreshed) logoutLocal();
-      }
-    };
-
-    initAuth();
-  }, []);
-
-  /* ==============================
-     🔓 LOGOUTS
+     🔓 ADMIN LOGOUT
   ============================== */
   const logoutAdmin = async () => {
     try {
@@ -108,15 +87,21 @@ export const AuthProvider = ({ children }) => {
         }
       );
     } catch (err) {
-      console.error("Admin logout failed:", err.response?.data || err.message);
+      console.error(
+        "Admin logout failed:",
+        err.response?.data || err.message
+      );
     } finally {
       logoutLocal();
     }
   };
 
+  /* ==============================
+     🔓 LOCAL LOGOUT (STAFF / STUDENT)
+  ============================== */
   const logoutLocal = () => {
     localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("refreshToken"); // safe to remove even if not exists
     setToken(null);
   };
 
@@ -128,7 +113,6 @@ export const AuthProvider = ({ children }) => {
         setToken,
         authFetch,
         refreshAccessToken,
-        verifyAccessToken,
         logoutAdmin,
         logoutLocal,
       }}

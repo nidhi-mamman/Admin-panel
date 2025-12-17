@@ -1,17 +1,17 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { context } from "../context/Authprovider";
-import Logo from '../assets/tce_logo.png'
-import profile from '../assets/profilepic.jpg'
-import poweroff from '../assets/logout.png'
+import { context } from "../../context/Authprovider";
+import Logo from '../../assets/tce_logo.png'
+import profile from '../../assets/profilepic.jpg'
+import poweroff from '../../assets/logout.png'
 
-export default function StaffNavbar() {
-  const { isLoggedin, logoutLocal } = useContext(context);
+export default function AdminNavbar() {
+  const { isLoggedin, logout } = useContext(context);
   const [isOpen, setOpen] = useState(false)
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await logoutLocal();
+    await logout();
     navigate("/");
   };
   const handledropdown = () => {
