@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { context } from "../../context/Authprovider";
+import styles from "./AddPayment.module.css";
 
 export default function AddPayment() {
   const { token } = useContext(context);
@@ -57,66 +58,102 @@ export default function AddPayment() {
   };
 
   return (
-    <div className="payment-container">
-      <div className="payment-card">
-        <h2>Add Payment {registrationNumber && `for ${registrationNumber}`}</h2>
+    <div className={styles.container}>
+      <div className={styles.wrapper}>
+        <div className={styles.header}>
+          <h2>Add Payment</h2>
+          {registrationNumber && (
+            <p className={styles.registrationNumber}>
+              Registration: {registrationNumber}
+            </p>
+          )}
+        </div>
 
-        <p className="pending-text">🔴 Pending Payment: ₹{pendingAmount}</p>
+        <div className={styles.pendingAlert}>
+          <span className={styles.pendingIcon}>🔴</span>
+          <div>
+            <p className={styles.pendingText}>Pending Payment</p>
+            <p className={styles.pendingAmount}>₹{pendingAmount}</p>
+          </div>
+        </div>
 
-        {message && (
-          <p
-            className={`message ${
-              message.startsWith("✅") ? "success" : "error"
-            }`}
-          >
-            {message}
-          </p>
-        )}
+        <div className={styles.content}>
+          {message && (
+            <div
+              className={`${styles.message} ${
+                message.startsWith("✅") ? styles.success : styles.error
+              }`}
+            >
+              {message}
+            </div>
+          )}
 
-        <form onSubmit={handleSubmit}>
-          <label>Amount</label>
-          <input
-            type="number"
-            name="amount"
-            value={formData.amount}
-            onChange={handleChange}
-            required
-          />
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <div className={styles.formGroup}>
+              <label className={styles.label}>
+                Amount <span className={styles.required}>*</span>
+              </label>
+              <input
+                type="number"
+                name="amount"
+                value={formData.amount}
+                onChange={handleChange}
+                className={styles.input}
+                placeholder="Enter payment amount"
+                required
+              />
+            </div>
 
-          <label>Payment Mode</label>
-          <select
-            name="payment_mode"
-            value={formData.payment_mode}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Mode</option>
-            <option value="cash">Cash</option>
-            <option value="card">Card</option>
-            <option value="upi">UPI</option>
-            <option value="bank_transfer">Bank Transfer</option>
-          </select>
+            <div className={styles.formGroup}>
+              <label className={styles.label}>
+                Payment Mode <span className={styles.required}>*</span>
+              </label>
+              <select
+                name="payment_mode"
+                value={formData.payment_mode}
+                onChange={handleChange}
+                className={styles.select}
+                required
+              >
+                <option value="">Select Mode</option>
+                <option value="cash">Cash</option>
+                <option value="card">Card</option>
+                <option value="upi">UPI</option>
+                <option value="bank_transfer">Bank Transfer</option>
+              </select>
+            </div>
 
-          <label>Transaction ID</label>
-          <input
-            type="text"
-            name="transaction_id"
-            value={formData.transaction_id}
-            onChange={handleChange}
-            placeholder="Optional"
-          />
+            <div className={styles.formGroup}>
+              <label className={styles.label}>Transaction ID</label>
+              <input
+                type="text"
+                name="transaction_id"
+                value={formData.transaction_id}
+                onChange={handleChange}
+                className={styles.input}
+                placeholder="Optional"
+              />
+            </div>
 
-          <label>Remark</label>
-          <textarea
-            name="remark"
-            value={formData.remark}
-            onChange={handleChange}
-            rows="3"
-            required
-          />
+            <div className={styles.formGroup}>
+              <label className={styles.label}>
+                Remark <span className={styles.required}>*</span>
+              </label>
+              <textarea
+                name="remark"
+                value={formData.remark}
+                onChange={handleChange}
+                className={styles.textarea}
+                placeholder="Add payment remarks..."
+                required
+              />
+            </div>
 
-          <button type="submit">Submit Payment</button>
-        </form>
+            <button type="submit" className={styles.submitButton}>
+              Submit Payment
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

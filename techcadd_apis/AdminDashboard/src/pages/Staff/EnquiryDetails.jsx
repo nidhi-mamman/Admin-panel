@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { context } from "../../context/Authprovider";
+import styles from "./EnquiryDetails.module.css";
 
 export default function EnquiryDetails() {
   const { id } = useParams();
@@ -31,51 +32,128 @@ export default function EnquiryDetails() {
     fetchEnquiryDetails();
   }, [id, token]);
 
-  if (error) return <p style={{ color: "red", textAlign: "center" }}>{error}</p>;
-  if (!enquiry) return <p style={{ textAlign: "center" }}>Loading enquiry details...</p>;
+  if (error) return <p className={styles.error}>{error}</p>;
+  if (!enquiry) return <p className={styles.loading}>Loading enquiry details...</p>;
 
   return (
-    <div className="details-container">
-      <div className="enquiry-details-form">
-        <div>
-          <h5>Personal/Educational Details</h5>
-          <div className="form-row">
-            <p><strong>Student Name:</strong> {enquiry.student_name}</p>
-            <p><strong>Date of Birth:</strong> {enquiry.date_of_birth}</p>
-            <p><strong>Qualification:</strong> {enquiry.qualification}</p>
-            <p><strong>Work or College:</strong> {enquiry.student_type}</p>
-          </div>
+    <div className={styles.container}>
+      <div className={styles.wrapper}>
+        <div className={styles.header}>
+          <h2>Student Enquiry Details</h2>
+          <p>Complete information about the student enquiry</p>
         </div>
-        <div>
-          <h5>Contact Details</h5>
-          <div className="form-row">
-            <p><strong>Mobile:</strong> {enquiry.mobile}</p>
-            <p><strong>Email:</strong> {enquiry.email}</p>
-            <p><strong>Address:</strong> {enquiry.address}</p>
+        
+        <div className={styles.content}>
+          {/* ===================== Personal Details ===================== */}
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>
+              <span className={styles.sectionIcon}>👤</span>
+              Personal Details
+            </h3>
+            <div className={styles.grid}>
+              <div className={styles.field}>
+                <span className={styles.fieldLabel}>Student Name</span>
+                <span className={styles.fieldValue}>{enquiry.student_name}</span>
+              </div>
+              <div className={styles.field}>
+                <span className={styles.fieldLabel}>Date of Birth</span>
+                <span className={styles.fieldValue}>{enquiry.date_of_birth}</span>
+              </div>
+              <div className={styles.field}>
+                <span className={styles.fieldLabel}>Qualification</span>
+                <span className={styles.fieldValue}>{enquiry.qualification}</span>
+              </div>
+              <div className={styles.field}>
+                <span className={styles.fieldLabel}>Work or College</span>
+                <span className={styles.fieldValue}>{enquiry.student_type}</span>
+              </div>
+            </div>
           </div>
-        </div>
-        <div>
-          <h5>Course Details</h5>
-          <div className="form-row">
-            <p><strong>Centre:</strong> {enquiry.centre_display}</p>
-            <p><strong>Batch Timing:</strong> {enquiry.batch_time}</p>
+
+          {/* ===================== Contact Details ===================== */}
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>
+              <span className={styles.sectionIcon}>📞</span>
+              Contact Details
+            </h3>
+            <div className={styles.grid}>
+              <div className={styles.field}>
+                <span className={styles.fieldLabel}>Mobile</span>
+                <span className={styles.fieldValue}>{enquiry.mobile}</span>
+              </div>
+              <div className={styles.field}>
+                <span className={styles.fieldLabel}>Email</span>
+                <span className={styles.fieldValue}>{enquiry.email}</span>
+              </div>
+              <div className={`${styles.field} ${styles.fullWidth}`}>
+                <span className={styles.fieldLabel}>Address</span>
+                <span className={styles.fieldValue}>{enquiry.address}</span>
+              </div>
+            </div>
           </div>
-          <div className="form-row">
-            <p><strong>Course Fee offered:</strong>&#8377;{enquiry.course_fee_offer}</p>
-            <p><strong>Interested Course:</strong> {enquiry.course_interested}</p>
+
+          {/* ===================== Course Details ===================== */}
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>
+              <span className={styles.sectionIcon}>📚</span>
+              Course Details
+            </h3>
+            <div className={styles.grid}>
+              <div className={styles.field}>
+                <span className={styles.fieldLabel}>Centre</span>
+                <span className={styles.fieldValue}>{enquiry.centre_display}</span>
+              </div>
+              <div className={styles.field}>
+                <span className={styles.fieldLabel}>Batch Timing</span>
+                <span className={styles.fieldValue}>{enquiry.batch_time}</span>
+              </div>
+              <div className={styles.field}>
+                <span className={styles.fieldLabel}>Course Fee Offered</span>
+                <span className={styles.fieldValue}>₹{enquiry.course_fee_offer}</span>
+              </div>
+              <div className={styles.field}>
+                <span className={styles.fieldLabel}>Interested Course</span>
+                <span className={styles.fieldValue}>{enquiry.course_interested}</span>
+              </div>
+              <div className={styles.field}>
+                <span className={styles.fieldLabel}>Trade</span>
+                <span className={styles.fieldValue}>{enquiry.trade_display}</span>
+              </div>
+              <div className={styles.field}>
+                <span className={styles.fieldLabel}>Enquiry Source</span>
+                <span className={styles.fieldValue}>{enquiry.enquiry_source}</span>
+              </div>
+            </div>
           </div>
-          <div className="form-row">
-            <p><strong>Trade:</strong> {enquiry.trade_display}</p>
-            <p><strong>Enquiry Source:</strong> {enquiry.enquiry_source}</p>
-          </div>
-          <div className="form-row">
-            <p><strong>Enquiry Date:</strong> {enquiry.enquiry_date}</p>
-            <p><strong>Status:</strong> {enquiry.enquiry_status_display}</p>
-            <p><strong>Follow-up Date:</strong> {enquiry.next_follow_up_date}</p>
-          </div>
-          <div className="form-row">
-            <p><strong>Remarks:</strong> {enquiry.remark}</p>
-            <p><strong>Enquiry Taken By:</strong> {enquiry.enquiry_taken_by["first_name"]}</p>
+
+          {/* ===================== Enquiry Status ===================== */}
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>
+              <span className={styles.sectionIcon}>📋</span>
+              Enquiry Status
+            </h3>
+            <div className={styles.grid}>
+              <div className={styles.field}>
+                <span className={styles.fieldLabel}>Enquiry Date</span>
+                <span className={styles.fieldValue}>{enquiry.enquiry_date}</span>
+              </div>
+              <div className={styles.field}>
+                <span className={styles.fieldLabel}>Status</span>
+                <span className={styles.fieldValue}>{enquiry.enquiry_status_display}</span>
+              </div>
+              <div className={styles.field}>
+                <span className={styles.fieldLabel}>Follow-up Date</span>
+                <span className={styles.fieldValue}>{enquiry.next_follow_up_date}</span>
+              </div>
+              <div className={styles.field}>
+                <span className={styles.fieldLabel}>Enquiry Taken By</span>
+                <span className={styles.fieldValue}>{enquiry.enquiry_taken_by["first_name"]}</span>
+              </div>
+              <div className={`${styles.field} ${styles.fullWidth}`}>
+                <span className={styles.fieldLabel}>Remarks</span>
+                <span className={styles.fieldValue}>{enquiry.remark}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
