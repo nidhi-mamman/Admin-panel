@@ -7,27 +7,26 @@ import enquiry from '../../assets/info.png'
 import registration from '../../assets/registration.png'
 import signout from '../../assets/signout.png'
 import staff from '../../assets/team.png'
-export default function AdminSidebar() {
-    const { logoutAdmin,isLoggedin } = useContext(context);
+export default function AdminSidebar({isOpen}) {
+    const { logoutAdmin } = useContext(context);
     const navigate = useNavigate();
-
-    const [openMenu, setOpenMenu] = useState(null);
 
     const handleLogout = async () => {
         await logoutAdmin();
         navigate("/");
     };
 
-    const toggleMenu = (menuName) => {
-        setOpenMenu(openMenu === menuName ? null : menuName);
-    };
 
     const handleNavigate = () => {
         navigate("/admin/admin-dashboard");
     }
 
+
+    const handleStaffList = () => {
+        navigate("/admin/show/staff-list");
+    }
     return (
-        <div className="sidebar">
+        <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
             <div className="sidebar-items">
                 <ul>
 
@@ -36,81 +35,26 @@ export default function AdminSidebar() {
                         <img src={dashboard} alt="" />
                         Dashboard
                     </li>
-                    {/* Authentication */}
-                    <li onClick={() => toggleMenu("authentication")} style={{ cursor: "pointer" }}>
+                    {/* Lead */}
+                    <li  style={{ cursor: "pointer" }}>
                         <img src={shield} alt='' className="auth-item" />
-                        Authentication
-                        <i className='bx  bx-chevron-down auth-item' style={{ color: '#525562' }}></i>
+                        Lead
                     </li>
-
-                    {/* Authentication SUBMENU - Persistent wrapper for smooth transitions */}
-                    <div className={`submenu-wrapper ${openMenu === "authentication" ? "open" : ""}`}>
-                        <li
-                            className="submenu-item"
-                            onClick={(e) => {
-                                if (isLoggedin) {
-                                    e.preventDefault();
-                                    alert("You are already logged in!");
-                                } else {
-                                    navigate("/");
-                                }
-                            }}
-                            style={{ cursor: "pointer" }}
-                        >
-                            Sign in
-                        </li>
-
-                    </div>
-
-                    <li onClick={() => toggleMenu("staff")} style={{ cursor: "pointer" }}>
+                    <li onClick={handleStaffList} style={{ cursor: "pointer" }}>
                         <img src={staff} alt="" />
                         Staff
-                        <i className='bx  bx-chevron-down auth-item' style={{ color: '#525562' }}></i>
                     </li>
-
-                    {/* ENQUIRY SUBMENU - Persistent wrapper for smooth transitions */}
-                    <div className={`submenu-wrapper ${openMenu === "staff" ? "open" : ""}`}>
-                        <li className="submenu-item">
-                            <Link to="/admin/create-staff">New Staff</Link>
-                        </li>
-                        <li className="submenu-item">
-                            <Link to="/admin/show/staff-list">Staff List</Link>
-                        </li>
-                    </div>
-
                     {/* ENQUIRY */}
-                    <li onClick={() => toggleMenu("enquiry")} style={{ cursor: "pointer" }}>
+                    <li style={{ cursor: "pointer" }}>
                         <img src={enquiry} alt="" />
-                        Enquiry
-                        <i className='bx  bx-chevron-down auth-item' style={{ color: '#525562' }}></i>
+                        Visited Enquiry
                     </li>
-
-                    {/* ENQUIRY SUBMENU - Persistent wrapper for smooth transitions */}
-                    <div className={`submenu-wrapper ${openMenu === "enquiry" ? "open" : ""}`}>
-                        <li className="submenu-item">
-                            <Link to="/staff/create-enquiry">New Enquiry</Link>
-                        </li>
-                        <li className="submenu-item">
-                            <Link to="/staff/show/enquiry-list">Enquiry List</Link>
-                        </li>
-                    </div>
 
                     {/* REGISTRATION */}
-                    <li onClick={() => toggleMenu("registration")} style={{ cursor: "pointer" }}>
+                    <li style={{ cursor: "pointer" }}>
                         <img src={registration} alt="" />
-                        Registration
-                        <i className='bx  bx-chevron-down auth-item' style={{ color: '#525562' }}></i>
+                        Registrations
                     </li>
-
-                    {/* REGISTRATION SUBMENU - Persistent wrapper for smooth transitions */}
-                    <div className={`submenu-wrapper ${openMenu === "registration" ? "open" : ""}`}>
-                        <li className="submenu-item">
-                            <Link to="/staff/student/create">New Registration</Link>
-                        </li>
-                        <li className="submenu-item">
-                            <Link to="/staff/show/registration-list">Registration List</Link>
-                        </li>
-                    </div>
 
                     {/* LOGOUT */}
                     <li onClick={handleLogout}>

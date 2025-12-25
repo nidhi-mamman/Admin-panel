@@ -34,6 +34,7 @@ export default function RegistrationList() {
                     Authorization: `Bearer ${token}`,
                 },
             });
+            console.log(response)
             if (!response.ok) throw new Error("Failed to fetch registration list");
 
             const data = await response.json();
@@ -137,7 +138,7 @@ export default function RegistrationList() {
     if (!options) return <p>Loading form options...</p>;
 
     return (
-        <div style={{ padding: "30px", fontSize: "12px", marginLeft: "250px" }}>
+        <div style={{ padding: "30px", fontSize: "12px"}} className="dashboard-container">
             <div
                 style={{
                     display: "flex",
@@ -146,17 +147,13 @@ export default function RegistrationList() {
                     marginBottom: "20px",
                     gap: "20px"
                 }}
+                className="list-filter"
             >
-                <div className="d-flex align-items-center justify-content-start gap-2">
-                    <Link to='/staff/student/create' className="add-badge" style={{ marginLeft: "0px", textDecoration: 'none' }}>
-                        <span>New Student</span> <i className='bx bxs-plus' style={{ color: '#ffffff' }}></i>
-                    </Link>
-                </div>
                 <select name="branch" required value={filters.branch}
                     onChange={(e) =>
                         setFilters({ ...filters, branch: e.target.value })
                     }>
-                    <option value="">-- Select Branch --</option>
+                    <option value="">Select Branch</option>
                     {options.branch_choices?.map(([value, label]) => (
                         <option key={value} value={value}>{label}</option>
                     ))}
@@ -165,14 +162,14 @@ export default function RegistrationList() {
                     onChange={(e) =>
                         setFilters({ ...filters, course_type: e.target.value })
                     }>
-                    <option value="">-- Select Course Type --</option>
+                    <option value="">Select Course Type</option>
                     {options.course_types?.map((type) => (
                         <option key={type.id} value={type.id}>{type.name}</option>
                     ))}
                 </select>
 
                 {/* Search Form */}
-                <form style={{ display: "flex", alignItems: "center", flexDirection: "row" }} onSubmit={handleSearch}>
+                <form style={{ display: "flex", alignItems: "center", flexDirection: "row",width:"100%" }} onSubmit={handleSearch}>
                     <input
                         className="form-control me-2"
                         type="search"
@@ -306,4 +303,5 @@ const tdStyle = {
     padding: "10px",
     textAlign: "center",
     color: "#092847ff",
+    backgroundColor:"#ffffff"
 };

@@ -10,11 +10,15 @@ export default function StaffList() {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  useEffect(() => {
+    if (!isLoggedin) {
+      navigate("/", { replace: true });
+    }
+  }, [isLoggedin, navigate]);
 
 
   useEffect(() => {
     const fetchStaff = async () => {
-      // Skip fetch if not logged in
       if (!isLoggedin) {
         setLoading(false);
         return;
@@ -27,12 +31,7 @@ export default function StaffList() {
             "Content-Type": "application/json",
           },
         });
-
-        if (response.status === 401) {
-          // Token invalid/expired and refresh failed — redirect to login
-          navigate("/");
-          return;
-        }
+       
 
         if (!response.ok) throw new Error("Failed to fetch staff list");
 
@@ -108,11 +107,7 @@ export default function StaffList() {
   };
 
   return (
-    <div style={{ padding: "30px", marginLeft: "250px" }}>
-      <div className="d-flex align-items-center justify-content-start gap-2 mb-4">
-        <Link to='/admin/create-staff' className="add-badge" style={{ marginLeft: "0px", textDecoration: 'none' }}> <span>Add Staff</span> <i class='bx  bxs-plus' style={{ color: '#ffffff' }}  ></i> </Link>
-      </div>
-
+    <div className="list-dashboard-container" style={{ padding: "30px", marginLeft: "250px" }}>
       {/* Scrollable container */}
       <div
         style={{
@@ -235,4 +230,5 @@ const tdStyle = {
   textAlign: "center",
   color: "#092847ff",
   fontSize: "9px",
+  backgroundColor:"#fff"
 };

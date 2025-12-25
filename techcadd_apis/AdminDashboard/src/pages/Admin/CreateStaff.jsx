@@ -165,7 +165,7 @@ export default function CreateStaff() {
 
           <div style={{ marginTop: 8,width:"100%" }} className="form-group">
             <select name="role" id="role">
-              <option value="">-------------------Select Role------------------</option>
+              <option value="">Select Role</option>
               <option value="manager">Manager</option>
               <option value="trainer">Trainer</option>
               <option value="counselor">Counselor</option>

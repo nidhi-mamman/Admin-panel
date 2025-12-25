@@ -29,9 +29,12 @@ import AdminDashboard from './pages/Admin/AdminDashboard';
 import StudentDashboard from './pages/Student/StudentDashboard';
 import StudentProfile from './pages/Student/StudentProfile';
 import MyCourses from './pages/Student/MyCourses';
+import ScrollToTop from './pages/ScrollToTop';
 
 export default function App() {
   return (
+    <>
+    <ScrollToTop/>
     <Routes>
 
       {/* PUBLIC ROUTES */}
@@ -67,5 +70,6 @@ export default function App() {
         <Route path="mycourses" element={<MyCourses />} />
       </Route>
     </Routes>
+    </>
   );
 }

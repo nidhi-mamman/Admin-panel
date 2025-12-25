@@ -1,39 +1,121 @@
 import { useEffect, useState, useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { context } from "../../context/Authprovider";
-import Chart from '../../components/Charts/EnquiryRegistrationChart';
+import Chart from "../../components/Charts/EnquiryRegistrationChart";
 
-export default function AdminDashboard() {
-  const { authFetch } = useContext(context);
-  const [totalEnquiries, setTotalEnquiries] = useState(0);
-  const [totalRegistrations, setTotalRegistrations] = useState(0);
+export default function StaffDashboard() {
+  const { authFetch, isLoggedin } = useContext(context);
+  const navigate = useNavigate();
 
+  const [todayEnquiries, setTodayEnquiries] = useState(0);
+  const [todayRegistrations, setTodayRegistrations] = useState(0);
+  const [todayPaidFees, setTodayPaidFees] = useState(0);
+
+  const [todayFollowUps, setTodayFollowUps] = useState(0);
+  const [upcomingFollowUps, setUpcomingFollowUps] = useState(0);
+  const [overdueFollowUps, setOverdueFollowUps] = useState(0);
+
+  /* ===============================
+     🔐 Redirect immediately on logout
+  =============================== */
   useEffect(() => {
+    if (!isLoggedin) {
+      navigate("/", { replace: true });
+    }
+  }, [isLoggedin, navigate]);
+
+  /* ===============================
+     📊 Dashboard API Calls
+  =============================== */
+  useEffect(() => {
+    if (!isLoggedin) return; // ⛔ STOP API calls if logged out
+
     const fetchDashboardCounts = async () => {
       try {
-        // 🔹 Registrations
+        const today = new Date().toISOString().split("T")[0];
+
+        /* ===== REGISTRATIONS ===== */
         const regRes = await authFetch(
           "http://localhost:8000/api/staff/registrations/list/"
         );
-        const regData = await regRes.json();
-        setTotalRegistrations(regData.count || 0);
 
-        // 🔹 Enquiries
+        if (!regRes.ok) return;
+
+        const regData = await regRes.json();
+
+        const todaysRegistrations = regData.registrations.filter(
+          reg => reg.joining_date === today
+        );
+
+        setTodayRegistrations(todaysRegistrations.length);
+
+        const totalFeesToday = todaysRegistrations.reduce(
+          (sum, reg) => sum + Number(reg.paid_fee || 0),
+          0
+        );
+
+        setTodayPaidFees(totalFeesToday);
+
+        /* ===== ENQUIRIES + FOLLOW-UPS ===== */
         const enquiryRes = await authFetch(
           "http://localhost:8000/api/staff/students/list/"
         );
-        const enquiryData = await enquiryRes.json();
-        setTotalEnquiries(enquiryData.count || 0);
 
+        if (!enquiryRes.ok) return;
+
+        const enquiryData = await enquiryRes.json();
+
+        const todaysEnquiries = enquiryData.students.filter(
+          e => e.created_at?.split("T")[0] === today
+        );
+
+        setTodayEnquiries(todaysEnquiries.length);
+
+        const validFollowUps = enquiryData.students.filter(
+          s => s.next_follow_up_date && s.enquiry_status !== "converted"
+        );
+
+        setTodayFollowUps(
+          validFollowUps.filter(s => s.next_follow_up_date === today).length
+        );
+
+        setUpcomingFollowUps(
+          validFollowUps.filter(s => s.next_follow_up_date > today).length
+        );
+
+        setOverdueFollowUps(
+          validFollowUps.filter(s => s.next_follow_up_date < today).length
+        );
       } catch (err) {
         console.error("Dashboard API error:", err);
       }
     };
 
     fetchDashboardCounts();
-  }, []);
+  }, [authFetch, isLoggedin]);
 
   return (
-    <div style={{ marginLeft: "220px" }}>
+    <div className="dashboard-container">
+      {/* ======BADGES======= */}
+      <div className="badges-container">
+        <div className="d-flex align-items-center justify-content-start gap-2">
+          <Link to='/staff/student/create' className="add-badge" style={{ marginLeft: "0px", textDecoration: 'none' }}>
+            <span>New Lead</span> <i className='bx bxs-plus' style={{ color: '#ffffff' }}></i>
+          </Link>
+        </div>
+        <div className="d-flex align-items-center justify-content-start gap-2">
+          <Link to='/staff/create-enquiry' className="add-badge" style={{ marginLeft: "0px", textDecoration: 'none' }}>
+            <span>New Enquiry</span> <i className='bx bxs-plus' style={{ color: '#ffffff' }}></i>
+          </Link>
+        </div>
+        <div className="d-flex align-items-center justify-content-start gap-2">
+          <Link to='/staff/student/create' className="add-badge" style={{ marginLeft: "0px", textDecoration: 'none' }}>
+            <span>New Registration</span> <i className='bx bxs-plus' style={{ color: '#ffffff' }}></i>
+          </Link>
+        </div>
+      </div>
+
+      {/* ===== TODAY SUMMARY ===== */}
       <div className="summary-container">
         <div className="summary-area">
           <div className="summary-header">
@@ -42,27 +124,18 @@ export default function AdminDashboard() {
 
           <div className="summary-cards">
             <div className="summary-card">
-              <div className="summary-icon icon-primary">
-                <i className="bx bxs-bar-chart-square" />
-              </div>
-              <h4>{totalEnquiries}</h4>
-              <p className="summary-label">Total Enquiries</p>
+              <h4>{todayEnquiries}</h4>
+              <p>Enquiries</p>
             </div>
 
             <div className="summary-card">
-              <div className="summary-icon icon-secondary">
-                <i className="bx bxs-file-detail" />
-              </div>
-              <h4>{totalRegistrations}</h4>
-              <p className="summary-label">Total Registrations</p>
+              <h4>{todayRegistrations}</h4>
+              <p>Registrations</p>
             </div>
 
             <div className="summary-card">
-              <div className="summary-icon icon-tertiary">
-                <i className="bx bxs-price-tag" />
-              </div>
-              <h4>₹1k</h4>
-              <p className="summary-label">Total Fees</p>
+              <h4>₹{todayPaidFees.toLocaleString("en-IN")}</h4>
+              <p>Paid Fees</p>
             </div>
           </div>
         </div>
@@ -71,6 +144,26 @@ export default function AdminDashboard() {
           <Chart />
         </div>
       </div>
-    </div>
+
+      {/* ===== FOLLOW-UP HIGHLIGHTS ===== */}
+      <div className="summary-area" style={{ marginLeft: "20px" }}>
+        <div className="summary-cards">
+          <div className="summary-card followup-today">
+            <h4>{todayFollowUps}</h4>
+            <p>Follow-ups Today</p>
+          </div>
+
+          <div className="summary-card followup-upcoming">
+            <h4>{upcomingFollowUps}</h4>
+            <p>Upcoming Follow-ups</p>
+          </div>
+
+          <div className="summary-card followup-overdue">
+            <h4>{overdueFollowUps}</h4>
+            <p>Overdue Follow-ups</p>
+          </div>
+        </div>
+      </div>
+    </div >
   );
 }

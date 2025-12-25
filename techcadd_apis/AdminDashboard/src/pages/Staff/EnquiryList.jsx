@@ -43,7 +43,7 @@ export default function EnquiryList() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-
+  
                 if (!response.ok) throw new Error("Failed to fetch enquiry list");
 
                 const data = await response.json();
@@ -120,26 +120,22 @@ export default function EnquiryList() {
 
 
     return (
-        <div style={{ padding: "30px", fontSize: "12px", marginLeft: "250px" }}>
+        <div style={{ padding: "30px", fontSize: "12px" }} className="dashboard-container">
             <div className="d-flex align-items-center justify-content-start gap-2 mb-5">
-                <Link to='/staff/create-enquiry' className="add-badge" style={{ textDecoration: 'none' }}>
-                    <span>New Enquiry</span>
-                    <i className='bx bxs-plus' style={{ color: '#ffffff' }}></i>
-                </Link>
                 <select name="centre" required onChange={handleFilterChange}>
-                    <option value="">-- Select Centre --</option>
+                    <option value="">Select Centre</option>
                     {options.centre_choices.map(([value, label]) => (
                         <option key={value} value={value}>{label}</option>
                     ))}
                 </select>
                 <select name="trade" required onChange={handleFilterChange}>
-                    <option value="">-- Select Trade --</option>
+                    <option value="">Select Trade</option>
                     {options.trade_choices.map(([value, label]) => (
                         <option key={value} value={value}>{label}</option>
                     ))}
                 </select>
                 <select name="enquiry_status" required onChange={handleFilterChange}>
-                    <option value="">-- Select Status --</option>
+                    <option value="">Select Status</option>
                     {options.enquiry_status_choices.map(([value, label]) => (
                         <option key={value} value={value}>{label}</option>
                     ))}
@@ -275,4 +271,5 @@ const tdStyle = {
     padding: "10px",
     textAlign: "center",
     color: "#092847ff",
+    backgroundColor:"white"
 };
