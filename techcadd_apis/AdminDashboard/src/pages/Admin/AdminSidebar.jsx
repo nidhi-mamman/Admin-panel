@@ -25,9 +25,17 @@ export default function AdminSidebar({isOpen}) {
     const handleStaffList = () => {
         navigate("/admin/show/staff-list");
     }
+
+    const handleEnquiryList = () => {
+        navigate("/staff/show/enquiry-list");
+    }
+
+    const handleRegistrationList = () => {      
+        navigate("/staff/show/registration-list");
+    }
     return (
         <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
-            <div className="sidebar-items">
+            <div classNam  e="sidebar-items">
                 <ul>
 
                     {/* HOME */}
@@ -45,13 +53,13 @@ export default function AdminSidebar({isOpen}) {
                         Staff
                     </li>
                     {/* ENQUIRY */}
-                    <li style={{ cursor: "pointer" }}>
+                    <li onClick={handleEnquiryList} style={{ cursor: "pointer" }}>
                         <img src={enquiry} alt="" />
                         Visited Enquiry
                     </li>
 
                     {/* REGISTRATION */}
-                    <li style={{ cursor: "pointer" }}>
+                    <li onClick={handleRegistrationList} style={{ cursor: "pointer" }}>
                         <img src={registration} alt="" />
                         Registrations
                     </li>
