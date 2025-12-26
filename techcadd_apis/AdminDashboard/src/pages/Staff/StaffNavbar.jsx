@@ -5,10 +5,13 @@ import Logo from '../../assets/tce_logo.png'
 import profile from '../../assets/profilepic.jpg'
 import poweroff from '../../assets/logout.png'
 import menu from '../../assets/menu.png'
+import plus from '../../assets/add.png'
+import add from '../../assets/plus.png'
 
-export default function StaffNavbar({toggleSidebar}) {
+export default function StaffNavbar({ toggleSidebar }) {
   const { isLoggedin, logoutLocal } = useContext(context);
   const [isOpen, setOpen] = useState(false)
+  const [showQuickActions, setShowQuickActions] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -17,6 +20,11 @@ export default function StaffNavbar({toggleSidebar}) {
   };
   const handledropdown = () => {
     setOpen(!isOpen)
+    setShowQuickActions(false)
+  }
+  const handleQuickActions = () => {
+    setShowQuickActions(!showQuickActions);
+    setOpen(false)
   }
 
   return (
@@ -41,6 +49,14 @@ export default function StaffNavbar({toggleSidebar}) {
           </li>
         </ul>
         <div className="profile-area">
+          <img src={plus} alt="" className="staff-quick-actions" onClick={handleQuickActions} />
+          <div className='staff-quick-action-item' style={{ display: showQuickActions ? 'flex' : 'none' }} >
+            <ul>
+              <li><img src={add} alt="" /> <Link to='/staff/student/create' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Lead</Link></li>
+              <li><img src={add} alt="" /> <Link to='/staff/create-enquiry' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Visited Enquiry</Link></li>
+              <li><img src={add} alt="" /> <Link to='/staff/student/create' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Registration</Link></li>
+            </ul>
+          </div>
           <div className="d-flex align-items-center justify-content-center  admin-profile flex-column">
             <div className="d-flex align-items-center justify-content-center gap-2">
               <img src={profile} alt="" width={50} height={50} className="profile-img" />
@@ -69,6 +85,14 @@ export default function StaffNavbar({toggleSidebar}) {
             </Link>
           </li>
           <li style={{ listStyle: "none", fontWeight: "600" }}>
+            <img src={plus} alt="" className="staff-quick-actions" onClick={handleQuickActions} />
+            <div className='staff-quick-action-item' style={{ display: showQuickActions ? 'flex' : 'none' }} >
+              <ul>
+                <li><img src={add} alt="" /> <Link to='/staff/student/create' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Lead</Link></li>
+                <li><img src={add} alt="" /> <Link to='/staff/create-enquiry' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Visited Enquiry</Link></li>
+                <li><img src={add} alt="" /> <Link to='/staff/student/create' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Registration</Link></li>
+              </ul>
+            </div>
             <img style={{ width: "30px", height: "30px" }} src={menu} alt="" onClick={toggleSidebar} />
           </li>
         </ul>

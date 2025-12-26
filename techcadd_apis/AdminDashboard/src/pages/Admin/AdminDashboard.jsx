@@ -1,145 +1,110 @@
-// import RegistrationsChart from '../../components/Charts/RegistrationsChart'
-import chart from '../../assets/chart.png'
 import { useContext, useEffect, useState } from "react";
 import { context } from "../../context/Authprovider";
 import { useNavigate } from "react-router-dom";
+import Chart from '../../components/Charts/EnquiryRegistrationChart'
 export default function AdminDashboard() {
-    const { authFetch, isLoggedin } = useContext(context);
-    const navigate = useNavigate();
-    const [staffList, setStaffList] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 6;
-  
-  
-    useEffect(() => {
-      const fetchStaff = async () => {
-        // Skip fetch if not logged in
-        if (!isLoggedin) {
-          setLoading(false);
-          return;
-        }
+  const { authFetch, isLoggedin } = useContext(context);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [todayEnquiries, setTodayEnquiries] = useState(0);
+  const [todayRegistrations, setTodayRegistrations] = useState(0);
+  const [todayPaidFees, setTodayPaidFees] = useState(0);
 
-        try {
-          const response = await authFetch("http://localhost:8000/api/admin/staff/list/", {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-  
-          if (response.status === 401) {
-            // Token invalid/expired and refresh failed — redirect to login
-            navigate("/");
-            return;
-          }
+  useEffect(() => {
+    if (!isLoggedin) return; // ⛔ STOP API calls if logged out
 
-          if (!response.ok) throw new Error("Failed to fetch staff list");
-  
-          const data = await response.json();
-          setStaffList(data.staff_list || []);
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
-        }
-      };
-  
-      fetchStaff();
-    }, [authFetch, isLoggedin, navigate]);
-  
-    if (loading) return <p style={{ textAlign: "center" }}>Loading staff list...</p>;
-    if (error) return <p style={{ color: "red", textAlign: "center" }}>{error}</p>;
+    const fetchDashboardCounts = async () => {
+      try {
+        const today = new Date().toISOString().split("T")[0];
 
-    // Pagination calculations
-    const totalPages = Math.ceil(staffList.length / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentStaff = staffList.slice(startIndex, endIndex);
+        /* ===== REGISTRATIONS ===== */
+        const regRes = await authFetch(
+          "http://localhost:8000/api/staff/registrations/list/"
+        );
 
-    // Generate page numbers to display
-    const getPageNumbers = () => {
-      const pages = [];
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
+        if (!regRes.ok) return;
+
+        const regData = await regRes.json();
+
+        const todaysRegistrations = regData.registrations.filter(
+          reg => reg.joining_date === today
+        );
+
+        setTodayRegistrations(todaysRegistrations.length);
+
+        const totalFeesToday = todaysRegistrations.reduce(
+          (sum, reg) => sum + Number(reg.paid_fee || 0),
+          0
+        );
+
+        setTodayPaidFees(totalFeesToday);
+
+        /* ===== ENQUIRIES + FOLLOW-UPS ===== */
+        const enquiryRes = await authFetch(
+          "http://localhost:8000/api/staff/students/list/"
+        );
+
+        if (!enquiryRes.ok) return;
+
+        const enquiryData = await enquiryRes.json();
+
+        const todaysEnquiries = enquiryData.students.filter(
+          e => e.created_at?.split("T")[0] === today
+        );
+
+        setTodayEnquiries(todaysEnquiries.length);
+
+        const validFollowUps = enquiryData.students.filter(
+          s => s.next_follow_up_date && s.enquiry_status !== "converted"
+        );
+
+        setTodayFollowUps(
+          validFollowUps.filter(s => s.next_follow_up_date === today).length
+        );
+
+        setUpcomingFollowUps(
+          validFollowUps.filter(s => s.next_follow_up_date > today).length
+        );
+
+        setOverdueFollowUps(
+          validFollowUps.filter(s => s.next_follow_up_date < today).length
+        );
+      } catch (err) {
+        console.error("Dashboard API error:", err);
       }
-      return pages;
     };
 
-    // Badge style helper for roles - dark text + light gradient background
-    const getRoleBadgeStyle = (role) => {
-      const baseStyle = {
-        display: "inline-block",
-        padding: "6px 12px",
-        borderRadius: "12px",
-        fontSize: "12px",
-        fontWeight: "700",
-      };
-
-      const roleKey = (role || "").toString().toLowerCase();
-      const roleMap = {
-        manager: { color: "#2b8a3e", background: "linear-gradient(135deg,#ecfff1,#d6ffd6)" },
-        trainer: { color: "#b35a00", background: "linear-gradient(135deg,#fff6ea,#ffe8cf)" },
-        counselor: { color: "#1f6fd6", background: "linear-gradient(135deg,#e6f4ff,#dbefff)" },
-      };
-
-      const chosen = roleMap[roleKey] || { color: "#444", background: "linear-gradient(135deg,#f3f4f6,#e6e7ea)" };
-      return { ...baseStyle, color: chosen.color, background: chosen.background };
-    };
-
-    // Badge style helper for active status - dark text + light gradient
-    const getActiveBadgeStyle = (isActive) => {
-      const baseStyle = {
-        display: "inline-block",
-        padding: "6px 12px",
-        borderRadius: "12px",
-        fontSize: "12px",
-        fontWeight: "700",
-      };
-
-      if (isActive) {
-        return { ...baseStyle, color: "#2b8a3e", background: "linear-gradient(135deg,#ecfff1,#d6ffd6)" };
-      }
-      return { ...baseStyle, color: "#a21919", background: "linear-gradient(135deg,#fff1f2,#ffd6d8)" };
-    };
-  
+    fetchDashboardCounts();
+  }, [authFetch, isLoggedin]);
   return (
     <>
       <div className='dashboard-container'>
         <div className="summary-container">
           <div className="summary-area">
             <div className="summary-header">
-              <div>
-                <h4 className="summary-title">Today's Summary</h4>
-              </div>
+              <h4 className="summary-title">Today's Summary</h4>
             </div>
+
             <div className="summary-cards">
               <div className="summary-card">
-                <div className="summary-icon icon-primary">
-                  <i class='bx  bxs-bar-chart-square' style={{ color: '#f4f6ff' }}></i>                 </div>
-                <h4>$1k</h4>
-                <p className="summary-label">Total Sales</p>
-                <p className="summary-change">Last day +8%</p>
+                <h4>{todayEnquiries}</h4>
+                <p>Enquiries</p>
               </div>
+
               <div className="summary-card">
-                <div className="summary-icon icon-secondary">
-                  <i class='bx  bxs-file-detail' style={{ color: '#f4f6ff' }}></i>                </div>
-                <h4>$1k</h4>
-                <p className="summary-label">Total Sales</p>
-                <p className="summary-change">Last day +8%</p>
+                <h4>{todayRegistrations}</h4>
+                <p>Registrations</p>
               </div>
+
               <div className="summary-card">
-                <div className="summary-icon icon-tertiary">
-                  <i class='bx bxs-price-tag' style={{ color: '#f4f6ff' }}></i>                 </div>
-                <h4>$1k</h4>
-                <p className="summary-label">Total Sales</p>
-                <p className="summary-change">Last day +8%</p>
+                <h4>₹{todayPaidFees.toLocaleString("en-IN")}</h4>
+                <p>Paid Fees</p>
               </div>
             </div>
           </div>
           <div className="summary-chart">
-            <img src={chart} alt="" />
+            <Chart />
           </div>
         </div>
       </div>

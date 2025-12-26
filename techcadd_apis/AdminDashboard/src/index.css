@@ -183,11 +183,45 @@ p {
   background-color: rgb(239, 241, 243);
 }
 
+.quick-actions {
+  position: relative;
+}
+
+.quick-action-item {
+  position: absolute;
+  top: 70px;
+  right: 100px;
+  padding: 8px 12px;
+  background-color: white;
+  width: 120px;
+  font-size: 12px;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  box-shadow: 2px 2px 4px rgb(187, 187, 187), -2px -2px 4px rgb(187, 187, 187);
+}
+
+.staff-quick-action-item {
+  position: absolute;
+  top: 70px;
+  right: 100px;
+  background-color: white;
+  font-size: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  box-shadow: 2px 2px 4px rgb(187, 187, 187), -2px -2px 4px rgb(187, 187, 187);
+}
+
 .sub-profile {
   top: 60px;
   right: 0px;
   background-color: white;
-  width: 150px;
+  width: 120px;
   font-size: 12px;
   position: absolute;
   border-radius: 10px;
@@ -195,7 +229,8 @@ p {
   box-shadow: 2px 2px 4px rgb(187, 187, 187), -2px -2px 4px rgb(187, 187, 187);
 }
 
-.sub-profile ul li {
+.sub-profile ul li,
+.staff-quick-action-item ul li {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -203,21 +238,24 @@ p {
   text-align: center;
   text-decoration: none;
   color: #333;
+  width: 100%;
 }
+
 
 .sub-profile a:hover {
   background-color: #f5f5f5;
 }
 
-.sub-profile ul {
+.sub-profile ul,
+.staff-quick-action-item ul {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0!important;
 }
 
-.sub-profile ul li:not(:last-child) {
+.sub-profile ul li:not(:last-child) ,.staff-quick-action-item ul li:not(:last-child) {
   cursor: pointer;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid #8f8d8d;
 }
 
 .nav-tabs {
@@ -752,16 +790,6 @@ textarea {
   padding: 0 4px;
 }
 
-.badges-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  margin-top: 20px;
-  margin-right: 30px;
-  margin-left: 30px;
-}
-
 .add-badge {
   width: 250px;
   text-align: center;
@@ -1223,13 +1251,15 @@ h5 {
   text-align: left !important;
 }
 
-.admin-mobile-menu ul,.staff-mobile-menu ul {
+.admin-mobile-menu ul,
+.staff-mobile-menu ul {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.admin-mobile-menu,.staff-mobile-menu {
+.admin-mobile-menu,
+.staff-mobile-menu {
   display: none;
 }
 
@@ -1247,7 +1277,8 @@ h5 {
     display: none !important;
   }
 
-  .admin-mobile-menu,.staff-mobile-menu {
+  .admin-mobile-menu,
+  .staff-mobile-menu {
     display: block !important;
     position: fixed;
     width: 100%;
@@ -1255,6 +1286,21 @@ h5 {
     left: 0;
     z-index: 10000;
     background-color: white;
+  }
+
+  .admin-mobile-menu ul li:last-child,.staff-mobile-menu ul li:last-child{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .quick-action-item,.staff-quick-action-item{
+    right: 50px !important;
+  }
+
+  .staff-quick-action-item ul{
+    flex-direction: column !important;
   }
 
   .admin-body {
@@ -1286,11 +1332,12 @@ h5 {
     display: none !important;
   }
 
-  .dashboard-container{
+  .dashboard-container {
     margin-top: 40px !important;
   }
 
-  .dashboard-container,.list-dashboard-container {
+  .dashboard-container,
+  .list-dashboard-container {
     margin-left: 0px !important;
   }
 
@@ -1320,36 +1367,40 @@ h5 {
 
   .create-staff-container {
     margin-left: 0px !important;
-    margin-top: 70px!important;
-  } 
+    margin-top: 70px !important;
+  }
 
-  .right-container{
+  .right-container {
     width: 100% !important;
     height: 100% !important;
   }
 
-  .form-group{
+  .form-group {
     flex-direction: column !important;
   }
 
-  input,select,textarea{
+  input,
+  select,
+  textarea {
     width: 100% !important;
-    font-size: 10px!important;
+    font-size: 10px !important;
   }
 
-  .badges-container{
-    flex-direction: column !important;
-    margin-top: 75px !important;
+  ._container_16c0s_3,
+  ._container_v4nlg_3,
+  ._container_14dmu_3,
+  ._container_56mcu_3 {
+    margin-top: 60px !important;
   }
 
-  ._container_16c0s_3,._container_v4nlg_3,._container_14dmu_3,._container_56mcu_3{
-    margin-top: 60px!important;
-  }
-
-  .list-filter{
+  .list-filter {
     flex-direction: column !important;
   }
-  .form-control{
+
+  .form-control {
     padding: 10px !important;
+  }
+  .staff-quick-action-item ul li{
+    justify-content: flex-start !important;
   }
 }

@@ -5,10 +5,12 @@ import Logo from '../../assets/tce_logo.png'
 import profile from '../../assets/profilepic.jpg'
 import poweroff from '../../assets/logout.png'
 import menu from '../../assets/menu.png'
-
-export default function AdminNavbar({toggleSidebar}) {
+import plus from '../../assets/add.png'
+import add from '../../assets/plus.png'
+export default function AdminNavbar({ toggleSidebar }) {
   const { isLoggedin, logout } = useContext(context);
   const [isOpen, setOpen] = useState(false)
+  const [showQuickActions, setShowQuickActions] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -17,6 +19,11 @@ export default function AdminNavbar({toggleSidebar}) {
   };
   const handledropdown = () => {
     setOpen(!isOpen)
+    setShowQuickActions(false)
+  }
+  const handleQuickActions = () => {
+    setShowQuickActions(!showQuickActions);
+    setOpen(false)
   }
 
   return (
@@ -43,12 +50,13 @@ export default function AdminNavbar({toggleSidebar}) {
         </ul>
 
         <div className="profile-area">
-          <div className="d-flex align-items-center justify-content-start gap-2">
-            <Link to='/admin/create-staff' className="add-badge" style={{ marginLeft: "0px", textDecoration: 'none' }}> <span>Add Staff</span> <i class='bx  bxs-plus' style={{ color: '#ffffff' }}  ></i> </Link>
+          <img src={plus} alt="" className="quick-actions" onClick={handleQuickActions} />
+          <div className='quick-action-item' style={{ display: showQuickActions ? 'flex' : 'none' }} >
+            <img src={add} alt="" /> <Link to='/admin/create-staff' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>New Staff</Link>
           </div>
           <div className="d-flex align-items-center justify-content-center  admin-profile flex-column">
             <div className="d-flex align-items-center justify-content-center gap-2">
-              <img src={profile} alt="" width={50} height={50} className="profile-img" />
+              <img src={profile} alt="" width={40} height={40} className="profile-img" />
               <i className='bx bx-sm bx-chevron-down auth-item' style={{ color: '#525562' }} onClick={handledropdown}></i>
             </div>
 
@@ -73,7 +81,11 @@ export default function AdminNavbar({toggleSidebar}) {
             </Link>
           </li>
           <li style={{ listStyle: "none", fontWeight: "600" }}>
-            <img style={{ width: "30px", height: "30px" }} src={menu} alt="" onClick={toggleSidebar}/>
+            <img src={plus} alt="" className="quick-actions" onClick={handleQuickActions} />
+            <div className='quick-action-item' style={{ display: showQuickActions ? 'flex' : 'none' }} >
+              <img src={add} alt="" /> <Link to='/admin/create-staff' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>New Staff</Link>
+            </div>
+            <img style={{ width: "30px", height: "30px" }} src={menu} alt="" onClick={toggleSidebar} />
           </li>
         </ul>
       </div>

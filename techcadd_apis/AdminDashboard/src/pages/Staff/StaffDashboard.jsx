@@ -96,25 +96,6 @@ export default function StaffDashboard() {
 
   return (
     <div className="dashboard-container">
-      {/* ======BADGES======= */}
-      <div className="badges-container">
-        <div className="d-flex align-items-center justify-content-start gap-2">
-          <Link to='/staff/student/create' className="add-badge" style={{ marginLeft: "0px", textDecoration: 'none' }}>
-            <span>New Lead</span> <i className='bx bxs-plus' style={{ color: '#ffffff' }}></i>
-          </Link>
-        </div>
-        <div className="d-flex align-items-center justify-content-start gap-2">
-          <Link to='/staff/create-enquiry' className="add-badge" style={{ marginLeft: "0px", textDecoration: 'none' }}>
-            <span>New Enquiry</span> <i className='bx bxs-plus' style={{ color: '#ffffff' }}></i>
-          </Link>
-        </div>
-        <div className="d-flex align-items-center justify-content-start gap-2">
-          <Link to='/staff/student/create' className="add-badge" style={{ marginLeft: "0px", textDecoration: 'none' }}>
-            <span>New Registration</span> <i className='bx bxs-plus' style={{ color: '#ffffff' }}></i>
-          </Link>
-        </div>
-      </div>
-
       {/* ===== TODAY SUMMARY ===== */}
       <div className="summary-container">
         <div className="summary-area">
