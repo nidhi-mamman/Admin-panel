@@ -35,7 +35,7 @@ export default function AdminSidebar({isOpen}) {
     }
     return (
         <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
-            <div classNam  e="sidebar-items">
+            <div className="sidebar-items">
                 <ul>
 
                     {/* HOME */}
