@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { context } from "../../context/Authprovider";
 import dashboard from '../../assets/pie-chart.png'
@@ -6,38 +6,27 @@ import shield from '../../assets/shield.png'
 import enquiry from '../../assets/info.png'
 import registration from '../../assets/registration.png'
 import signout from '../../assets/signout.png'
-import staff from '../../assets/team.png'
-import location from '../../assets/location.png'
-export default function AdminSidebar({ isOpen }) {
-    const { logoutAdmin } = useContext(context);
+export default function BranchSidebar({ isOpen }) {
+    const { logoutLocal } = useContext(context);
     const navigate = useNavigate();
 
     const handleLogout = async () => {
-        await logoutAdmin();
+        await logoutLocal();
         navigate("/");
     };
 
-
     const handleNavigate = () => {
-        navigate("/admin/admin-dashboard");
+        navigate("/staff/staff-dashboard");
     }
 
-
-    const handleStaffList = () => {
-        navigate("/admin/show/staff-list");
+    const handleEnquiry=()=>{
+        navigate("/branch/show/enquiries");
+    }
+    
+    const handleRegistration=()=>{ 
+        navigate('/branch/show/registrations')
     }
 
-    const handleEnquiryList = () => {
-        navigate("/staff/show/enquiry-list");
-    }
-
-    const handleRegistrationList = () => {
-        navigate("/staff/show/registration-list");
-    }
-
-    const handleBranchList = () => {
-        navigate("/admin/show/branch-list")
-    }
     return (
         <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
             <div className="sidebar-items">
@@ -48,30 +37,22 @@ export default function AdminSidebar({ isOpen }) {
                         <img src={dashboard} alt="" />
                         Dashboard
                     </li>
-                    {/* Staff */}
-                    <li onClick={handleStaffList} style={{ cursor: "pointer" }}>
-                        <img src={staff} alt="" />
-                        Staff
-                    </li>
-                    {/* Lead */}
+                    {/* Authentication */}
                     <li style={{ cursor: "pointer" }}>
                         <img src={shield} alt='' className="auth-item" />
-                        Lead
+                        Leads
                     </li>
-                    {/* Branch */}
-                    <li onClick={handleBranchList} style={{ cursor: "pointer" }}>
-                        <img src={location} alt='' className="auth-item" />
-                        Branch
-                    </li>
+
 
                     {/* ENQUIRY */}
-                    <li onClick={handleEnquiryList} style={{ cursor: "pointer" }}>
+                    <li style={{ cursor: "pointer" }} onClick={handleEnquiry}>
                         <img src={enquiry} alt="" />
-                        Visited Enquiry
+                        Visited Enquiries
                     </li>
 
+
                     {/* REGISTRATION */}
-                    <li onClick={handleRegistrationList} style={{ cursor: "pointer" }}>
+                    <li style={{ cursor: "pointer" }} onClick={handleRegistration}>
                         <img src={registration} alt="" />
                         Registrations
                     </li>

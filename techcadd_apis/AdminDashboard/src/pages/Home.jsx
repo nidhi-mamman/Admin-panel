@@ -14,7 +14,7 @@ export default function Home() {
   const roleText = {
     admin:
       "Manage users, monitor activities, and control the entire platform from one powerful dashboard. Login as an admin to keep everything running smoothly.",
-    staff:
+    branch:
       "Handle daily tasks, manage records, and support students effectively. Login as staff to stay organized and productive.",
     student:
       "Access your courses, track progress, and manage your learning journey. Login as a student and continue learning with confidence.",
@@ -40,7 +40,6 @@ export default function Home() {
 
     }, 300);
   };
-
   // 🔥 FUNCTION: show toast
   const showToast = (message, type) => {
     setToast({ message, type });
@@ -54,8 +53,8 @@ export default function Home() {
       case "admin":
         apiUrl = "http://localhost:8000/api/admin/login/";
         break;
-      case "staff":
-        apiUrl = "http://localhost:8000/api/staff/login/";
+      case "branch":
+        apiUrl = "http://localhost:8000/api/staff/branch/login/";
         break;
       case "student":
         apiUrl = "http://localhost:8000/api/student/lms/login/";
@@ -86,8 +85,8 @@ export default function Home() {
           navigate(
             role === "admin"
               ? "/admin/admin-dashboard"
-              : role === "staff"
-                ? "/staff/staff-dashboard"
+              : role === "branch"
+                ? "/branch/dashboard/"
                 : "/student/dashboard"
           );
         }, 2000);
@@ -121,7 +120,7 @@ export default function Home() {
               </p>
               {/* ROLE SELECTOR */}
               <div className="row justify-content-start mt-4">
-                {["admin", "staff", "student"].map((item) => (
+                {["admin", "branch", "student"].map((item) => (
                   <div
                     key={item}
                     className={`col-3 one mx-2 ${role === item ? "active-role" : ""
@@ -172,7 +171,6 @@ export default function Home() {
               </form>
             </div>
           </div>
-
         </div>
       </div>
     </div>

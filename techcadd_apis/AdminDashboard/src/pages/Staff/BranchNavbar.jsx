@@ -7,14 +7,15 @@ import poweroff from '../../assets/logout.png'
 import menu from '../../assets/menu.png'
 import plus from '../../assets/add.png'
 import add from '../../assets/plus.png'
-export default function AdminNavbar({ toggleSidebar }) {
-  const { isLoggedin, logout } = useContext(context);
+
+export default function BranchNavbar({ toggleSidebar }) {
+  const { isLoggedin, logoutLocal } = useContext(context);
   const [isOpen, setOpen] = useState(false)
   const [showQuickActions, setShowQuickActions] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await logout();
+    await logoutLocal();
     navigate("/");
   };
   const handledropdown = () => {
@@ -46,20 +47,19 @@ export default function AdminNavbar({ toggleSidebar }) {
               <img style={{ width: "180px", height: "50px" }} src={Logo} alt="tce_logo" />
             </Link>
           </li>
-
         </ul>
-
         <div className="profile-area">
-          <img src={plus} alt="" className="quick-actions" onClick={handleQuickActions} />
-          <div className='quick-action-item' style={{ display: showQuickActions ? 'flex' : 'none' }} >
+          <img src={plus} alt="" className="staff-quick-actions" onClick={handleQuickActions} />
+          <div className='staff-quick-action-item' style={{ display: showQuickActions ? 'flex' : 'none' }} >
             <ul>
-              <li><img src={add} alt="" /> <Link to='/admin/create-staff' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Staff</Link></li>
-              <li><img src={add} alt="" /> <Link to='/admin/create-branch' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Branch</Link></li>
+              <li><img src={add} alt="" /> <Link to='/staff/Login' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Lead</Link></li>
+              <li><img src={add} alt="" /> <Link to='/staff/Login' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Visited Enquiry</Link></li>
+              <li><img src={add} alt="" /> <Link to='/staff/Login' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Registration</Link></li>
             </ul>
           </div>
           <div className="d-flex align-items-center justify-content-center  admin-profile flex-column">
             <div className="d-flex align-items-center justify-content-center gap-2">
-              <img src={profile} alt="" width={40} height={40} className="profile-img" />
+              <img src={profile} alt="" width={50} height={50} className="profile-img" />
               <i className='bx bx-sm bx-chevron-down auth-item' style={{ color: '#525562' }} onClick={handledropdown}></i>
             </div>
 
@@ -70,11 +70,12 @@ export default function AdminNavbar({ toggleSidebar }) {
             </div>
           </div>
         </div>
+
       </div>
       <div style={{
         padding: "12px 20px"
       }}
-        className="admin-mobile-menu">
+        className="staff-mobile-menu">
         <ul style={{ margin: 0, padding: 0 }}>
           <li style={{ listStyle: "none", fontWeight: "600" }}>
             <Link
@@ -84,11 +85,12 @@ export default function AdminNavbar({ toggleSidebar }) {
             </Link>
           </li>
           <li style={{ listStyle: "none", fontWeight: "600" }}>
-            <img src={plus} alt="" className="quick-actions" onClick={handleQuickActions} />
-            <div className='quick-action-item' style={{ display: showQuickActions ? 'flex' : 'none' }} >
+            <img src={plus} alt="" className="staff-quick-actions" onClick={handleQuickActions} />
+            <div className='staff-quick-action-item' style={{ display: showQuickActions ? 'flex' : 'none' }} >
               <ul>
-                <li><img src={add} alt="" /> <Link to='/admin/create-branch' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Staff</Link></li>
-                <li><img src={add} alt="" /> <Link to='/admin/create-staff' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Branch</Link></li>
+                <li><img src={add} alt="" /> <Link to='/staff/student/create' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Lead</Link></li>
+                <li><img src={add} alt="" /> <Link to='/staff/create-enquiry' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Visited Enquiry</Link></li>
+                <li><img src={add} alt="" /> <Link to='/staff/student/create' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Registration</Link></li>
               </ul>
             </div>
             <img style={{ width: "30px", height: "30px" }} src={menu} alt="" onClick={toggleSidebar} />

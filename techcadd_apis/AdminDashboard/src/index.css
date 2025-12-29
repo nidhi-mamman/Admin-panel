@@ -186,7 +186,7 @@ p {
   right: 100px;
   padding: 8px 12px;
   background-color: white;
-  width: 120px;
+  width: 110px;
   font-size: 12px;
   border-radius: 10px;
   overflow: hidden;
@@ -223,7 +223,7 @@ p {
 }
 
 .sub-profile ul li,
-.staff-quick-action-item ul li {
+.staff-quick-action-item ul li,.quick-action-item ul li {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -240,16 +240,16 @@ p {
 }
 
 .sub-profile ul,
-.staff-quick-action-item ul {
+.staff-quick-action-item ul,.quick-action-item ul {
   list-style: none;
   margin: 0;
   padding: 0 !important;
 }
 
 .sub-profile ul li:not(:last-child),
-.staff-quick-action-item ul li:not(:last-child) {
+.staff-quick-action-item ul li:not(:last-child),.quick-action-item ul li:not(:last-child) {
   cursor: pointer;
-  border-bottom: 1px solid #8f8d8d;
+  border-bottom: 1px solid #bdbaba;
 }
 
 .nav-tabs {
@@ -1294,10 +1294,6 @@ h5 {
   height: 450px!important;
   box-shadow: 0 0px 35px rgba(0, 0, 0, 0.521);
   border-radius: 10px;
-}
-
-input {
-  border-top: none;
 }
 
 .custom-toast {
