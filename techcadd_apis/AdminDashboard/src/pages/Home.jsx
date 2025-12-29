@@ -1,69 +1,24 @@
-import { useContext, useRef, useState, useEffect } from "react";
+import { useState, useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { context } from "../context/Authprovider";
-import login_illustration from "../assets/login_illustration.png";
-import styles from './Home.module.css';
-import gsap from 'gsap';
+import tce_white from '../assets/tce_white.png';
 
 export default function Home() {
-  const formRef = useRef(null);
-  const mainContainerRef = useRef(null);
-  const leftContainerRef = useRef(null);
-  const rightContainerRef = useRef(null);
-  const loginBadgeRef = useRef(null);
-  const navTabsRef = useRef(null);
-  const formContainerRef = useRef(null);
-  
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [toast, setToast] = useState(null);
+  const [role, setRole] = useState("admin");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [isExiting, setIsExiting] = useState(false);
-  const [activeTab, setActiveTab] = useState('admin');
+  const [toast, setToast] = useState(null);
   const navigate = useNavigate();
   const { setToken } = useContext(context);
-
-  useEffect(() => {
-    gsap.set([mainContainerRef.current, leftContainerRef.current, loginBadgeRef.current, navTabsRef.current, formContainerRef.current], {
-      opacity: 0
-    });
-    gsap.set(mainContainerRef.current, { scale: 0.9, y: 20 });
-    gsap.set(leftContainerRef.current, { x: 0 });
-    gsap.set(loginBadgeRef.current, { y: -30 });
-    gsap.set(navTabsRef.current, { y: -20 });
-    gsap.set(formContainerRef.current, { y: 30 });
-
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-    
-    tl.to(mainContainerRef.current, {
-      scale: 1,
-      y: 0,
-      opacity: 1,
-      duration: 0.7,
-    })
-    .to(leftContainerRef.current, {
-      x: 0,
-      opacity: 1,
-      duration: 0.6,
-    }, "-=0.4")
-    .to(loginBadgeRef.current, {
-      y: 0,
-      opacity: 1,
-      duration: 0.5,
-    }, "-=0.3")
-    .to(navTabsRef.current, {
-      y: 0,
-      opacity: 1,
-      duration: 0.5,
-    }, "-=0.3")
-    .to(formContainerRef.current, {
-      y: 0,
-      opacity: 1,
-      duration: 0.6,
-    }, "-=0.3");
-
-    return () => tl.kill();
-  }, []);
-
-  // 🔥 Auto-hide toast after 3 seconds
+  const roleText = {
+    admin:
+      "Manage users, monitor activities, and control the entire platform from one powerful dashboard. Login as an admin to keep everything running smoothly.",
+    staff:
+      "Handle daily tasks, manage records, and support students effectively. Login as staff to stay organized and productive.",
+    student:
+      "Access your courses, track progress, and manage your learning journey. Login as a student and continue learning with confidence.",
+  };
   useEffect(() => {
     if (toast) {
       const timer = setTimeout(() => {
@@ -71,18 +26,18 @@ export default function Home() {
         setTimeout(() => {
           setToast(null);
           setIsExiting(false);
-        }, 300); // Match animation duration
+        }, 300);
       }, 3000);
       return () => clearTimeout(timer);
     }
   }, [toast]);
-
   // 🔥 FUNCTION: close toast manually
   const handleCloseToast = () => {
     setIsExiting(true);
     setTimeout(() => {
       setToast(null);
-      setIsExiting(false);
+
+
     }, 300);
   };
 
@@ -90,37 +45,35 @@ export default function Home() {
   const showToast = (message, type) => {
     setToast({ message, type });
   };
-
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    const form = new FormData(formRef.current);
-    const formData = Object.fromEntries(form.entries());
+    let apiUrl = "";
 
-    let endpoint;
-    let redirectPath;
-
-    if (activeTab === 'admin') {
-      endpoint = "http://localhost:8000/api/admin/login/";
-      redirectPath = "/admin/admin-dashboard";
-    } else if (activeTab === 'staff') {
-      endpoint = "http://localhost:8000/api/staff/login/";
-      redirectPath = "/staff/staff-dashboard";
-    } else {
-      endpoint = "http://127.0.0.1:8000/api/student/lms/login/";
-      redirectPath = "/student/dashboard";
+    switch (role) {
+      case "admin":
+        apiUrl = "http://localhost:8000/api/admin/login/";
+        break;
+      case "staff":
+        apiUrl = "http://localhost:8000/api/staff/login/";
+        break;
+      case "student":
+        apiUrl = "http://localhost:8000/api/student/lms/login/";
+        break;
+      default:
+        return;
     }
 
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ username, password }),
       });
 
       const data = await response.json();
 
-      if (response.ok || data.status === "success" || data.message === "Login successful") {
+      if (response.ok && data.tokens) {
         showToast("Login successful", "success");
 
         if (data.tokens) {
@@ -129,7 +82,16 @@ export default function Home() {
           setToken(data.tokens.access);
         }
 
-        setTimeout(() => navigate(redirectPath), activeTab === 'staff' ? 1200 : 2000);
+        setTimeout(() => {
+          navigate(
+            role === "admin"
+              ? "/admin/admin-dashboard"
+              : role === "staff"
+                ? "/staff/staff-dashboard"
+                : "/student/dashboard"
+          );
+        }, 2000);
+
       } else {
         showToast(data.message || "Invalid username or password", "error");
       }
@@ -139,105 +101,80 @@ export default function Home() {
   };
 
   return (
-    <>
-      <div className={styles.toastContainer}>
-        {toast && (
-          <div className={`${styles.toast} ${toast.type === 'success' ? styles.toastSuccess : styles.toastError} ${isExiting ? styles.toastExit : ''}`}>
-            <span className={styles.toastIcon}>
-              {toast.type === 'success' ? '✓' : '⚠'}
-            </span>
-            <span>{toast.message}</span>
-            <button 
-              className={styles.toastClose}
-              onClick={handleCloseToast}
-              aria-label="Close"
-            >
-              ✕
-            </button>
-          </div>
-        )}
-      </div>
-      <div className={styles.loginArea}>
-        {/* <h2 className="login-form-heading">Login</h2> */}
-        <div className="login-form-area" ref={mainContainerRef}>
-          <div className="left-container" ref={leftContainerRef}>
-            <img src={login_illustration} alt="login illustration" />
-          </div>
-          <div className="right-container" ref={rightContainerRef}>
-            <p className="login-badge" ref={loginBadgeRef}>Welcome Back</p>
-            <nav ref={navTabsRef}>
-              <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                <button
-                  className={`nav-link ${activeTab === 'admin' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('admin')}
-                  type="button"
-                >
-                  Admin
-                </button>
-                <button
-                  className={`nav-link ${activeTab === 'staff' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('staff')}
-                  type="button"
-                >
-                  Staff
-                </button>
-                <button
-                  className={`nav-link ${activeTab === 'student' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('student')}
-                  type="button"
-                >
-                  Student
-                </button>
+    <div className="container-fluid p-5">
+      {toast && (
+        <div className={`custom-toast ${toast.type} ${isExiting ? "exit" : ""}`}>
+          <span>{toast.message}</span>
+          <button onClick={handleCloseToast}>×</button>
+        </div>
+      )}
+
+      <div className="container">
+        <div className="row d-flex justify-content-center">
+          {/* LEFT SIDE */}
+          <div className="col-lg-6 col-sm-12 bg p-3">
+            <div className="row d-flex justify-content-center text-center text-white">
+              <h4 className="p-2">Welcome to</h4>
+              <img className="img m-3" src={tce_white} alt="Logo" />
+              <p className="m-5 role-text">
+                {roleText[role]}
+              </p>
+              {/* ROLE SELECTOR */}
+              <div className="row justify-content-start mt-4">
+                {["admin", "staff", "student"].map((item) => (
+                  <div
+                    key={item}
+                    className={`col-3 one mx-2 ${role === item ? "active-role" : ""
+                      }`}
+                    onClick={() => setRole(item)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {item.toUpperCase()}
+                  </div>
+                ))}
               </div>
-            </nav>
-            
-            <div className="myform" ref={formContainerRef}>
-              <form ref={formRef} onSubmit={handleSubmit}>
-                <div className={styles.inputContainer}>
-                  <i className={`bx bxs-user ${styles.inputIcon}`}></i>
+            </div>
+          </div>
+
+          {/* RIGHT SIDE */}
+          <div className="col-lg-6 col-sm-12 form p-5">
+            <div className="row d-flex justify-content-center">
+              <h3 className="text-center mb-4">
+                Login as {role.toUpperCase()}
+              </h3>
+
+              <form onSubmit={handleLogin}>
+                <div className="mb-3">
+                  <label>Username</label>
                   <input
                     type="text"
-                    name="username"
-                    placeholder="Username"
+                    className="form-control"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     required
-                    className={styles.inputField}
                   />
                 </div>
 
-                <div className={styles.inputContainerWithMargin}>
-                  {passwordVisible ? (
-                    <i
-                      className={`bx bxs-lock-keyhole-open-alt ${styles.inputIcon}`}
-                      onClick={() => setPasswordVisible(!passwordVisible)}
-                    ></i>
-                  ) : (
-                    <i
-                      className={`bx bxs-lock-keyhole ${styles.inputIcon}`}
-                      onClick={() => setPasswordVisible(!passwordVisible)}
-                    ></i>
-                  )}
+                <div className="mb-3">
+                  <label>Password</label>
                   <input
-                    type={passwordVisible ? "text" : "password"}
-                    name="password"
-                    placeholder="Password"
+                    type="password"
+                    className="form-control"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     required
-                    className={styles.inputField}
                   />
                 </div>
-                
-                <div className="d-flex align-items-center justify-content-center">
-                  <button
-                    type="submit"
-                    className={`custom-btn ${styles.loginButton}`}
-                  >
-                    Login
-                  </button>
-                </div>
+
+                <button type="submit" className="btn btn-primary w-100">
+                  Login
+                </button>
               </form>
             </div>
           </div>
+
         </div>
       </div>
-    </>
+    </div>
   );
 }
