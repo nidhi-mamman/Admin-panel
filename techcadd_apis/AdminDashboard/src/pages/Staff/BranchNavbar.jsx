@@ -26,6 +26,17 @@ export default function BranchNavbar({ toggleSidebar }) {
     setShowQuickActions(!showQuickActions);
     setOpen(false)
   }
+  const goToLoginForEnquiry = () => {
+    navigate("/staff/Login", {
+      state: { from: "/staff/create-enquiry" }
+    });
+  };
+
+  const goToLoginForRegistration = () => {
+    navigate("/staff/Login", {
+      state: { from: "/staff/student/create" }
+    });
+  };
 
   return (
     <>
@@ -53,8 +64,14 @@ export default function BranchNavbar({ toggleSidebar }) {
           <div className='staff-quick-action-item' style={{ display: showQuickActions ? 'flex' : 'none' }} >
             <ul>
               <li><img src={add} alt="" /> <Link to='/staff/Login' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Lead</Link></li>
-              <li><img src={add} alt="" /> <Link to='/staff/Login' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Visited Enquiry</Link></li>
-              <li><img src={add} alt="" /> <Link to='/staff/Login' style={{ color: "black", marginLeft: "0px", textDecoration: 'none' }}>Registration</Link></li>
+              <li onClick={goToLoginForEnquiry} style={{ cursor: "pointer" }}>
+                <img src={add} alt="" />
+                <span>Visited Enquiry</span>
+              </li>
+              <li onClick={goToLoginForRegistration} style={{ cursor: "pointer" }}>
+                <img src={add} alt="" />
+                <span>Registration</span>
+              </li>
             </ul>
           </div>
           <div className="d-flex align-items-center justify-content-center  admin-profile flex-column">
