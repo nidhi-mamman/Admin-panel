@@ -122,12 +122,6 @@ export default function EnquiryList() {
     return (
         <div style={{ padding: "30px", fontSize: "12px" }} className="dashboard-container">
             <div className="d-flex align-items-center justify-content-start gap-2 mb-5">
-                <select name="centre" required onChange={handleFilterChange}>
-                    <option value="">Select Centre</option>
-                    {options.centre_choices.map(([value, label]) => (
-                        <option key={value} value={value}>{label}</option>
-                    ))}
-                </select>
                 <select name="trade" required onChange={handleFilterChange}>
                     <option value="">Select Trade</option>
                     {options.trade_choices.map(([value, label]) => (

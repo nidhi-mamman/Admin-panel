@@ -1,4 +1,4 @@
-import { useContext} from "react";
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { context } from "../../context/Authprovider";
 import dashboard from '../../assets/pie-chart.png'
@@ -7,7 +7,7 @@ import enquiry from '../../assets/info.png'
 import registration from '../../assets/registration.png'
 import signout from '../../assets/signout.png'
 export default function BranchSidebar({ isOpen }) {
-    const { logoutLocal } = useContext(context);
+    const { logoutLocal,token } = useContext(context);
     const navigate = useNavigate();
 
     const handleLogout = async () => {
@@ -18,14 +18,26 @@ export default function BranchSidebar({ isOpen }) {
     const handleNavigate = () => {
         navigate("/staff/staff-dashboard");
     }
+    const handleEnquiry = () => {
+        if (!token) {
+            navigate("/staff/Login", {
+                state: { from: "/branch/show/enquiries" },
+            });
+        } else {
+            navigate("/branch/show/enquiries");
+        }
+    };
 
-    const handleEnquiry=()=>{
-        navigate("/branch/show/enquiries");
-    }
-    
-    const handleRegistration=()=>{ 
-        navigate('/branch/show/registrations')
-    }
+    const handleRegistration = () => {
+        if (!token) {
+            navigate("/staff/Login", {
+                state: { from: "/branch/show/registrations" },
+            });
+        } else {
+            navigate("/branch/show/registrations");
+        }
+    };
+
 
     return (
         <div className={`sidebar ${isOpen ? "open" : "closed"}`}>

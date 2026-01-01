@@ -211,7 +211,7 @@ export default function EnquiryCreation() {
                                 <label className={styles.label}>Mobile Number*</label>
                                 <input
                                     type="tel"
-                                    name="phone"
+                                    name="mobile"
                                     pattern="[0-9]{10}"
                                     maxLength="10"
                                     className={styles.input}

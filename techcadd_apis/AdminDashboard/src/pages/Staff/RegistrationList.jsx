@@ -149,15 +149,6 @@ export default function RegistrationList() {
                 }}
                 className="list-filter"
             >
-                <select name="branch" required value={filters.branch}
-                    onChange={(e) =>
-                        setFilters({ ...filters, branch: e.target.value })
-                    }>
-                    <option value="">Select Branch</option>
-                    {options.branch_choices?.map(([value, label]) => (
-                        <option key={value} value={value}>{label}</option>
-                    ))}
-                </select>
                 <select name="course_type" required value={filters.course_type}
                     onChange={(e) =>
                         setFilters({ ...filters, course_type: e.target.value })

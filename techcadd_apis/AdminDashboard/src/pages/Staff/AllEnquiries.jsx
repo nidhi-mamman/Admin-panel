@@ -1,8 +1,10 @@
 import { useEffect, useContext, useState } from "react";
 import { context } from "../../context/Authprovider";
+import { Link, useLocation } from "react-router-dom";
 
 const AllEnquiries = () => {
   const { token } = useContext(context);
+  const location = useLocation();
 
   const [enquiries, setEnquiries] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,7 +26,8 @@ const AllEnquiries = () => {
         );
 
         const data = await response.json();
-        console.log(data)
+        console.log("Enquiries:", data);
+
         setEnquiries(data.enquiries || []);
       } catch (error) {
         console.error("Error fetching enquiries:", error);
@@ -61,29 +64,53 @@ const AllEnquiries = () => {
               <th style={thStyle}>Email</th>
               <th style={thStyle}>Enquiry Date</th>
               <th style={thStyle}>Enquiry Status</th>
-              {/* <th style={thStyle}>Details</th>
-              <th style={thStyle}>Update</th> */}
+              <th style={thStyle}>Details</th>
+              <th style={thStyle}>Update</th>
             </tr>
           </thead>
 
           <tbody>
             {paginatedEnquiries.length > 0 ? (
-              paginatedEnquiries.map((item, index) => (
-                <tr key={item.id} style={{ borderBottom: "1px solid #eee" }}>
-                  <td style={tdStyle}>{startIndex + index + 1}</td>
-                  <td style={tdStyle}>{item.student_name}</td>
-                  <td style={tdStyle}>{item.mobile}</td>
-                  <td style={tdStyle}>{item.email}</td>
-                  <td style={tdStyle}>{item.created_at.split("T")[0]}</td>
-                  <td style={tdStyle}>{item.enquiry_status}</td>
-                  {/* <td style={tdStyle}>
-                    <a href="#" style={{ color: "#3f51ff" }}>
-                      Click Here
-                    </a>
-                  </td>
-                  <td style={tdStyle}>✏️</td> */}
-                </tr>
-              ))
+              paginatedEnquiries.map((item, index) => {
+                const updatePath = `/staff/student/enquiry/update/${item.id}`;
+
+                return (
+                  <tr key={item.id} style={{ borderBottom: "1px solid #eee" }}>
+                    <td style={tdStyle}>{startIndex + index + 1}</td>
+                    <td style={tdStyle}>{item.student_name}</td>
+                    <td style={tdStyle}>{item.mobile}</td>
+                    <td style={tdStyle}>{item.email}</td>
+                    <td style={tdStyle}>
+                      {item.created_at?.split("T")[0]}
+                    </td>
+                    <td style={tdStyle}>{item.enquiry_status}</td>
+
+                    <td style={tdStyle}>
+                      <a href="#" style={{ color: "#3f51ff" }}>
+                        Click Here
+                      </a>
+                    </td>
+
+                    {/* ✅ LOGIN-AWARE UPDATE LINK */}
+                    <td style={tdStyle}>
+                      <Link
+                        to={token ? updatePath : "/staff/Login"}
+                        state={
+                          token
+                            ? {}
+                            : { from: updatePath }
+                        }
+                        style={{
+                          color: "green",
+                          textDecoration: "underline",
+                        }}
+                      >
+                        <i className="bx bx-sm bx-pencil"></i>
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })
             ) : (
               <tr>
                 <td colSpan="8" style={{ textAlign: "center", padding: "20px" }}>
@@ -119,7 +146,13 @@ const AllEnquiries = () => {
               ‹
             </button>
 
-            <button style={{ ...pageBtn, background: "#5a5ee0", color: "#fff" }}>
+            <button
+              style={{
+                ...pageBtn,
+                background: "#5a5ee0",
+                color: "#fff",
+              }}
+            >
               {currentPage}
             </button>
 
@@ -141,21 +174,21 @@ export default AllEnquiries;
 
 /* 🔹 Styles */
 const thStyle = {
-    border: "1px solid #ddd",
-    padding: "10px",
-    textAlign: "center",
-    fontWeight: "600",
-    color: "#092847ff",
-    backgroundColor: "#f8f9fa",
+  border: "1px solid #ddd",
+  padding: "10px",
+  textAlign: "center",
+  fontWeight: "600",
+  color: "#092847ff",
+  backgroundColor: "#f8f9fa",
 };
 
 const tdStyle = {
-    border: "1px solid #ddd",
-    padding: "10px",
-    textAlign: "center",
-    fontSize:"10px",
-    color: "#092847ff",
-    backgroundColor:"white"
+  border: "1px solid #ddd",
+  padding: "10px",
+  textAlign: "center",
+  fontSize: "10px",
+  color: "#092847ff",
+  backgroundColor: "white",
 };
 
 const pageBtn = {
