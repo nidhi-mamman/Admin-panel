@@ -60,12 +60,12 @@ const AllRegistrations = () => {
           <thead style={{ background: "#f8f9fb" }}>
             <tr>
               <th style={thStyle}>Id</th>
+              <th style={thStyle}>Registration No.</th>
               <th style={thStyle}>Student Name</th>
               <th style={thStyle}>Mobile</th>
               <th style={thStyle}>Email</th>
               <th style={thStyle}>Course</th>
               <th style={thStyle}>Registration Date</th>
-              <th style={thStyle}>Status</th>
             </tr>
           </thead>
 
@@ -74,14 +74,14 @@ const AllRegistrations = () => {
               paginatedRegistrations.map((item, index) => (
                 <tr key={item.id} style={{ borderBottom: "1px solid #eee" }}>
                   <td style={tdStyle}>{startIndex + index + 1}</td>
+                  <td style={tdStyle}>{item.registration_number}</td>
                   <td style={tdStyle}>{item.student_name}</td>
-                  <td style={tdStyle}>{item.mobile}</td>
+                  <td style={tdStyle}>{item.phone_no}</td>
                   <td style={tdStyle}>{item.email}</td>
                   <td style={tdStyle}>{item.course_name}</td>
                   <td style={tdStyle}>
                     {item.created_at?.split("T")[0]}
                   </td>
-                  <td style={tdStyle}>{item.registration_status}</td>
                 </tr>
               ))
             ) : (

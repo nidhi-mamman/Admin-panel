@@ -39,11 +39,12 @@ export default function Home() {
 
 
     }, 300);
-  };
-  // 🔥 FUNCTION: show toast
+  }
+  // 🔥 FUNCTION: show toast           
   const showToast = (message, type) => {
     setToast({ message, type });
-  };
+  };   
+  // 🔥 FUNCTION: handle login     
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -56,6 +57,7 @@ export default function Home() {
       case "branch":
         apiUrl = "http://localhost:8000/api/staff/branch/login/";
         break;
+
       case "student":
         apiUrl = "http://localhost:8000/api/student/lms/login/";
         break;

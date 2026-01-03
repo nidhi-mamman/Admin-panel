@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { context } from "../../context/Authprovider";
 import { Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
 
 export default function EnquiryList() {
     const { token } = useContext(context);
@@ -13,6 +15,11 @@ export default function EnquiryList() {
         trade: "",
         enquiry_status: ""
     });
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const from = location.state?.from || "/staff/dashboard";
 
 
     // Pagination
@@ -43,7 +50,7 @@ export default function EnquiryList() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-  
+
                 if (!response.ok) throw new Error("Failed to fetch enquiry list");
 
                 const data = await response.json();
@@ -187,9 +194,10 @@ export default function EnquiryList() {
                                             Click Here
                                         </Link>
                                     </td>
-                                    <td style={tdStyle}>
+                                    <td style={tdStyle}> 
                                         <Link
-                                            to={`/staff/student/enquiry/update/${enquiry.id}`}
+                                            to="/staff/Login"
+                                            state={{ from: `/staff/student/enquiry/update/${enquiry.id}` }}
                                             style={{
                                                 color: "green",
                                                 textDecoration: "underline",
@@ -197,6 +205,7 @@ export default function EnquiryList() {
                                         >
                                             <i className="bx bx-sm bx-pencil"></i>
                                         </Link>
+
                                     </td>
                                 </tr>
                             ))
@@ -265,5 +274,5 @@ const tdStyle = {
     padding: "10px",
     textAlign: "center",
     color: "#092847ff",
-    backgroundColor:"white"
+    backgroundColor: "white"
 };

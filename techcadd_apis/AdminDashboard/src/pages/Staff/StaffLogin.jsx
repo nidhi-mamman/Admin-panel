@@ -25,8 +25,8 @@ export default function StaffLogin() {
       const data = response.data;
 
       if (response.status === 200 && data.tokens) {
-        localStorage.setItem("accessToken", data.tokens.access);
-        localStorage.setItem("refreshToken", data.tokens.refresh);
+        localStorage.setItem("accessStaffToken", data.tokens.access);
+        localStorage.setItem("refreshStaffToken", data.tokens.refresh);
         setToken(data.tokens.access);
 
         navigate(redirectTo);

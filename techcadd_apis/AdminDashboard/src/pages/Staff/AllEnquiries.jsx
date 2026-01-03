@@ -11,7 +11,7 @@ const AllEnquiries = () => {
 
   const itemsPerPage = 10;
 
-  /* 🔹 Fetch enquiries */
+  /* Fetch enquiries */
   useEffect(() => {
     const fetchEnquiries = async () => {
       try {
@@ -37,7 +37,7 @@ const AllEnquiries = () => {
     if (token) fetchEnquiries();
   }, [token]);
 
-  /* 🔹 Pagination logic */
+  /* Pagination logic */
   const totalItems = enquiries.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -94,12 +94,8 @@ const AllEnquiries = () => {
                     {/* ✅ LOGIN-AWARE UPDATE LINK */}
                     <td style={tdStyle}>
                       <Link
-                        to={token ? updatePath : "/staff/Login"}
-                        state={
-                          token
-                            ? {}
-                            : { from: updatePath }
-                        }
+                        to="/staff/Login"
+                        state={{ from: `/staff/student/enquiry/update/${item.id}` }}
                         style={{
                           color: "green",
                           textDecoration: "underline",
@@ -122,7 +118,7 @@ const AllEnquiries = () => {
         </table>
       </div>
 
-      {/* 🔹 Pagination Footer */}
+      {/*🔹 Pagination Footer */}
       {totalItems > 0 && (
         <div
           style={{
@@ -172,7 +168,7 @@ const AllEnquiries = () => {
 
 export default AllEnquiries;
 
-/* 🔹 Styles */
+/*🔹Styles */
 const thStyle = {
   border: "1px solid #ddd",
   padding: "10px",
@@ -181,7 +177,6 @@ const thStyle = {
   color: "#092847ff",
   backgroundColor: "#f8f9fa",
 };
-
 const tdStyle = {
   border: "1px solid #ddd",
   padding: "10px",
@@ -190,7 +185,6 @@ const tdStyle = {
   color: "#092847ff",
   backgroundColor: "white",
 };
-
 const pageBtn = {
   border: "1px solid #ddd",
   background: "#fff",
